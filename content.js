@@ -265,7 +265,8 @@ function isElementVisible(element) {
 
 function getScopeHintKeywords(section) {
   const bySection = {
-    internships: ['公司', '单位', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
+    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式'],
+    internships: ['公司', '单位', '单位规模', '公司规模', '汇报对象', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
     projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '起止时间', '项目内容', '主要业绩'],
     educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历'],
     selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点'],
@@ -304,7 +305,8 @@ function containerHasPayloadField(node, payload, section) {
       element,
       getLabelText(element),
       getElementPlaceholder(element),
-      getContextHintText(element)
+      getContextHintText(element),
+      section
     );
     if (field && keys.has(field)) {
       matchedFields.add(field);
@@ -543,10 +545,11 @@ function getDefaultPayload() {
   return resolveTemplate(resumeData, section, key);
 }
 
-function detectField(element, labelText, placeholder, contextText) {
+function detectField(element, labelText, placeholder, contextText, section = null) {
   const type = (element.type || '').toLowerCase();
   const primaryText = toCompactText(labelText, placeholder);
   const extendedText = toCompactText(labelText, placeholder, contextText);
+  const normalizedSection = section ? String(section).trim() : null;
 
   // 1. Context Bleed Protection: Clear context for generic fields that often trigger false positives
   let effectiveContext = contextText;
@@ -605,8 +608,11 @@ function detectField(element, labelText, placeholder, contextText) {
   
   // 3. Section-Specific Mappings (with Context)
   // Family Member Logic (PRIORITY: Before Job Logic to avoid generic "Title/Company" conflicts)
-  if (text.includes('成员') || text.includes('家庭') || text.includes('亲属') || 
-      text.includes('父亲') || text.includes('母亲') || text.includes('配偶') || text.includes('子女')) {
+  if (
+    normalizedSection === 'familyMembers' &&
+    (text.includes('成员') || text.includes('家庭') || text.includes('亲属') ||
+      text.includes('父亲') || text.includes('母亲') || text.includes('配偶') || text.includes('子女'))
+  ) {
     if (text.includes('关系') || text.includes('称谓')) return 'familyRelation';
     if (text.includes('姓名')) return 'familyName';
     if (text.includes('单位') || text.includes('单位及职务')) return 'familyCompany';
@@ -616,72 +622,107 @@ function detectField(element, labelText, placeholder, contextText) {
   }
 
   // Open Questions Logic
-  if (text.includes('规划') || text.includes('理由') || text.includes('说明') || text.includes('陈述') || 
-      text.includes('看法') || text.includes('背景') || text.includes('性格') || text.includes('其他')) {
+  if (
+    normalizedSection === 'openQuestions' &&
+    (text.includes('规划') || text.includes('理由') || text.includes('说明') || text.includes('陈述') ||
+      text.includes('看法') || text.includes('背景') || text.includes('性格') || text.includes('其他'))
+  ) {
     if (element.tagName === 'TEXTAREA' || element.isContentEditable || primaryText.length > 5) {
       return 'content';
     }
   }
 
   // Referee Logic
-  if (text.includes('证明人') || text.includes('联系人')) {
+  if (
+    normalizedSection === 'internships' &&
+    (text.includes('证明人') || text.includes('联系人') || text.includes('汇报对象') || text.includes('汇报人'))
+  ) {
     if (primaryText.includes('电话') || primaryText.includes('手机') || primaryText.includes('联系方式')) return 'refereePhone';
     // Strict Title detection for referees to avoid hijacking the Name field
     if (primaryText.includes('单位') || primaryText.includes('职务') || primaryText.includes('单位及职务')) return 'refereeCompanyTitle';
     // If the label is JUST "Referee" or similar, it's most likely the name
-    if (primaryText.includes('证明人') || primaryText.includes('联系人') || primaryText === '') return 'refereeName';
+    if (primaryText.includes('证明人') || primaryText.includes('联系人') || primaryText.includes('汇报对象') || primaryText.includes('汇报人') || primaryText === '') {
+      return 'refereeName';
+    }
   }
 
   // Education Logic
-  if (text.includes('在校经历/核心课程')) return 'educationSummary';
-  if (text.includes('在校经历') || text.includes('校园经历')) return 'educationExperience';
-  if (text.includes('核心课程') || text.includes('主修课程')) return 'coreCourses';
-  if (text.includes('学院') || text.includes('院系') || text.includes('学部')) return 'college';
-  if (text.includes('专业')) return 'major';
-  if (text.includes('学校名称') || text.includes('毕业院校') || text.includes('学校')) return 'schoolName';
+  if (normalizedSection === 'educations') {
+    if (text.includes('在校经历/核心课程')) return 'educationSummary';
+    if (text.includes('在校经历') || text.includes('校园经历')) return 'educationExperience';
+    if (text.includes('核心课程') || text.includes('主修课程')) return 'coreCourses';
+    if (text.includes('学院') || text.includes('院系') || text.includes('学部')) return 'college';
+    if (text.includes('专业')) return 'major';
+    if (text.includes('学校名称') || text.includes('毕业院校') || text.includes('学校')) return 'schoolName';
+  }
 
   // Project role: Phoenix/Beisen may label "project role" as just "职务"
   // Use extendedText to detect the "project context" so we don't hijack internship positions.
-  if (
+  if (normalizedSection === 'projects' && (
     (primaryText.includes('职务') || primaryText.includes('职位') || primaryText.includes('岗位')) &&
     (extendedText.includes('项目名称') || extendedText.includes('项目描述') || extendedText.includes('项目背景') || extendedText.includes('项目概述') || extendedText.includes('项目内容') || extendedText.includes('项目经验'))
-  ) {
+  )) {
     return 'projectRoleTitle';
   }
 
   // Internship/Job Logic
-  if (text.includes('离职原因')) return 'leaveReason';
-  if (text.includes('单位性质')) return 'companyType';
-  if (text.includes('工作性质')) return 'workType';
-  if (text.includes('部门') || text.includes('团队') || text.includes('产品部')) return 'department';
-  if (text.includes('职务') || text.includes('职位') || text.includes('岗位')) {
-    if (!text.includes('类别') && !text.includes('级别') && !text.includes('等级')) return 'position';
-  }
-  if ((text.includes('单位') || text.includes('公司')) && !text.includes('性质') && !text.includes('类型') && !text.includes('行业')) {
-    return 'company';
+  if (normalizedSection === 'internships') {
+    if (text.includes('离职原因')) return 'leaveReason';
+    if (text.includes('单位性质')) return 'companyType';
+    if (text.includes('工作性质')) return 'workType';
+    if (text.includes('部门') || text.includes('团队') || text.includes('产品部')) return 'department';
+    if (text.includes('单位规模') || text.includes('公司规模')) return 'companySize';
+    if (text.includes('职务') || text.includes('职位') || text.includes('岗位')) {
+      if (!text.includes('类别') && !text.includes('级别') && !text.includes('等级')) return 'position';
+    }
+    if (
+      (text.includes('单位') || text.includes('公司')) &&
+      !text.includes('规模') &&
+      !text.includes('性质') &&
+      !text.includes('类型') &&
+      !text.includes('行业')
+    ) {
+      return 'company';
+    }
   }
 
   // Project Logic
-  if (text.includes('项目名称')) return 'projectName';
-  if (text.includes('项目角色')) return 'projectRoleTitle';
-  if (text.includes('技术栈')) return 'techStack';
-  if (text.includes('项目职责')) return 'projectResponsibility';
-  if (text.includes('项目成果') || text.includes('项目业绩')) return 'projectAchievement';
-  if (text.includes('项目内容')) return 'content';
-  // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),
-  // while "项目介绍" maps to the shorter "项目介绍" field (projectDesc).
-  if (text.includes('项目描述')) return 'content';
-  if (text.includes('项目介绍') || text.includes('项目背景') || text.includes('项目概述') || text.includes('项目概况') || text.includes('项目经验')) return 'projectDesc';
+  if (normalizedSection === 'projects') {
+    if (text.includes('项目名称')) return 'projectName';
+    if (text.includes('项目角色')) return 'projectRoleTitle';
+    if (text.includes('技术栈')) return 'techStack';
+    if (text.includes('项目职责')) return 'projectResponsibility';
+    if (text.includes('项目成果') || text.includes('项目业绩')) return 'projectAchievement';
+    if (text.includes('项目内容')) return 'content';
+    // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),
+    // while "项目介绍" maps to the shorter "项目介绍" field (projectDesc).
+    if (text.includes('项目描述')) return 'content';
+    if (text.includes('项目介绍') || text.includes('项目背景') || text.includes('项目概述') || text.includes('项目概况') || text.includes('项目经验')) return 'projectDesc';
+  }
 
   // Skills & Self-Eval
-  if (text.includes('自我评价') || text.includes('个人评价') || text.includes('个人优势')) return 'selfEvaluation';
-  if (text.includes('外语') || text.includes('英语')) return 'languageSkills';
-  if (text.includes('计算机') || text.includes('IT技能')) return 'computerSkills';
+  if (normalizedSection === 'selfEvaluations') {
+    if (text.includes('自我评价') || text.includes('个人评价') || text.includes('个人优势')) return 'selfEvaluation';
+  }
+  if (normalizedSection === 'languages') {
+    if (text.includes('外语') || text.includes('英语')) return 'languageSkills';
+  }
+  if (normalizedSection === 'computerSkills') {
+    if (text.includes('计算机') || text.includes('IT技能')) return 'computerSkills';
+  }
 
   // Generic Fallbacks
   if (text.includes('住址') || text.includes('地址') || text.includes('地点') || text.includes('城市')) return 'homeAddress';
   if (text.includes('户籍所在地') || text.includes('户籍地址') || text.includes('户籍')) return 'hukouLocation';
-  if (text.includes('描述') || text.includes('主要工作') || text.includes('职责业绩') || text.includes('主要业绩')) {
+  if (
+    (normalizedSection === 'internships' ||
+      normalizedSection === 'projects' ||
+      normalizedSection === 'selfEvaluations' ||
+      normalizedSection === 'openQuestions' ||
+      normalizedSection === 'languages' ||
+      normalizedSection === 'computerSkills') &&
+    (text.includes('描述') || text.includes('主要工作') || text.includes('职责业绩') || text.includes('主要业绩'))
+  ) {
     return 'content';
   }
 
@@ -709,6 +750,9 @@ function fillBossWorkContentOnly(contentValue, scopeRoot = document) {
   });
 
   if (!candidate) return false;
+
+  const currentText = candidate.isContentEditable ? String(candidate.textContent || '') : String(candidate.value || '');
+  if (currentText.trim().length > 2) return false; // Avoid overriding user/already-filled value
 
   if (candidate.isContentEditable) {
     setContentEditableValue(candidate, contentValue);
@@ -753,6 +797,9 @@ function fillGeneralWorkContentFallback(contentValue, scopeRoot = document) {
 
   if (!candidate) return false;
 
+  const currentText = candidate.isContentEditable ? String(candidate.textContent || '') : String(candidate.value || '');
+  if (currentText.trim().length > 2) return false; // Avoid overriding user/already-filled value
+
   if (candidate.isContentEditable) {
     setContentEditableValue(candidate, contentValue);
   } else {
@@ -765,13 +812,24 @@ function fillGeneralWorkContentFallback(contentValue, scopeRoot = document) {
   return true;
 }
 
-function autoFill(payload, dataSource, scopeRoot = document) {
+function autoFill(payload, dataSource, scopeRoot = document, section = null) {
   if (!payload) throw new Error('未找到模板数据');
 
   const defaults = dataSource?.defaults || {};
-  const data = { ...defaults, ...payload };
+  const data =
+    section === 'internships'
+      ? { ...defaults, ...payload }
+      : { ...payload };
+
+  const allowedFields = new Set(Object.keys(payload));
+  if (section === 'internships') {
+    // Keep known internship defaults (e.g. companyType/workType) fillable if the template omits them.
+    Object.keys(defaults).forEach(k => allowedFields.add(k));
+  }
+
   const results = [];
   let contentFilled = false;
+  let projectDescFilled = false;
 
   const elements = Array.from(
     scopeRoot.querySelectorAll('input, textarea, select, [role="combobox"], [contenteditable="true"]')
@@ -783,8 +841,9 @@ function autoFill(payload, dataSource, scopeRoot = document) {
     const labelText = getLabelText(element);
     const placeholder = getElementPlaceholder(element);
     const contextText = getContextHintText(element);
-    const field = detectField(element, labelText, placeholder, contextText);
+    const field = detectField(element, labelText, placeholder, contextText, section);
     if (!field) return;
+    if (!allowedFields.has(field)) return;
 
     // Relationship Guard: If filling a family member, ensure the label matches the specific relation if it exists
     if (data.familyRelation && field.startsWith('family')) {
@@ -844,6 +903,7 @@ function autoFill(payload, dataSource, scopeRoot = document) {
       }
 
       if (field === 'content') contentFilled = true;
+    if (field === 'projectDesc') projectDescFilled = true;
 
       if (field === 'companyType' || field === 'workType' || field === 'companySize' || field === 'industry') {
         if (element.tagName === 'SELECT') {
@@ -903,7 +963,7 @@ function autoFill(payload, dataSource, scopeRoot = document) {
     }
   });
 
-  if (!contentFilled && data.content) {
+  if (section === 'internships' && data.content) {
     const fallbackOk =
       fillBossWorkContentOnly(data.content, scopeRoot) || fillGeneralWorkContentFallback(data.content, scopeRoot);
     if (fallbackOk) {
@@ -915,6 +975,64 @@ function autoFill(payload, dataSource, scopeRoot = document) {
         success: true
       });
       contentFilled = true;
+    }
+  }
+
+  // Extra BOSS-safe fallback for project descriptions: only fill when the target textarea is still empty.
+  if (section === 'projects' && isBossSite()) {
+    const longTextInputs = Array.from(
+      scopeRoot.querySelectorAll('textarea, [contenteditable="true"], [role="textbox"]')
+    ).filter(isElementVisible);
+
+    const findEmptyCandidate = (predicate, shouldFillValue) => {
+      if (!shouldFillValue) return null;
+      const candidate = longTextInputs.find(element => {
+        const hint = toCompactText(getLabelText(element), getElementPlaceholder(element), getContextHintText(element));
+        return predicate(hint);
+      });
+      if (!candidate) return null;
+      const currentText = candidate.isContentEditable ? String(candidate.textContent || '') : String(candidate.value || '');
+      if (currentText.trim().length > 2) return null;
+      return candidate;
+    };
+
+    const contentTarget = findEmptyCandidate(
+      hint => hint.includes('项目描述'),
+      data.content
+    );
+    if (contentTarget) {
+      if (contentTarget.isContentEditable) setContentEditableValue(contentTarget, data.content);
+      else setNativeValue(contentTarget, data.content);
+      results.push({
+        index: -2,
+        field: 'content',
+        label: '项目描述(BOSS兜底)',
+        value: String(data.content).slice(0, 80),
+        success: true
+      });
+      contentFilled = true;
+    }
+
+    const projectDescTarget = findEmptyCandidate(
+      hint =>
+        hint.includes('项目介绍') ||
+        hint.includes('项目背景') ||
+        hint.includes('项目概述') ||
+        hint.includes('项目概况') ||
+        hint.includes('项目经验'),
+      data.projectDesc
+    );
+    if (projectDescTarget) {
+      if (projectDescTarget.isContentEditable) setContentEditableValue(projectDescTarget, data.projectDesc);
+      else setNativeValue(projectDescTarget, data.projectDesc);
+      results.push({
+        index: -3,
+        field: 'projectDesc',
+        label: '项目介绍(BOSS兜底)',
+        value: String(data.projectDesc).slice(0, 80),
+        success: true
+      });
+      projectDescFilled = true;
     }
   }
 
@@ -943,7 +1061,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             console.warn('[ResumeFiller] scoped模式未命中容器，已降级为整页填充');
           }
         }
-        const result = autoFill(payload, dataSource, scopeRoot);
+        const result = autoFill(payload, dataSource, scopeRoot, request.section);
         sendResponse({ success: true, result });
         return;
       }
@@ -952,7 +1070,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         const section = dataSource?.defaultTemplate?.section;
         const key = dataSource?.defaultTemplate?.key;
         const payload = resolveTemplate(dataSource, section, key) || getDefaultPayload();
-        const result = autoFill(payload, dataSource);
+        const result = autoFill(payload, dataSource, document, section);
         sendResponse({ success: true, result });
         return;
       }

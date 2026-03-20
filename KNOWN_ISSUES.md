@@ -28,3 +28,10 @@ This file lists known limitations and temporary workarounds.
 ## 6) Bank of China (Yingcai) Recognition Limitation
 - **Symptom**: The system uses deep table nesting (TR/TD isolation), which makes it hard for the plugin to associate labels via context, leading to field misplacement or misses.
 - **Workaround**: After clicking a specific input box on that page, use the plugin's **"Scoped Fill"** feature to fill near the cursor manually.
+
+## 7) BOSS (Zhipin) Content & Scoped Fill Limitations
+- **Symptom**:
+  - Internships: only basic fields (company/department/position) are filled reliably; other internship long-text fields may not be populated.
+  - Projects: long-text distribution between "project description" (long) and "project intro" (short) may be incorrect; one of the targets can remain empty.
+  - Self-evaluation & Education: those sections may not be filled (or only partially filled) on some pages/components.
+- **Workaround**: Use manual input (or the plugin's scoped filling after clicking the exact target input first). If it still fails, capture the label text + screenshot and add it to the report.

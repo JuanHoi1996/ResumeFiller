@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
           action: 'autoFillByKey',
           section,
           key,
-          scoped: ['internships', 'projects', 'educations', 'selfEvaluations', 'languages', 'computerSkills', 'familyMembers', 'openQuestions'].includes(section)
+          scoped: ['personalInfos', 'internships', 'projects', 'educations', 'selfEvaluations', 'languages', 'computerSkills', 'familyMembers', 'openQuestions'].includes(section)
         });
         showStatus(`已执行：${name}`);
       } catch (error) {
