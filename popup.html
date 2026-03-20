@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: auto;
+      min-width: 320px;
+      padding: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f6f8fb;
+    }
+    h1 {
+      font-size: 16px;
+      margin: 0 0 10px;
+      color: #1f2d3d;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #e7edf3;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .section-title {
+      margin: 6px 0 8px;
+      color: #243447;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .template-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .template-btn {
+      flex: 1 1 30%;
+      max-width: 33%;
+      border: 1px solid #d6e2ee;
+      background: #fff;
+      color: #1f2d3d;
+      border-radius: 6px;
+      padding: 8px 10px;
+      min-height: 34px;
+      white-space: nowrap;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .template-btn:hover {
+      border-color: #5b9bd5;
+      background: #f1f7ff;
+    }
+    .tool-bar {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tool-bar button {
+      flex: 1;
+      border: 1px solid #d6e2ee;
+      background: #fff;
+      color: #243447;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .tool-bar button:hover {
+      background: #f1f7ff;
+    }
+    .status {
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: none;
+    }
+    .status.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <h1>ResumeFiller 模板填充</h1>
+  <div class="panel">
+    <div class="section-title">个人信息</div>
+    <div id="personalInfoMenu" class="template-grid"></div>
+    <div class="section-title">教育经历</div>
+    <div id="educationMenu" class="template-grid"></div>
+    <div class="section-title">实习经历</div>
+    <div id="internshipMenu" class="template-grid"></div>
+    <div class="section-title">项目经历</div>
+    <div id="projectMenu" class="template-grid"></div>
+    <div class="section-title">自我评价</div>
+    <div id="selfEvaluationMenu" class="template-grid"></div>
+    <div class="section-title">外语与计算机技能</div>
+    <div class="template-grid">
+      <div id="languageMenu" style="display: contents;"></div>
+      <div id="computerSkillsMenu" style="display: contents;"></div>
+    </div>
+    <div class="section-title">家庭成员</div>
+    <div id="familyMemberMenu" class="template-grid"></div>
+    <div class="section-title">开放性问答 (小作文)</div>
+    <div id="openQuestionMenu" class="template-grid"></div>
+    <div class="tool-bar">
+      <button id="openDataBtn">编辑简历数据</button>
+      <button id="reloadBtn">刷新页面</button>
+    </div>
+  </div>
+  <div id="status" class="status"></div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
+

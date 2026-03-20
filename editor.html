@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ResumeFiller Editor</title>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f7f9fc; color: #1f2d3d; }
+    .container { max-width: 1220px; margin: 0 auto; padding: 20px; }
+    h1 { margin: 0 0 14px; font-size: 22px; }
+    .section-tabs, .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    button { border: 1px solid #ccd7e5; border-radius: 8px; background: #fff; color: #1f2d3d; padding: 8px 12px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    button.primary { border-color: #1d6ef2; background: #1d6ef2; color: #fff; }
+    button.active { border-color: #1d6ef2; background: #edf4ff; color: #1d4ed8; }
+    .layout { display: grid; grid-template-columns: 280px 1fr; gap: 12px; }
+    .panel { background: #fff; border: 1px solid #e4ebf3; border-radius: 10px; padding: 12px; }
+    .list-item { width: 100%; text-align: left; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .list-item.active { border-color: #1d6ef2; background: #edf4ff; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(240px, 1fr)); gap: 10px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .form-block.hidden { display: none; }
+    label { font-size: 12px; font-weight: 600; color: #44556a; }
+    input, textarea { border: 1px solid #ccd7e5; border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff; }
+    textarea { min-height: 110px; resize: vertical; }
+    #status { margin-top: 10px; font-size: 13px; color: #166534; min-height: 18px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ResumeFiller 数据编辑器</h1>
+    <div class="section-tabs">
+      <button id="tabPersonalInfos" class="active">个人信息</button>
+      <button id="tabEducations">教育经历</button>
+      <button id="tabInternships">实习经历</button>
+      <button id="tabProjects">项目经历</button>
+      <button id="tabSelfEvaluations">自我评价</button>
+      <button id="tabLanguages">外语能力</button>
+      <button id="tabComputerSkills">计算机技能</button>
+      <button id="tabFamilyMembers">家庭成员</button>
+      <button id="tabOpenQuestions">开放性问答/小作文</button>
+    </div>
+    <div class="toolbar">
+      <button id="addItemBtn">新增条目</button>
+      <button id="deleteItemBtn">删除当前</button>
+      <button id="setDefaultBtn">设为默认模板</button>
+      <button id="exportBtn">导出 JSON</button>
+      <button id="importBtn">导入 JSON</button>
+      <button id="saveBtn" class="primary">保存到本地</button>
+    </div>
+    <div class="layout">
+      <div class="panel"><div id="itemList"></div></div>
+      <div class="panel">
+        <div id="personalInfoForm" class="form-block">
+          <div class="grid">
+            <div class="field"><label for="personalName">模板名称</label><input id="personalName" /></div>
+            <div class="field"><label for="personalKey">模板 Key</label><input id="personalKey" disabled /></div>
+            <div class="field"><label for="fullName">姓名</label><input id="fullName" /></div>
+            <div class="field"><label for="phone">手机号</label><input id="phone" /></div>
+            <div class="field"><label for="email">邮箱</label><input id="email" /></div>
+            <div class="field"><label for="idNumber">证件号码</label><input id="idNumber" /></div>
+            <div class="field full"><label for="homeAddress">家庭住址</label><input id="homeAddress" /></div>
+            <div class="field full"><label for="hukouLocation">户籍所在地</label><input id="hukouLocation" /></div>
+          </div>
+        </div>
+
+        <div id="educationForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="educationName">模板名称</label><input id="educationName" /></div>
+            <div class="field"><label for="educationKey">模板 Key</label><input id="educationKey" disabled /></div>
+            <div class="field"><label for="schoolName">学校名称</label><input id="schoolName" /></div>
+            <div class="field"><label for="college">学院/学部</label><input id="college" /></div>
+            <div class="field"><label for="major">专业</label><input id="major" /></div>
+            <div class="field full"><label for="educationExperience">在校经历</label><textarea id="educationExperience"></textarea></div>
+            <div class="field full"><label for="coreCourses">核心课程</label><textarea id="coreCourses"></textarea></div>
+            <div class="field full"><label for="educationSummary">在校经历/核心课程（组合兜底）</label><textarea id="educationSummary"></textarea></div>
+          </div>
+        </div>
+
+        <div id="internshipForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="internshipName">模板名称</label><input id="internshipName" /></div>
+            <div class="field"><label for="internshipKey">模板 Key</label><input id="internshipKey" disabled /></div>
+            <div class="field"><label for="company">公司</label><input id="company" /></div>
+            <div class="field"><label for="department">部门</label><input id="department" /></div>
+            <div class="field"><label for="position">岗位</label><input id="position" /></div>
+            <div class="field"><label for="location">地点</label><input id="location" /></div>
+            <div class="field"><label for="start">开始日期</label><input id="start" placeholder="YYYY-MM-DD" /></div>
+            <div class="field"><label for="end">结束日期</label><input id="end" placeholder="YYYY-MM-DD" /></div>
+            <div class="field"><label for="industry">行业</label><input id="industry" /></div>
+            <div class="field"><label for="companySize">公司规模</label><input id="companySize" /></div>
+            <div class="field"><label for="companyType">单位性质</label><input id="companyType" /></div>
+            <div class="field"><label for="workType">工作性质</label><input id="workType" /></div>
+            <div class="field"><label for="refereeName">证明人</label><input id="refereeName" /></div>
+            <div class="field"><label for="leaveReason">离职原因</label><input id="leaveReason" /></div>
+            <div class="field"><label for="refereeCompanyTitle">证明人单位/职务</label><input id="refereeCompanyTitle" /></div>
+            <div class="field"><label for="refereePhone">联系方式</label><input id="refereePhone" /></div>
+            <div class="field full"><label for="internshipContent">工作内容</label><textarea id="internshipContent"></textarea></div>
+          </div>
+        </div>
+
+        <div id="projectForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="projectNameLabel">模板名称</label><input id="projectNameLabel" /></div>
+            <div class="field"><label for="projectKey">模板 Key</label><input id="projectKey" disabled /></div>
+            <div class="field"><label for="projectName">项目名称</label><input id="projectName" /></div>
+            <div class="field"><label for="projectRoleTitle">项目角色</label><input id="projectRoleTitle" /></div>
+            <div class="field full"><label for="techStack">技术栈</label><input id="techStack" /></div>
+            <div class="field full"><label for="projectContent">项目描述（通用）</label><textarea id="projectContent"></textarea></div>
+            <div class="field full"><label for="projectDesc">项目介绍</label><textarea id="projectDesc"></textarea></div>
+            <div class="field full"><label for="projectResponsibility">项目职责</label><textarea id="projectResponsibility"></textarea></div>
+            <div class="field full"><label for="projectAchievement">项目成果</label><textarea id="projectAchievement"></textarea></div>
+          </div>
+        </div>
+
+        <div id="selfEvaluationForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="selfEvalShortName">短名称</label><input id="selfEvalShortName" /></div>
+            <div class="field"><label for="selfEvalKey">模板 Key</label><input id="selfEvalKey" disabled /></div>
+            <div class="field full"><label for="selfEvalTitle">标题</label><input id="selfEvalTitle" /></div>
+            <div class="field full"><label for="selfEvalContent">自我评价内容</label><textarea id="selfEvalContent"></textarea></div>
+          </div>
+        </div>
+
+        <div id="languageForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="langShortName">名称</label><input id="langShortName" /></div>
+            <div class="field"><label for="langKey">模板 Key</label><input id="langKey" disabled /></div>
+            <div class="field full"><label for="langContent">外语能力描述</label><textarea id="langContent"></textarea></div>
+          </div>
+        </div>
+
+        <div id="computerForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="compShortName">名称</label><input id="compShortName" /></div>
+            <div class="field"><label for="compKey">模板 Key</label><input id="compKey" disabled /></div>
+            <div class="field full"><label for="compContent">计算机技能描述</label><textarea id="compContent"></textarea></div>
+          </div>
+        </div>
+
+        <div id="familyMemberForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="familyNameLabel">模板名称</label><input id="familyNameLabel" /></div>
+            <div class="field"><label for="familyKey">模板 Key</label><input id="familyKey" disabled /></div>
+            <div class="field"><label for="familyRelation">关系</label><input id="familyRelation" /></div>
+            <div class="field"><label for="familyName">姓名</label><input id="familyName" /></div>
+            <div class="field"><label for="familyCompany">工作单位</label><input id="familyCompany" /></div>
+            <div class="field"><label for="familyPosition">职务</label><input id="familyPosition" /></div>
+            <div class="field"><label for="familyPhone">联系电话</label><input id="familyPhone" /></div>
+            <div class="field"><label for="familyPoliticalStatus">政治面貌</label><input id="familyPoliticalStatus" /></div>
+          </div>
+        </div>
+
+        <div id="openQuestionForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="openQuesName">名称</label><input id="openQuesName" /></div>
+            <div class="field"><label for="openQuesKey">模板 Key</label><input id="openQuesKey" disabled /></div>
+            <div class="field full"><label for="openQuesContent">内容</label><textarea id="openQuesContent" style="min-height: 260px;"></textarea></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="status"></div>
+    <input id="importFileInput" type="file" accept=".json,application/json" style="display:none" />
+  </div>
+
+  <script src="data.js"></script>
+  <script src="storage.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>

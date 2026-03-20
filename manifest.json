@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ResumeFiller",
+  "version": "1.6.10",
+  "description": "Open-source resume autofill assistant for job applications",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "sidePanel"
+  ],
+  "action": {
+    "default_title": "ResumeFiller"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["storage.js", "data.js", "content.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
+
