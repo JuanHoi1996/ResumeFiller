@@ -583,9 +583,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   // 2. High-Priority Direct Mappings (Check Primary Labels first)
   if (primaryText.includes('家庭住址') || primaryText.includes('家庭地址') || primaryText.includes('现居地址')) return 'homeAddress';
   if (primaryText.includes('户籍所在地') || primaryText.includes('户籍地址') || primaryText.includes('户籍')) return 'hukouLocation';
-  if (primaryText.includes('姓名') && !primaryText.includes('联系人') && !primaryText.includes('证明人')) return 'fullName';
+  if (
+    normalizedSection !== 'familyMembers' &&
+    primaryText.includes('姓名') &&
+    !primaryText.includes('联系人') &&
+    !primaryText.includes('证明人')
+  ) {
+    return 'fullName';
+  }
   if (primaryText.includes('邮箱') || primaryText.includes('邮件')) return 'email';
-  if (primaryText.includes('手机号') || primaryText.includes('手机号码')) return 'phone';
+  if (normalizedSection !== 'familyMembers' && (primaryText.includes('手机号') || primaryText.includes('手机号码'))) return 'phone';
   if (primaryText.includes('证件号码') || primaryText.includes('证件号')) return 'idNumber';
 
   // Phoenix often uses label like "开始时间/结束时间" while placeholder is just "请选择"
@@ -608,14 +615,10 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   
   // 3. Section-Specific Mappings (with Context)
   // Family Member Logic (PRIORITY: Before Job Logic to avoid generic "Title/Company" conflicts)
-  if (
-    normalizedSection === 'familyMembers' &&
-    (text.includes('成员') || text.includes('家庭') || text.includes('亲属') ||
-      text.includes('父亲') || text.includes('母亲') || text.includes('配偶') || text.includes('子女'))
-  ) {
+  if (normalizedSection === 'familyMembers') {
     if (text.includes('关系') || text.includes('称谓')) return 'familyRelation';
     if (text.includes('姓名')) return 'familyName';
-    if (text.includes('单位') || text.includes('单位及职务')) return 'familyCompany';
+    if (text.includes('工作单位') || text.includes('单位') || text.includes('单位及职务')) return 'familyCompany';
     if (text.includes('职务') || text.includes('职称') || text.includes('职位')) return 'familyPosition';
     if (text.includes('电话') || text.includes('手机') || text.includes('联系方式')) return 'familyPhone';
     if (text.includes('政治面貌') || text.includes('面貌')) return 'familyPoliticalStatus';

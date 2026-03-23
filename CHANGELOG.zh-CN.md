@@ -1,6 +1,11 @@
 # 更新日志
 
 本文件用于记录 ResumeFiller 的所有重要变更。
+## [2.0.1] - 2026-03-23
+
+### 修复
+- **WeRecruit / 招商证券**：修复 `familyMembers` 在“家庭关系”卡片省略上下文定语时的识别（如仅显示 `姓名/工作单位/职位`）。禁用跨 section 的直接映射，确保能正确映射到 `familyName/familyCompany/familyPosition`。
+
 ## [2.0.0] - 2026-03-23
 
 ### 变更

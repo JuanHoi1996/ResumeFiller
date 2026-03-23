@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.0.1] - 2026-03-23
+
+### Fixes
+- **WeRecruit / 招商证券**: Fix `familyMembers` fields when the card label omits context (e.g. only shows `姓名/工作单位/职位`). Disable cross-section direct mappings to ensure inputs map to `familyName/familyCompany/familyPosition` correctly.
+
 ## [2.0.0] - 2026-03-23
 
 ### Changes
