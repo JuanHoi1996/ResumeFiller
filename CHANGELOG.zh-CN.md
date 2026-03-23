@@ -5,6 +5,7 @@
 
 ### 修复
 - **WeRecruit / 招商证券**：修复 `familyMembers` 在“家庭关系”卡片省略上下文定语时的识别（如仅显示 `姓名/工作单位/职位`）。禁用跨 section 的直接映射，确保能正确映射到 `familyName/familyCompany/familyPosition`。
+- **WeRecruit / 招商证券**：支持自我评价 label `评价内容`（映射到 `selfEvaluation`）。
 
 ## [2.0.0] - 2026-03-23
 
@@ -16,7 +17,6 @@
 - **BOSS（zhipin.com）安全性增强**：收紧长文本兜底策略，避免覆盖其它容器。
 
 ### 修复
-- **WeRecruit / 招商证券**：支持自我评价 label `评价内容`（映射到 `selfEvaluation`）。
 
 ## [1.6.10] - 2026-03-20
 

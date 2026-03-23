@@ -5,6 +5,7 @@ All notable changes to ResumeFiller will be documented in this file.
 
 ### Fixes
 - **WeRecruit / 招商证券**: Fix `familyMembers` fields when the card label omits context (e.g. only shows `姓名/工作单位/职位`). Disable cross-section direct mappings to ensure inputs map to `familyName/familyCompany/familyPosition` correctly.
+- **WeRecruit / 招商证券**: Support self-evaluation label `评价内容` (maps to `selfEvaluation`).
 
 ## [2.0.0] - 2026-03-23
 
@@ -16,7 +17,6 @@ All notable changes to ResumeFiller will be documented in this file.
 - **BOSS (zhipin.com) safety improvements**: constrained long-text fallbacks to avoid overwriting other containers.
 
 ### Fixes
-- **WeRecruit / 招商证券**: support self-evaluation label `评价内容` (maps to `selfEvaluation`).
 
 ## [1.6.10] - 2026-03-20
 
