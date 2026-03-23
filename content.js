@@ -269,7 +269,7 @@ function getScopeHintKeywords(section) {
     internships: ['公司', '单位', '单位规模', '公司规模', '汇报对象', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
     projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '起止时间', '项目内容', '主要业绩'],
     educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历'],
-    selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点'],
+    selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点', '评价内容'],
     languages: ['外语', '英语', '等级', '熟练程度', '语言能力'],
     computerSkills: ['计算机', '技能', '熟练程度', '软件', '编程', 'IT技能'],
     familyMembers: ['家庭成员', '成员', '关系', '姓名', '工作单位', '职务', '政治面貌', '联系电话', '父亲', '母亲', '配偶', '子女', '父母'],
@@ -702,7 +702,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
 
   // Skills & Self-Eval
   if (normalizedSection === 'selfEvaluations') {
-    if (text.includes('自我评价') || text.includes('个人评价') || text.includes('个人优势')) return 'selfEvaluation';
+    if (
+      text.includes('自我评价') ||
+      text.includes('个人评价') ||
+      text.includes('自我介绍') ||
+      text.includes('个人优势') ||
+      text.includes('优势亮点') ||
+      text.includes('评价内容')
+    ) {
+      return 'selfEvaluation';
+    }
   }
   if (normalizedSection === 'languages') {
     if (text.includes('外语') || text.includes('英语')) return 'languageSkills';

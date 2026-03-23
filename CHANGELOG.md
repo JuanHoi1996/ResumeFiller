@@ -1,6 +1,18 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.0.0] - 2026-03-23
+
+### Changes
+- **Intent-based scoped filling (v2 refactor)**:
+  - `detectField` now accepts an explicit `section` (intent) and locks mapping to the selected module.
+  - `autoFill` filters fill targets by the template payload keys to reduce cross-module miswrites.
+  - `scoped` mode now covers `personalInfos` as well.
+- **BOSS (zhipin.com) safety improvements**: constrained long-text fallbacks to avoid overwriting other containers.
+
+### Fixes
+- **WeRecruit / 招商证券**: support self-evaluation label `评价内容` (maps to `selfEvaluation`).
+
 ## [1.6.10] - 2026-03-20
 
 ### Fixes

@@ -1,6 +1,18 @@
 # 更新日志
 
 本文件用于记录 ResumeFiller 的所有重要变更。
+## [2.0.0] - 2026-03-23
+
+### 变更
+- **基于意图的作用域填充（v2 重构）**：
+  - `detectField` 新增显式 `section`（意图）参数，并将字段映射锁定在当前选中的模块。
+  - `autoFill` 通过模板 payload keys 过滤填充目标，降低跨模块误填概率。
+  - `scoped` 模式已覆盖 `personalInfos`。
+- **BOSS（zhipin.com）安全性增强**：收紧长文本兜底策略，避免覆盖其它容器。
+
+### 修复
+- **WeRecruit / 招商证券**：支持自我评价 label `评价内容`（映射到 `selfEvaluation`）。
+
 ## [1.6.10] - 2026-03-20
 
 ### 修复
