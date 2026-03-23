@@ -6,6 +6,8 @@ All notable changes to ResumeFiller will be documented in this file.
 ### Fixes
 - **WeRecruit / 招商证券**: Fix `familyMembers` fields when the card label omits context (e.g. only shows `姓名/工作单位/职位`). Disable cross-section direct mappings to ensure inputs map to `familyName/familyCompany/familyPosition` correctly.
 - **WeRecruit / 招商证券**: Support self-evaluation label `评价内容` (maps to `selfEvaluation`).
+- **WeRecruit / 招商证券**: Support internship label `企业名称` (maps to `company`).
+- **WeRecruit / 招商证券**: Prevent internship `content` from being mis-filled into education "specialty description" fields (label like `专业描述`).
 
 ## [2.0.0] - 2026-03-23
 

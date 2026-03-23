@@ -6,6 +6,8 @@
 ### 修复
 - **WeRecruit / 招商证券**：修复 `familyMembers` 在“家庭关系”卡片省略上下文定语时的识别（如仅显示 `姓名/工作单位/职位`）。禁用跨 section 的直接映射，确保能正确映射到 `familyName/familyCompany/familyPosition`。
 - **WeRecruit / 招商证券**：支持自我评价 label `评价内容`（映射到 `selfEvaluation`）。
+- **WeRecruit / 招商证券**：支持实习经历 label `企业名称`（映射到 `company`）。
+- **WeRecruit / 招商证券**：修复实习经历 `content` 误填到教育“专业描述”类字段（label like `专业描述`）。
 
 ## [2.0.0] - 2026-03-23
 

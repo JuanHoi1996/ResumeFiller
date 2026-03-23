@@ -266,7 +266,7 @@ function isElementVisible(element) {
 function getScopeHintKeywords(section) {
   const bySection = {
     personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式'],
-    internships: ['公司', '单位', '单位规模', '公司规模', '汇报对象', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
+    internships: ['公司', '企业名称', '单位', '单位规模', '公司规模', '汇报对象', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
     projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '起止时间', '项目内容', '主要业绩'],
     educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历'],
     selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点', '评价内容'],
@@ -311,6 +311,13 @@ function containerHasPayloadField(node, payload, section) {
     if (field && keys.has(field)) {
       matchedFields.add(field);
     }
+  }
+
+  if (section === 'internships') {
+    // For internships, avoid selecting "family/person cards" as entry containers.
+    // Require at least one strong internship anchor field inside the container.
+    const internshipAnchors = ['start', 'end', 'content', 'leaveReason', 'companyType', 'workType', 'location', 'industry'];
+    return internshipAnchors.some(f => matchedFields.has(f));
   }
 
   if (matchedFields.size >= 2) return true;
@@ -675,6 +682,7 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('工作性质')) return 'workType';
     if (text.includes('部门') || text.includes('团队') || text.includes('产品部')) return 'department';
     if (text.includes('单位规模') || text.includes('公司规模')) return 'companySize';
+    if (primaryText.includes('企业名称')) return 'company';
     if (text.includes('职务') || text.includes('职位') || text.includes('岗位')) {
       if (!text.includes('类别') && !text.includes('级别') && !text.includes('等级')) return 'position';
     }
@@ -685,6 +693,12 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       !text.includes('类型') &&
       !text.includes('行业')
     ) {
+      // Avoid misclassifying "measurement unit" placeholders, e.g. placeholder="（单位：cm）"
+      const placeholderStr = String(placeholder || '');
+      const labelStr = String(labelText || '');
+      const isMeasurePlaceholder = /单位[:：]/.test(placeholderStr) && !/单位规模|单位性质|单位及职务/.test(placeholderStr);
+      const labelHasCompanyUnit = labelStr.includes('单位') || labelStr.includes('公司');
+      if (isMeasurePlaceholder && !labelHasCompanyUnit) return '';
       return 'company';
     }
   }
@@ -735,6 +749,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       normalizedSection === 'computerSkills') &&
     (text.includes('描述') || text.includes('主要工作') || text.includes('职责业绩') || text.includes('主要业绩'))
   ) {
+    // Prevent internship/project "content" from being mis-mapped into education "specialty description" fields
+    // where the label/placeholder is like "专业描述".
+    if (normalizedSection !== 'educations' && text.includes('专业') && text.includes('描述')) return '';
     return 'content';
   }
 
