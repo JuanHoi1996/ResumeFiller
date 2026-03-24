@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.0.2] - 2026-03-23
+
+### Fixes
+- **Guopin / WeRecruit self-evaluation placeholder conflict**: prevent privacy-hint placeholders (e.g. text containing `手机号/邮箱/联系方式`) from hijacking `selfEvaluation` detection as personal-info fields (`phone/email`) in non-`personalInfos` sections.
+
 ## [2.0.1] - 2026-03-23
 
 ### Fixes

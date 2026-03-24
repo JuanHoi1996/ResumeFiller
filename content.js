@@ -588,9 +588,11 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   const text = effectiveContext ? extendedText : primaryText;
 
   // 2. High-Priority Direct Mappings (Check Primary Labels first)
-  if (primaryText.includes('家庭住址') || primaryText.includes('家庭地址') || primaryText.includes('现居地址')) return 'homeAddress';
-  if (primaryText.includes('户籍所在地') || primaryText.includes('户籍地址') || primaryText.includes('户籍')) return 'hukouLocation';
+  const isPersonalInfoSection = !normalizedSection || normalizedSection === 'personalInfos';
+  if (isPersonalInfoSection && (primaryText.includes('家庭住址') || primaryText.includes('家庭地址') || primaryText.includes('现居地址'))) return 'homeAddress';
+  if (isPersonalInfoSection && (primaryText.includes('户籍所在地') || primaryText.includes('户籍地址') || primaryText.includes('户籍'))) return 'hukouLocation';
   if (
+    isPersonalInfoSection &&
     normalizedSection !== 'familyMembers' &&
     primaryText.includes('姓名') &&
     !primaryText.includes('联系人') &&
@@ -598,9 +600,15 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   ) {
     return 'fullName';
   }
-  if (primaryText.includes('邮箱') || primaryText.includes('邮件')) return 'email';
-  if (normalizedSection !== 'familyMembers' && (primaryText.includes('手机号') || primaryText.includes('手机号码'))) return 'phone';
-  if (primaryText.includes('证件号码') || primaryText.includes('证件号')) return 'idNumber';
+  if (isPersonalInfoSection && (primaryText.includes('邮箱') || primaryText.includes('邮件'))) return 'email';
+  if (
+    isPersonalInfoSection &&
+    normalizedSection !== 'familyMembers' &&
+    (primaryText.includes('手机号') || primaryText.includes('手机号码'))
+  ) {
+    return 'phone';
+  }
+  if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号'))) return 'idNumber';
 
   // Phoenix often uses label like "开始时间/结束时间" while placeholder is just "请选择"
   if (
