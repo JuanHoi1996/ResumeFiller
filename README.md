@@ -7,11 +7,25 @@ Open-source resume autofill assistant for job applications.
 - One-click autofill into common online application forms.
 - Uses **scoped fill** (intent-based) to reduce cross-field miswrites: you can click the target input first, then run the corresponding template.
 
+## Sites & ATS ecosystems (focus / tested)
+The extension combines **generic** heuristics (common UI libraries, labels, placeholders) with **targeted** fixes where we have reports. Changelog-backed examples include:
+
+| Area | Examples |
+|------|----------|
+| **BOSS Zhipin** | `zhipin.com` resume editor & application forms (dedicated handling) |
+| **Guopin / WeRecruit** | Government-style recruitment portals |
+| **Beisen / Phoenix (北森)** | Enterprise ATS using Phoenix-style items (e.g. `form-item--phoenix`) |
+| **Feishu / Lark** | Recruitment pages on Feishu/Lark forms |
+| **Moka** | Marketing career sites built on Moka |
+| **Bank of China “Yingcai” (英才)** | Very deep table layouts; use scoped fill; not 100% automatic |
+
+**Often usable** on other major boards via generic controls: **Liepin**, **Zhaopin (智联)**, **Shixiseng**, **51job**, etc. Other vendor families (**Hotjob**, **ChinaHR-style** portals, etc.) may work depending on DOM. If a field misses, use **scoped fill** and report the label + screenshot.
+
 ## Supported browsers
 This extension is packaged for **Chrome (Manifest V3)**. In practice it should work on most **Chromium-based** browsers via “Load unpacked”:
 - Edge, Opera, Brave, Vivaldi
 - 360 Browser, QQ Browser
-- Sogou/猎豹等同类浏览器
+- Sogou/Cheetah Browser etc.
 
 If a browser-specific component differs, please report the label text + a screenshot in the Known Issues.
 
