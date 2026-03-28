@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
   "name": "ResumeFiller",
-  "version": "2.0.2",
+  "version": "2.1.4",
   "description": "Open-source resume autofill assistant for job applications",
   "permissions": [
     "activeTab",
     "scripting",
     "storage",
-    "sidePanel"
+    "sidePanel",
+    "contextMenus",
+    "clipboardWrite"
   ],
   "action": {
     "default_title": "ResumeFiller"

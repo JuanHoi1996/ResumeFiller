@@ -39,6 +39,7 @@ function setContentEditableValue(element, value) {
 }
 
 let lastInteractedField = null;
+let lastContextMenuTarget = null;
 
 function isFillableElement(element) {
   if (!element) return false;
@@ -69,6 +70,20 @@ document.addEventListener(
   true
 );
 
+document.addEventListener(
+  'contextmenu',
+  event => {
+    const t = event.target;
+    if (isFillableElement(t)) {
+      lastContextMenuTarget = t;
+      return;
+    }
+    const closest = t?.closest?.('input, textarea, select, [role="combobox"], [contenteditable="true"]');
+    lastContextMenuTarget = isFillableElement(closest) ? closest : null;
+  },
+  true
+);
+
 function getElementPlaceholder(element) {
   if (!element) return '';
   if (typeof element.placeholder === 'string' && element.placeholder.trim()) {
@@ -84,6 +99,28 @@ function getElementPlaceholder(element) {
 
 function isBossSite() {
   return /(^|\.)zhipin\.com$/i.test(window.location.hostname);
+}
+
+function stripBossExampleSample(text) {
+  const t = String(text || '').trim();
+  const m = t.match(/^例如[:：]\s*(.+)$/);
+  return m ? m[1].trim() : '';
+}
+
+function bossExampleSampleFromField(labelText, placeholder) {
+  return stripBossExampleSample(placeholder) || stripBossExampleSample(labelText) || '';
+}
+
+function bossExampleLooksLikeJobTitle(sample) {
+  const s = String(sample || '').trim();
+  if (!s) return false;
+  return /师|员|经理|总监|主管|工程师|开发|设计|产品|运营|顾问|专员|助理|架构|招聘|HR|策划|编辑|分析师|法务|销售|客服|主播|顾问/i.test(s);
+}
+
+function bossExampleLooksLikeSchoolName(sample) {
+  const s = String(sample || '').trim();
+  if (!s) return false;
+  return /(大学|学院|专科学校|职业技术学院|职业技术|师范|医科|分校|研究院|校区|学校|中学|附中|小学|研究生院|高职)$/.test(s);
 }
 
 function getContextHintText(element) {
@@ -266,9 +303,29 @@ function isElementVisible(element) {
 function getScopeHintKeywords(section) {
   const bySection = {
     personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式'],
-    internships: ['公司', '企业名称', '单位', '单位规模', '公司规模', '汇报对象', '部门', '职位', '岗位', '工作内容', '在职时间', '任职时间', '描述', '主要业绩', '职务', '离职原因'],
+    internships: [
+      '公司',
+      '企业名称',
+      '单位',
+      '单位规模',
+      '公司规模',
+      '汇报对象',
+      '部门',
+      '职位',
+      '岗位',
+      '工作内容',
+      '在职时间',
+      '任职时间',
+      '描述',
+      '主要业绩',
+      '职务',
+      '离职原因',
+      '实习',
+      '实习经历',
+      '工作经历'
+    ],
     projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '起止时间', '项目内容', '主要业绩'],
-    educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历'],
+    educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历', '学历', '专业', '课程', '荣誉'],
     selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点', '评价内容'],
     languages: ['外语', '英语', '等级', '熟练程度', '语言能力'],
     computerSkills: ['计算机', '技能', '熟练程度', '软件', '编程', 'IT技能'],
@@ -316,8 +373,32 @@ function containerHasPayloadField(node, payload, section) {
   if (section === 'internships') {
     // For internships, avoid selecting "family/person cards" as entry containers.
     // Require at least one strong internship anchor field inside the container.
-    const internshipAnchors = ['start', 'end', 'content', 'leaveReason', 'companyType', 'workType', 'location', 'industry'];
+    // BOSS (zhipin) uses placeholder-only rows like "例如: 直聘网" — company/position must count as anchors.
+    const internshipAnchors = [
+      'start',
+      'end',
+      'content',
+      'leaveReason',
+      'companyType',
+      'workType',
+      'location',
+      'industry',
+      'company',
+      'position'
+    ];
     return internshipAnchors.some(f => matchedFields.has(f));
+  }
+
+  if (section === 'educations') {
+    const educationAnchors = [
+      'schoolName',
+      'major',
+      'college',
+      'educationSummary',
+      'educationExperience',
+      'coreCourses'
+    ];
+    return educationAnchors.some(f => matchedFields.has(f));
   }
 
   if (matchedFields.size >= 2) return true;
@@ -336,9 +417,17 @@ function resolveScopedRoot(section, payload) {
   if (!anchor) return null;
 
   let node = anchor;
-  for (let i = 0; i < 10 && node && node !== document.body; i += 1) {
-    if (isLikelyEntryContainer(node, section)) return node;
-    if (containerHasPayloadField(node, payload, section)) return node;
+  for (let i = 0; i < 12 && node && node !== document.body; i += 1) {
+    const likely = isLikelyEntryContainer(node, section);
+    const payloadOk = containerHasPayloadField(node, payload, section);
+    // Projects / educations (e.g. BOSS Zhipin): keyword-only likely-container can stop too early
+    // when fields are split across sibling cards — prefer payload-matching subtrees first.
+    if (section === 'projects' || section === 'educations') {
+      if (payloadOk) return node;
+    } else {
+      if (likely) return node;
+      if (payloadOk) return node;
+    }
     node = node.parentElement;
   }
   return null;
@@ -666,6 +755,22 @@ function detectField(element, labelText, placeholder, contextText, section = nul
 
   // Education Logic
   if (normalizedSection === 'educations') {
+    if (
+      isBossSite() &&
+      element.tagName === 'INPUT' &&
+      (type === 'text' || type === 'search' || type === '')
+    ) {
+      const egSample = bossExampleSampleFromField(labelText, placeholder);
+      if (egSample) {
+        return bossExampleLooksLikeSchoolName(egSample) ? 'schoolName' : 'major';
+      }
+    }
+    if (isBossSite() && element.tagName === 'TEXTAREA') {
+      const pt = primaryText;
+      if (pt.includes('在校担任') || pt.includes('获得荣誉') || pt.includes('所学主要课程')) {
+        return 'educationSummary';
+      }
+    }
     if (text.includes('在校经历/核心课程')) return 'educationSummary';
     if (text.includes('在校经历') || text.includes('校园经历')) return 'educationExperience';
     if (text.includes('核心课程') || text.includes('主修课程')) return 'coreCourses';
@@ -685,6 +790,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
 
   // Internship/Job Logic
   if (normalizedSection === 'internships') {
+    if (
+      isBossSite() &&
+      element.tagName === 'INPUT' &&
+      (type === 'text' || type === 'search' || type === '')
+    ) {
+      const egSample = bossExampleSampleFromField(labelText, placeholder);
+      if (egSample) {
+        return bossExampleLooksLikeJobTitle(egSample) ? 'position' : 'company';
+      }
+    }
     if (text.includes('离职原因')) return 'leaveReason';
     if (text.includes('单位性质')) return 'companyType';
     if (text.includes('工作性质')) return 'workType';
@@ -713,6 +828,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
 
   // Project Logic
   if (normalizedSection === 'projects') {
+    if (
+      isBossSite() &&
+      element.tagName === 'INPUT' &&
+      (type === 'text' || type === 'search' || type === '')
+    ) {
+      const egSample = bossExampleSampleFromField(labelText, placeholder);
+      if (egSample) {
+        return bossExampleLooksLikeJobTitle(egSample) ? 'projectRoleTitle' : 'projectName';
+      }
+    }
     if (text.includes('项目名称')) return 'projectName';
     if (text.includes('项目角色')) return 'projectRoleTitle';
     if (text.includes('技术栈')) return 'techStack';
@@ -722,7 +847,31 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),
     // while "项目介绍" maps to the shorter "项目介绍" field (projectDesc).
     if (text.includes('项目描述')) return 'content';
+    // BOSS resume: placeholder text contains "项目经验" but maps to the long bullet field (content), not projectDesc
+    if (
+      text.includes('描述该项目') ||
+      (text.includes('描述') && text.includes('项目') && text.includes('招聘者')) ||
+      (text.includes('展示') && text.includes('项目经验'))
+    ) {
+      return 'content';
+    }
     if (text.includes('项目介绍') || text.includes('项目背景') || text.includes('项目概述') || text.includes('项目概况') || text.includes('项目经验')) return 'projectDesc';
+  }
+
+  if (
+    isBossSite() &&
+    normalizedSection === 'internships' &&
+    element.tagName === 'TEXTAREA'
+  ) {
+    const pt = primaryText;
+    if (
+      pt.includes('主要负责') ||
+      pt.includes('店面管理') ||
+      pt.includes('客单价') ||
+      (/\d、/.test(pt) && (pt.includes('负责') || pt.includes('制定') || pt.includes('分析') || pt.includes('销售')))
+    ) {
+      return 'content';
+    }
   }
 
   // Skills & Self-Eval
@@ -783,7 +932,13 @@ function fillBossWorkContentOnly(contentValue, scopeRoot = document) {
       getElementPlaceholder(element),
       getContextHintText(element)
     );
-    return hint.includes('工作内容') && !hint.includes('工作业绩') && !hint.includes('业绩成果');
+    const bossWorkLike =
+      hint.includes('工作内容') ||
+      hint.includes('主要负责') ||
+      hint.includes('店面管理') ||
+      hint.includes('客单价') ||
+      (/\d、/.test(hint) && (hint.includes('负责') || hint.includes('制定') || hint.includes('分析') || hint.includes('销售')));
+    return bossWorkLike && !hint.includes('工作业绩') && !hint.includes('业绩成果') && !hint.includes('描述该项目');
   });
 
   if (!candidate) return false;
@@ -1034,7 +1189,11 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
     };
 
     const contentTarget = findEmptyCandidate(
-      hint => hint.includes('项目描述'),
+      hint =>
+        hint.includes('项目描述') ||
+        hint.includes('描述该项目') ||
+        (hint.includes('描述') && hint.includes('项目') && hint.includes('招聘者')) ||
+        (hint.includes('展示') && hint.includes('项目经验')),
       data.content
     );
     if (contentTarget) {
@@ -1078,7 +1237,89 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
   return { success: true, total: elements.length, filled, results };
 }
 
+function resolveReportTargetElement() {
+  if (lastContextMenuTarget && document.contains(lastContextMenuTarget) && isFillableElement(lastContextMenuTarget)) {
+    return lastContextMenuTarget;
+  }
+  const active = document.activeElement;
+  if (isFillableElement(active)) return active;
+  return null;
+}
+
+function buildFieldReportText(element) {
+  const manifest = chrome.runtime.getManifest();
+  const version = manifest?.version || '';
+  const labelText = getLabelText(element);
+  const placeholder = getElementPlaceholder(element);
+  const contextHint = getContextHintText(element);
+  let html = element?.outerHTML || '';
+  const max = 80000;
+  if (html.length > max) {
+    html = `${html.slice(0, max)}\n... [truncated ${html.length - max} chars]`;
+  }
+  return [
+    'ResumeFiller field report (beta)',
+    `Version: ${version}`,
+    `URL: ${location.href}`,
+    `Time: ${new Date().toISOString()}`,
+    '---',
+    `Label: ${labelText}`,
+    `Placeholder: ${placeholder}`,
+    `Context hint: ${contextHint}`,
+    '--- outerHTML ---',
+    html,
+    '--- end ---'
+  ].join('\n');
+}
+
+async function copyReportToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    return ok;
+  }
+}
+
+function showReportToast(message) {
+  const el = document.createElement('div');
+  el.textContent = message;
+  el.style.cssText =
+    'position:fixed;z-index:2147483647;left:50%;top:24px;transform:translateX(-50%);' +
+    'background:#1b5e20;color:#fff;padding:10px 16px;border-radius:8px;font:14px/1.4 system-ui,sans-serif;' +
+    'box-shadow:0 4px 12px rgba(0,0,0,.25);max-width:90vw;';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3500);
+}
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'reportField') {
+    (async () => {
+      try {
+        const element = resolveReportTargetElement();
+        if (!element) {
+          sendResponse({ success: false, error: '未找到可上报的输入框（请先在输入框上右键）' });
+          return;
+        }
+        const text = buildFieldReportText(element);
+        await copyReportToClipboard(text);
+        showReportToast('ResumeFiller：已复制到剪贴板，可粘贴到反馈/工单');
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message });
+      }
+    })();
+    return true;
+  }
+
   (async () => {
     try {
       const dataSource = window.resumeStorage

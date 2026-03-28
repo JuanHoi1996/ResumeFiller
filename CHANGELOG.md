@@ -1,6 +1,31 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.1.4] - 2026-03-28
+
+### Fixes
+- **BOSS Zhipin education**: Map `例如：…` rows to `schoolName` (name ends with 大学/学院/… ) vs `major` otherwise; BOSS textarea with 在校担任/获得荣誉/所学主要课程 → `educationSummary`. Scoped `educations` now prefers `containerHasPayloadField` (like `projects`) and treats `schoolName`/`major`/… as education anchors for split-card layouts.
+
+## [2.1.3] - 2026-03-28
+
+### Fixes
+- **Scoped `projects` root**: For `section === 'projects'`, `resolveScopedRoot` now prefers `containerHasPayloadField` over `isLikelyEntryContainer` so a description-only card does not win on keyword hits and shrink the scope, missing sibling-card fields like project name/role (e.g. BOSS Zhipin split cards).
+
+## [2.1.2] - 2026-03-28
+
+### Fixes
+- **BOSS Zhipin resume editor (`zhipin.com/web/geek/resume`)**: Map placeholder-only rows like `例如: …` to internship `company`/`position` and project `projectName`/`projectRoleTitle`; map BOSS-style internship textarea copy to `content`; treat BOSS project long text (`描述该项目` / `展示您的项目经验`) as `content` instead of `projectDesc`. Scoped internship containers now treat `company`/`position` as anchors and add keywords (`实习`, `工作经历`) for card detection.
+
+## [2.1.1] - 2026-03-28
+
+### Improved
+- **Side panel template chips**: Replaced fixed three-column flex with responsive `auto-fill` grid; long labels wrap, column count adapts to panel width.
+
+## [2.1.0] - 2026-03-28
+
+### Added
+- **Beta feedback**: New context-menu action on editable areas copies a report (URL, label/placeholder/context hints, `outerHTML` truncated when huge) to the clipboard for mis-detection feedback.
+
 ## [2.0.2] - 2026-03-23
 
 ### Fixes

@@ -1,6 +1,31 @@
 # 更新日志
 
 本文件用于记录 ResumeFiller 的所有重要变更。
+## [2.1.4] - 2026-03-28
+
+### 修复
+- **BOSS 直聘教育经历**：识别「例如：北京大学 / 例如：计算机科学与技术」类占位（学校名以大学/学院等结尾 → `schoolName`，否则 → `major`）；长文本占位含「在校担任/获得荣誉/所学主要课程」→ `educationSummary`。`educations` 作用域与 `projects` 相同优先 `containerHasPayloadField`，并将 `schoolName`/`major` 等纳入教育锚点，避免分卡时 scoped 过早截断。
+
+## [2.1.3] - 2026-03-28
+
+### 修复
+- **scoped 项目经历作用域**：`resolveScopedRoot` 对 `projects` 优先采用「当前子树内已能匹配到模板 payload 字段」的容器（`containerHasPayloadField`），再回退到关键词容器（`isLikelyEntryContainer`）。避免仅含项目描述等文案的卡片因关键词先命中而过早截断作用域，导致无法填充同一段经历里另一张卡片上的项目名称/角色（如 BOSS 直聘分卡布局）。
+
+## [2.1.2] - 2026-03-28
+
+### 修复
+- **BOSS 直聘（zhipin.com/web/geek/resume）实习/项目经历**：页面仅用「例如: xxx」占位、无真实 label 时识别 `company`/`position` 与 `projectName`/`projectRoleTitle`；实习长文本框按「主要负责 / 序号+负责」等 BOSS 文案映射到 `content`；项目长文避免被「项目经验」误判为 `projectDesc`。作用域检测将 `company`/`position` 计入实习锚点，并补充「实习/工作经历」等关键词以稳定命中卡片容器。
+
+## [2.1.1] - 2026-03-28
+
+### 改进
+- **侧栏模板按钮布局**：模板按钮由固定三列 flex 改为 `auto-fill` 网格，允许长标签自动换行，在窄宽度下列数随容器收缩，缓解长文案显得拥挤的问题。
+
+## [2.1.0] - 2026-03-28
+
+### 新增
+- **内测反馈**：在可编辑区域右键菜单增加「ResumeFiller · 上报此输入框」，一键将当前输入框的 URL、标签/占位/上下文提示与 `outerHTML`（过长会截断）复制到剪贴板，便于反馈识别失败问题。
+
 ## [2.0.2] - 2026-03-23
 
 ### 修复

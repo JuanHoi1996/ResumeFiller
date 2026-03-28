@@ -29,20 +29,24 @@
       font-weight: 600;
     }
     .template-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 7.75rem), 1fr));
       gap: 8px;
+      align-items: stretch;
     }
     .template-btn {
-      flex: 1 1 30%;
-      max-width: 33%;
+      width: 100%;
+      box-sizing: border-box;
       border: 1px solid #d6e2ee;
       background: #fff;
       color: #1f2d3d;
       border-radius: 6px;
       padding: 8px 10px;
-      min-height: 34px;
-      white-space: nowrap;
+      min-height: 2.25rem;
+      white-space: normal;
+      line-height: 1.35;
+      word-break: break-word;
+      overflow-wrap: anywhere;
       text-align: center;
       cursor: pointer;
       font-size: 12px;
