@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.1.5] - 2026-03-29
+
+### Improved
+- **Field Detection**: Supported generic labels like "内容" (Content) and "职责" (Responsibility) within the Project section, fixing issues on sites like Vipshop (Moka).
+- **UI Feedback**: Added `:active` visual states to all buttons in the side panel and editor for better interaction feedback.
+- **Default Templates**: Updated factory-default resume data with more instructive and humorous copy.
+
 ## [2.1.4] - 2026-03-28
 
 ### Fixes

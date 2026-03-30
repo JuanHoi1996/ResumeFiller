@@ -841,9 +841,14 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('项目名称')) return 'projectName';
     if (text.includes('项目角色')) return 'projectRoleTitle';
     if (text.includes('技术栈')) return 'techStack';
-    if (text.includes('项目职责')) return 'projectResponsibility';
+    if (text.includes('项目职责') || (text.includes('职责') && normalizedSection === 'projects')) return 'projectResponsibility';
     if (text.includes('项目成果') || text.includes('项目业绩')) return 'projectAchievement';
-    if (text.includes('项目内容')) return 'content';
+    if (text.includes('项目内容') || text.includes('项目描述')) return 'content';
+    // Moka / Generic: if we are in projects section and label is just "内容" or "职责"
+    if (normalizedSection === 'projects') {
+      if (primaryText === '内容' || primaryText === '项目内容') return 'content';
+      if (primaryText === '职责' || primaryText === '项目职责') return 'projectResponsibility';
+    }
     // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),
     // while "项目介绍" maps to the shorter "项目介绍" field (projectDesc).
     if (text.includes('项目描述')) return 'content';

@@ -1,135 +1,112 @@
 const resumeData = {
-  defaults: {
-    companyType: "民营公司",
-    workType: "实习"
+  computerSkills: {
+    default_skills: {
+      content: "跟外语能力一样，只是部分网站能填文本，但是能省一点事儿是一点对吧？",
+      name: "示例"
+    }
   },
   defaultTemplate: {
     section: "internships",
-    key: "default_internship"
+    key: "yuedian"
   },
-  personalInfos: {
-    default_personal_info: {
-      name: "示例",
-      payload: {
-        fullName: "张三",
-        phone: "13800138000",
-        email: "example@email.com",
-        idNumber: "110101199001011234",
-        homeAddress: "北京市朝阳区（请修改）",
-        hukouLocation: "广东省广州市（请修改）"
-      }
-    }
+  defaults: {
+    companyType: "国企/外资企业/上市公司",
+    workType: "实习"
   },
   educations: {
     default_education: {
       name: "示例",
       payload: {
-        schoolName: "示例大学（请修改）",
-        college: "经济与管理学院",
-        major: "金融学（请修改）",
-        educationExperience: "在校期间参与学生组织与学术项目，具备较强协作与执行能力。",
-        coreCourses: "数据结构，操作系统，计算机网络，数据库系统，机器学习",
-        educationSummary:
-          "在校经历：参与学生组织与学术项目。\n核心课程：数据结构、操作系统、计算机网络、数据库系统、机器学习。"
+        college: "在这里填学院",
+        coreCourses: "上过什么课给他列一下吧，有些公司有这个输入框，但大部分都不是必填的",
+        educationExperience: "如果你觉得很逆天就对了，有的公司真要填这个",
+        educationSummary: "如你所见，这个就是用来兜底的",
+        major: "在这里填专业",
+        schoolName: "在这里填学校"
       }
-    }
-  },
-  internships: {
-    default_internship: {
-      name: "示例",
-      payload: {
-        company: "示例公司（请修改）",
-        department: "示例部门",
-        position: "示例岗位",
-        location: "北京",
-        start: "2025-01-01",
-        end: "2025-03-31",
-        content:
-          "• 参与业务数据整理与分析，输出周报支持团队决策。\n" +
-          "• 协助跨部门沟通与项目推进，跟踪关键节点并复盘。\n" +
-          "• 独立完成流程优化小工具开发，提升日常协作效率。",
-        industry: "互联网",
-        companySize: "500-2000人",
-        refereeName: "",
-        refereePhone: "",
-        refereeCompanyTitle: "",
-        leaveReason: "实习期满",
-        companyType: "民营公司",
-        workType: "实习"
-      }
-    }
-  },
-  projects: {
-    default_project: {
-      name: "示例",
-      payload: {
-        projectName: "示例项目（请修改）",
-        projectRoleTitle: "项目成员",
-        techStack: "JavaScript, HTML, CSS",
-        content:
-          "• 负责核心功能开发与联调，保证功能按期上线。\n" +
-          "• 设计并实现关键模块，提升可维护性与可扩展性。\n" +
-          "• 通过问题排查与性能优化，改善用户体验。",
-        projectDesc:
-          "该项目用于演示网申插件默认项目模板。请根据个人真实经历修改项目背景与目标。",
-        projectResponsibility:
-          "负责需求分析、模块开发、联调测试与文档维护，推动项目按计划交付。",
-        projectAchievement:
-          "完成核心功能上线，满足业务需求并提升流程效率。"
-      }
-    }
-  },
-  selfEvaluations: {
-    default_general: {
-      shortName: "示例",
-      title: "默认自我评价（请修改）",
-      content:
-        "具备扎实的学习能力与执行力，能够快速理解业务并推动落地。擅长跨团队协作与问题拆解，重视结果导向与持续复盘。"
-    }
-  },
-  languages: {
-    default_en: {
-      name: "外语技能（英语）",
-      content: "CET-6 (580分)；具备良好的英语听说读写能力，能够熟练查阅英文专业文档并进行流畅的商务沟通。"
-    }
-  },
-  computerSkills: {
-    default_skills: {
-      name: "计算机技能",
-      content: "熟练掌握 Python (NumPy, Pandas), SQL, JavaScript; 熟悉 Office 办公套件, Tableau 及基本的 Git 操作。"
     }
   },
   familyMembers: {
     default_family: {
-      name: "家庭成员（示例）",
+      name: "示例",
       payload: {
-        familyRelation: "父亲",
-        familyName: "张大三",
-        familyCompany: "示例单位",
-        familyPosition: "工程师",
-        familyPhone: "13900139000",
-        familyPoliticalStatus: "中共党员"
+        familyCompany: "填这个家庭成员的工作单位",
+        familyName: "填这个家庭成员的名字",
+        familyPhone: "填这个家庭成员的电话号码",
+        familyPoliticalStatus: "填这个家庭成员的政治面貌",
+        familyPosition: "填这个家庭成员在单位的职务",
+        familyRelation: "填这个家庭成员跟你的关系"
       }
     }
   },
+  internships: {
+    yuedian: {
+      name: "示例",
+      payload: {
+        company: "在这里填公司的名字",
+        companySize: "很多网站都做成下拉菜单/二级菜单让你点鼠标的",
+        companyType: "根本由不得你填文本",
+        content: "在这里填工作内容，我们这里没字数限制，但是有些逆天公司非要你200个字写完",
+        department: "在这里填部门的名字",
+        end: "这些你还是做好手动点鼠标的心理准备",
+        industry: "行业、公司规模和单位&工作性质其实跟日期一样",
+        leaveReason: "有的公司真要填这个",
+        location: "地点",
+        position: "在这里填岗位的名字",
+        refereeCompanyTitle: "而且有些网站还是必填的",
+        refereeName: "如果你觉得很逆天就对了",
+        refereePhone: "我也觉得很逆天，我们一起骂",
+        start: "其实很少有能一口气填上的",
+        workType: "这个确实没办法"
+      }
+    }
+  },
+  languages: {
+    default_en: {
+      content: "有部分网站在这方面是文本框填写的，但真不多，大部分还是需要你点鼠标",
+      name: "示例"
+    }
+  },
   openQuestions: {
-    career_quant: {
-      name: "职业生涯规划 (量化/数据版)",
+    open_ques_1773757933317: {
+      name: "示例",
       payload: {
-        content: "1. 近三年（专业深耕期）：依托我数学与金融复合背景，在应聘部门快速上手业务。利用 Python 自动化建模与量化分析能力，将数据驱动思维引入日常投研或风控流程，提升部门业务执行效率。\n2. 三至五年（能力破局期）：目标是成为部门内的“技术+业务”复合型专家。深耕 FICC 或大类资产定价领域，能够独立处理复杂金融产品的估值与风险穿透，在合规前提下通过模型优化提升资产配置的胜率。\n3. 远期愿景：致力于在公司的系统化转型中发挥中坚作用，利用金融科技手段助力银行在复杂市场环境下的精准定价与风险对冲。"
+        content: "如果你觉得很逆天就对了，有的公司真要填这个，我也不懂海投阶段就让我写小作文是何意味"
       }
-    },
-    career_ib: {
-      name: "职业生涯规划 (投行/产业版)",
+    }
+  },
+  personalInfos: {
+    default_personal_info: {
+      name: "示例",
       payload: {
-        content: "1. 近三年（实务锤炼期）：快速扎根投行业务一线。发挥我在中行投行部及中金财富实习中积累的尽职调查与 REITs 现金流建模能力，严谨对待每一份底稿与估值报告，辅助团队完成高质量的项目交付。\n2. 三至五年（产业专家期）：目标是成为特定行业的产业专家。结合我对轻工制造及电力能源行业的深度研究经验，通过敏锐的行业洞察力为客户提供更具增值性的融资方案，从“工具性服务”向“顾问式服务”转型。\n3. 远期愿景：在公司的平台上，成为具备长期主义价值发现能力的资深投行人，助力实体企业通过资本市场实现跨越式发展。"
+        email: "所有数据都存储在本地",
+        fullName: "你的名字",
+        homeAddress: "也不会知道你的家庭住址",
+        hukouLocation: "不会泄露的，放心",
+        idNumber: "开发者不可能知道你的身份证号",
+        phone: "请放心填写"
       }
-    },
-    why_us: {
-      name: "应聘理由 (示例)",
+    }
+  },
+  projects: {
+    power_trading_quant: {
+      name: "示例",
       payload: {
-        content: "贵司作为行业领先的金融机构，具备完善的培养体系与广阔的业务平台。我个人的学术背景（数学+金融）与多段头部机构实习经历，使我能够迅速适应高强度的工作节奏，并为团队带来数据分析与业务研究的双重价值。"
+        content: "正常来说都只有一个输入框的，但是……",
+        projectAchievement: "所以没办法，你得准备4段文案，让AI帮你写吧",
+        projectDesc: "有不少逆天网站一个拆成三个",
+        projectName: "如题，填项目名称",
+        projectResponsibility: "比如国聘和猎聘，点名批评",
+        projectRoleTitle: "如题，填项目角色",
+        techStack: "如果你那个是编程项目的话，就有这个可以写了"
       }
+    }
+  },
+  selfEvaluations: {
+    self_eval_1773663870692: {
+      content: "真正重要的是下面这个，就是写小作文吹自己",
+      shortName: "示例",
+      title: "其实这个没什么用，只是一个长一点的名字"
     }
   }
 };

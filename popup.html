@@ -55,6 +55,10 @@
       border-color: #5b9bd5;
       background: #f1f7ff;
     }
+    .template-btn:active {
+      background: #e1effe;
+      transform: translateY(1px);
+    }
     .tool-bar {
       display: flex;
       gap: 8px;
@@ -70,9 +74,14 @@
       cursor: pointer;
       font-size: 12px;
       font-weight: 600;
+      transition: all 0.1s;
     }
     .tool-bar button:hover {
       background: #f1f7ff;
+    }
+    .tool-bar button:active {
+      background: #e1effe;
+      transform: translateY(1px);
     }
     .status {
       margin-top: 8px;

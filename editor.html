@@ -8,8 +8,10 @@
     .container { max-width: 1220px; margin: 0 auto; padding: 20px; }
     h1 { margin: 0 0 14px; font-size: 22px; }
     .section-tabs, .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-    button { border: 1px solid #ccd7e5; border-radius: 8px; background: #fff; color: #1f2d3d; padding: 8px 12px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    button { border: 1px solid #ccd7e5; border-radius: 8px; background: #fff; color: #1f2d3d; padding: 8px 12px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.1s; }
+    button:active { transform: translateY(1px); opacity: 0.8; }
     button.primary { border-color: #1d6ef2; background: #1d6ef2; color: #fff; }
+    button.primary:active { background: #1a56c5; }
     button.active { border-color: #1d6ef2; background: #edf4ff; color: #1d4ed8; }
     .layout { display: grid; grid-template-columns: 280px 1fr; gap: 12px; }
     .panel { background: #fff; border: 1px solid #e4ebf3; border-radius: 10px; padding: 12px; }
