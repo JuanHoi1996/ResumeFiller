@@ -84,7 +84,9 @@ const resumeData = {
         homeAddress: "也不会知道你的家庭住址",
         hukouLocation: "不会泄露的，放心",
         idNumber: "开发者不可能知道你的身份证号",
-        phone: "请放心填写"
+        phone: "请放心填写",
+        height: "175",
+        weight: "70"
       }
     }
   },

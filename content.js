@@ -698,6 +698,8 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     return 'phone';
   }
   if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号'))) return 'idNumber';
+  if (isPersonalInfoSection && primaryText.includes('身高')) return 'height';
+  if (isPersonalInfoSection && primaryText.includes('体重')) return 'weight';
 
   // Phoenix often uses label like "开始时间/结束时间" while placeholder is just "请选择"
   if (

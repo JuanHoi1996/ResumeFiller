@@ -40,6 +40,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     phone: document.getElementById("phone"),
     email: document.getElementById("email"),
     idNumber: document.getElementById("idNumber"),
+    height: document.getElementById("height"),
+    weight: document.getElementById("weight"),
     homeAddress: document.getElementById("homeAddress"),
     hukouLocation: document.getElementById("hukouLocation")
   };

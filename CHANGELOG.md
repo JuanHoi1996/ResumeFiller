@@ -1,6 +1,14 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.1.6] - 2026-03-30
+
+### Added
+- **Height & Weight fields**: Added `height` and `weight` fields to the Personal Info section, with corresponding detection logic for web forms.
+
+### Fixed
+- **Feedback Script Improvements**: Rewrote the regex and parsing logic in `FeedbackCollector.py` to be more robust, fixing the issue where multiple feedback reports could be mangled into a single CSV row.
+
 ## [2.1.5] - 2026-03-29
 
 ### Improved
