@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const languageMenu = document.getElementById('languageMenu');
   const computerSkillsMenu = document.getElementById('computerSkillsMenu');
   const familyMemberMenu = document.getElementById('familyMemberMenu');
+  const paperMenu = document.getElementById('paperMenu');
+  const gameExperienceMenu = document.getElementById('gameExperienceMenu');
   const openQuestionMenu = document.getElementById('openQuestionMenu');
   const status = document.getElementById('status');
 
@@ -43,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
           action: 'autoFillByKey',
           section,
           key,
-          scoped: ['personalInfos', 'internships', 'projects', 'educations', 'selfEvaluations', 'languages', 'computerSkills', 'familyMembers', 'openQuestions'].includes(section)
+          scoped: ['personalInfos', 'internships', 'projects', 'educations', 'selfEvaluations', 'languages', 'computerSkills', 'familyMembers', 'papers', 'gameExperience', 'openQuestions'].includes(section)
         });
         showStatus(`已执行：${name}`);
       } catch (error) {
@@ -76,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     languageMenu.innerHTML = '';
     computerSkillsMenu.innerHTML = '';
     familyMemberMenu.innerHTML = '';
+    paperMenu.innerHTML = '';
+    gameExperienceMenu.innerHTML = '';
     openQuestionMenu.innerHTML = '';
 
     Object.entries(data.personalInfos || {}).forEach(([key, item]) => {
@@ -112,6 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     Object.entries(data.familyMembers || {}).forEach(([key, item]) => {
       familyMemberMenu.appendChild(createTemplateButton('familyMembers', key, item.name || key));
+    });
+
+    Object.entries(data.papers || {}).forEach(([key, item]) => {
+      paperMenu.appendChild(createTemplateButton('papers', key, item.name || key));
+    });
+
+    Object.entries(data.gameExperience || {}).forEach(([key, item]) => {
+      gameExperienceMenu.appendChild(createTemplateButton('gameExperience', key, item.name || key));
     });
 
     Object.entries(data.openQuestions || {}).forEach(([key, item]) => {

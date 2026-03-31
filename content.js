@@ -330,7 +330,9 @@ function getScopeHintKeywords(section) {
     languages: ['外语', '英语', '等级', '熟练程度', '语言能力'],
     computerSkills: ['计算机', '技能', '熟练程度', '软件', '编程', 'IT技能'],
     familyMembers: ['家庭成员', '成员', '关系', '姓名', '工作单位', '职务', '政治面貌', '联系电话', '父亲', '母亲', '配偶', '子女', '父母'],
-    openQuestions: ['规划', '理由', '说明', '陈述', '性格', '特长', '爱好', '其他', '背景', '看法']
+    openQuestions: ['规划', '理由', '说明', '陈述', '性格', '特长', '爱好', '其他', '背景', '看法'],
+    papers: ['论文', '发表', '刊物', '期刊', '会议', '作者', '链接', 'DOI', '检索'],
+    gameExperience: ['游戏', '游玩', '品类', '时长', '频率', '本命', '段位', '等级', '成就', '审美', '见解']
   };
   return bySection[section] || bySection.internships;
 }
@@ -338,7 +340,7 @@ function getScopeHintKeywords(section) {
 function isLikelyEntryContainer(node, section) {
   if (!node || node === document.body || node === document.documentElement) return false;
   const controls = node.querySelectorAll?.('input, textarea, select, [role="combobox"], [contenteditable="true"]');
-  const minControls = ['selfEvaluations', 'languages', 'computerSkills'].includes(section) ? 1 : 2;
+  const minControls = ['selfEvaluations', 'languages', 'computerSkills', 'openQuestions'].includes(section) ? 1 : 2;
   if (!controls || controls.length < minControls || controls.length > 60) return false;
 
   const text = normalizeText(node.textContent || '');
@@ -401,6 +403,16 @@ function containerHasPayloadField(node, payload, section) {
     return educationAnchors.some(f => matchedFields.has(f));
   }
 
+  if (section === 'papers') {
+    const paperAnchors = ['paperName', 'paperChannel', 'paperLink', 'content'];
+    return paperAnchors.some(f => matchedFields.has(f));
+  }
+
+  if (section === 'gameExperience') {
+    const gameAnchors = ['gameList', 'gameFrequency', 'gameBest', 'gameInsight', 'content'];
+    return gameAnchors.some(f => matchedFields.has(f));
+  }
+
   if (matchedFields.size >= 2) return true;
 
   if (section === 'projects') {
@@ -420,9 +432,9 @@ function resolveScopedRoot(section, payload) {
   for (let i = 0; i < 12 && node && node !== document.body; i += 1) {
     const likely = isLikelyEntryContainer(node, section);
     const payloadOk = containerHasPayloadField(node, payload, section);
-    // Projects / educations (e.g. BOSS Zhipin): keyword-only likely-container can stop too early
+    // Projects / educations / papers / games (e.g. BOSS Zhipin): keyword-only likely-container can stop too early
     // when fields are split across sibling cards — prefer payload-matching subtrees first.
-    if (section === 'projects' || section === 'educations') {
+    if (section === 'projects' || section === 'educations' || section === 'papers' || section === 'gameExperience') {
       if (payloadOk) return node;
     } else {
       if (likely) return node;
@@ -700,6 +712,29 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号'))) return 'idNumber';
   if (isPersonalInfoSection && primaryText.includes('身高')) return 'height';
   if (isPersonalInfoSection && primaryText.includes('体重')) return 'weight';
+  if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
+  if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
+
+  // Paper Logic
+  if (normalizedSection === 'papers') {
+    if (text.includes('论文名称') || text.includes('题目') || text.includes('标题')) return 'paperName';
+    if (text.includes('发表渠道') || text.includes('发布渠道') || text.includes('刊物') || text.includes('期刊') || text.includes('会议')) return 'paperChannel';
+    if (text.includes('作者顺序') || text.includes('排名')) return 'authorOrder';
+    if (text.includes('链接') || text.includes('URL') || text.includes('DOI')) return 'paperLink';
+    if (text.includes('发表等级') || text.includes('收录') || text.includes('级别')) return 'paperLevel';
+    if (text.includes('发表状态') || text.includes('状态')) return 'paperStatus';
+    if (text.includes('描述') || text.includes('简介') || text.includes('摘要')) return 'content';
+  }
+
+  // Game Experience Logic (Common in Game Industry Recruitment)
+  if (normalizedSection === 'gameExperience') {
+    if (text.includes('游玩的游戏') || text.includes('常用') || text.includes('经常玩') || text.includes('游戏列表') || text.includes('游戏名')) return 'gameList';
+    if (text.includes('频率') || text.includes('时长') || text.includes('多久')) return 'gameFrequency';
+    if (text.includes('本命') || text.includes('最喜欢') || text.includes('最热爱')) return 'gameBest';
+    if (text.includes('成就') || text.includes('段位') || text.includes('等级') || text.includes('荣誉') || text.includes('最高')) return 'gameAchievement';
+    if (text.includes('见解') || text.includes('审美') || text.includes('分析') || text.includes('看法') || text.includes('为何喜欢')) return 'gameInsight';
+    if (text.includes('描述') || text.includes('经历') || text.includes('总结')) return 'content';
+  }
 
   // Phoenix often uses label like "开始时间/结束时间" while placeholder is just "请选择"
   if (

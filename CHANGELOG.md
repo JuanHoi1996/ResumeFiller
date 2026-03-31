@@ -1,6 +1,17 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+## [2.2.0] - 2026-03-30
+
+### Added
+- **Papers Section**: Support for paper name, publication channel, author order, links, and abstracts.
+- **Game Experience Section**: Targeted at the gaming industry; supports game lists, favorite games, achievements/ranks, and insights.
+- **Extended Personal Info**: Added Birthplace (nativePlace) and Political Status (politicalStatus).
+
+### Improved
+- **"Manage-it-all" Philosophy**: Added support for fields that might be hard to autofill (e.g. native place dropdowns) to the editor, ensuring the extension acts as a single source of truth for the user.
+- **Enhanced Scoped Logic**: Applied the "Payload-first" scoping strategy to Papers and Games to handle split-card layouts.
+
 ## [2.1.6] - 2026-03-30
 
 ### Added

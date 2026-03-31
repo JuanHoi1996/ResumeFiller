@@ -42,6 +42,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     idNumber: document.getElementById("idNumber"),
     height: document.getElementById("height"),
     weight: document.getElementById("weight"),
+    nativePlace: document.getElementById("nativePlace"),
+    politicalStatus: document.getElementById("politicalStatus"),
     homeAddress: document.getElementById("homeAddress"),
     hukouLocation: document.getElementById("hukouLocation")
   };
@@ -117,6 +119,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     familyPosition: document.getElementById("familyPosition"),
     familyPhone: document.getElementById("familyPhone"),
     familyPoliticalStatus: document.getElementById("familyPoliticalStatus")
+  };
+
+  const paperFields = {
+    name: document.getElementById("paperNameLabel"),
+    key: document.getElementById("paperKey"),
+    paperName: document.getElementById("paperName"),
+    paperChannel: document.getElementById("paperChannel"),
+    authorOrder: document.getElementById("authorOrder"),
+    paperLevel: document.getElementById("paperLevel"),
+    paperStatus: document.getElementById("paperStatus"),
+    paperLink: document.getElementById("paperLink"),
+    content: document.getElementById("paperContent")
+  };
+
+  const gameExperienceFields = {
+    name: document.getElementById("gameNameLabel"),
+    key: document.getElementById("gameKey"),
+    gameList: document.getElementById("gameList"),
+    gameFrequency: document.getElementById("gameFrequency"),
+    gameBest: document.getElementById("gameBest"),
+    gameAchievement: document.getElementById("gameAchievement"),
+    gameInsight: document.getElementById("gameInsight"),
+    content: document.getElementById("gameContent")
   };
 
   const openQuestionFields = {
@@ -273,6 +298,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
+  function createDefaultPaper(name) {
+    return {
+      name: name || "新论文",
+      payload: {
+        paperName: "",
+        paperChannel: "",
+        authorOrder: "",
+        paperLevel: "",
+        paperStatus: "",
+        paperLink: "",
+        content: ""
+      }
+    };
+  }
+
+  function createDefaultGame(name) {
+    return {
+      name: name || "新游戏经历",
+      payload: {
+        gameList: "",
+        gameFrequency: "",
+        gameBest: "",
+        gameAchievement: "",
+        gameInsight: "",
+        content: ""
+      }
+    };
+  }
+
   function createDefaultItem(section, name) {
     if (section === "personalInfos") return createDefaultPersonalInfo(name);
     if (section === "educations") return createDefaultEducation(name);
@@ -282,6 +336,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (section === "languages") return createDefaultLanguage();
     if (section === "computerSkills") return createDefaultComputer();
     if (section === "familyMembers") return createDefaultFamilyMember(name);
+    if (section === "papers") return createDefaultPaper(name);
+    if (section === "gameExperience") return createDefaultGame(name);
     if (section === "openQuestions") return createDefaultOpenQuestion(name);
   }
 
@@ -689,7 +745,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await window.resumeStorage.ensureResumeData();
     if (!data) throw new Error("未找到可用的简历数据");
     state.data = normalizeImportedData(data);
-    ["personalInfos", "educations", "internships", "projects", "selfEvaluations", "languages", "computerSkills", "familyMembers", "openQuestions"].forEach(ensureSectionHasItem);
+    ["personalInfos", "educations", "internships", "projects", "selfEvaluations", "languages", "computerSkills", "familyMembers", "papers", "gameExperience", "openQuestions"].forEach(ensureSectionHasItem);
     refreshUI();
   }
 
@@ -759,7 +815,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (!file) return;
       persistCurrentFormToState();
       state.data = await handleImportFile(file);
-      ["personalInfos", "educations", "internships", "projects", "selfEvaluations", "languages", "computerSkills", "familyMembers", "openQuestions"].forEach(ensureSectionHasItem);
+      ["personalInfos", "educations", "internships", "projects", "selfEvaluations", "languages", "computerSkills", "familyMembers", "papers", "gameExperience", "openQuestions"].forEach(ensureSectionHasItem);
       refreshUI();
       showStatus("导入成功，请点击保存到本地。");
     } catch (error) {

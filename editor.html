@@ -39,6 +39,8 @@
       <button id="tabLanguages">外语能力</button>
       <button id="tabComputerSkills">计算机技能</button>
       <button id="tabFamilyMembers">家庭成员</button>
+      <button id="tabPapers">论文发表</button>
+      <button id="tabGameExperience">游戏经历</button>
       <button id="tabOpenQuestions">开放性问答/小作文</button>
     </div>
     <div class="toolbar">
@@ -62,6 +64,8 @@
             <div class="field"><label for="idNumber">证件号码</label><input id="idNumber" /></div>
             <div class="field"><label for="height">身高 (cm)</label><input id="height" /></div>
             <div class="field"><label for="weight">体重 (kg)</label><input id="weight" /></div>
+            <div class="field"><label for="nativePlace">籍贯</label><input id="nativePlace" /></div>
+            <div class="field"><label for="politicalStatus">政治面貌</label><input id="politicalStatus" /></div>
             <div class="field full"><label for="homeAddress">家庭住址</label><input id="homeAddress" /></div>
             <div class="field full"><label for="hukouLocation">户籍所在地</label><input id="hukouLocation" /></div>
           </div>
@@ -151,6 +155,33 @@
             <div class="field"><label for="familyPosition">职务</label><input id="familyPosition" /></div>
             <div class="field"><label for="familyPhone">联系电话</label><input id="familyPhone" /></div>
             <div class="field"><label for="familyPoliticalStatus">政治面貌</label><input id="familyPoliticalStatus" /></div>
+          </div>
+        </div>
+
+        <div id="paperForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="paperNameLabel">模板名称</label><input id="paperNameLabel" /></div>
+            <div class="field"><label for="paperKey">模板 Key</label><input id="paperKey" disabled /></div>
+            <div class="field full"><label for="paperName">论文名称</label><input id="paperName" /></div>
+            <div class="field"><label for="paperChannel">发表渠道 (刊物/会议)</label><input id="paperChannel" /></div>
+            <div class="field"><label for="authorOrder">作者顺序 (排名)</label><input id="authorOrder" /></div>
+            <div class="field"><label for="paperLevel">发表等级</label><input id="paperLevel" /></div>
+            <div class="field"><label for="paperStatus">发表状态</label><input id="paperStatus" /></div>
+            <div class="field full"><label for="paperLink">论文链接 (DOI/URL)</label><input id="paperLink" /></div>
+            <div class="field full"><label for="paperContent">论文描述/摘要</label><textarea id="paperContent"></textarea></div>
+          </div>
+        </div>
+
+        <div id="gameExperienceForm" class="form-block hidden">
+          <div class="grid">
+            <div class="field"><label for="gameNameLabel">模板名称</label><input id="gameNameLabel" /></div>
+            <div class="field"><label for="gameKey">模板 Key</label><input id="gameKey" disabled /></div>
+            <div class="field full"><label for="gameList">经常游玩的游戏</label><input id="gameList" /></div>
+            <div class="field"><label for="gameFrequency">玩游戏频率</label><input id="gameFrequency" /></div>
+            <div class="field"><label for="gameBest">“本命”游戏</label><input id="gameBest" /></div>
+            <div class="field"><label for="gameAchievement">最高段位/成就荣誉</label><input id="gameAchievement" /></div>
+            <div class="field full"><label for="gameInsight">游戏见解/审美分析</label><textarea id="gameInsight"></textarea></div>
+            <div class="field full"><label for="gameContent">游戏历程/经历总结</label><textarea id="gameContent"></textarea></div>
           </div>
         </div>
 

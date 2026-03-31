@@ -86,7 +86,36 @@ const resumeData = {
         idNumber: "开发者不可能知道你的身份证号",
         phone: "请放心填写",
         height: "175",
-        weight: "70"
+        weight: "70",
+        nativePlace: "在这里填籍贯",
+        politicalStatus: "中共党员/共青团员/群众"
+      }
+    }
+  },
+  papers: {
+    default_paper: {
+      name: "示例",
+      payload: {
+        paperName: "示例论文题目（请修改）",
+        paperChannel: "IEEE/ACM/Nature 等期刊或会议",
+        authorOrder: "第一作者/共同一作/通讯作者",
+        paperLevel: "CCF-A/SCI 一区",
+        paperStatus: "已发表/录用/在投",
+        paperLink: "https://doi.org/xxxx",
+        content: "简要描述论文的核心创新点、解决的问题以及你在其中的具体贡献。"
+      }
+    }
+  },
+  gameExperience: {
+    default_game: {
+      name: "示例",
+      payload: {
+        gameList: "英雄联盟、原神、艾尔登法环",
+        gameFrequency: "日活玩家，每天 2 小时以上",
+        gameBest: "英雄联盟 (LOL)",
+        gameAchievement: "最强王者 / 全成就达成",
+        gameInsight: "从数值平衡、关卡设计或心流体验等方面描述你对该游戏的深度见解。",
+        content: "概述你的游戏历程，展示你作为核心玩家的热爱与审美。"
       }
     }
   },
