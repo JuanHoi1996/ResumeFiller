@@ -1,8 +1,9 @@
 const resumeData = {
   computerSkills: {
     default_skills: {
-      content: "跟外语能力一样，只是部分网站能填文本，但是能省一点事儿是一点对吧？",
-      name: "示例"
+      name: "示例",
+      dateEarned: "2023-12-20",
+      content: "跟外语能力一样，只是部分网站能填文本，但是能省一点事儿是一点对吧？"
     }
   },
   defaultTemplate: {
@@ -22,7 +23,9 @@ const resumeData = {
         educationExperience: "如果你觉得很逆天就对了，有的公司真要填这个",
         educationSummary: "如你所见，这个就是用来兜底的",
         major: "在这里填专业",
-        schoolName: "在这里填学校"
+        schoolName: "在这里填学校",
+        start: "2021-09-01",
+        end: "2025-06-30"
       }
     }
   },
@@ -63,8 +66,9 @@ const resumeData = {
   },
   languages: {
     default_en: {
-      content: "有部分网站在这方面是文本框填写的，但真不多，大部分还是需要你点鼠标",
-      name: "示例"
+      name: "示例",
+      dateEarned: "2023-06-15",
+      content: "有部分网站在这方面是文本框填写的，但真不多，大部分还是需要你点鼠标"
     }
   },
   openQuestions: {
@@ -96,13 +100,13 @@ const resumeData = {
     default_paper: {
       name: "示例",
       payload: {
-        paperName: "示例论文题目（请修改）",
-        paperChannel: "IEEE/ACM/Nature 等期刊或会议",
-        authorOrder: "第一作者/共同一作/通讯作者",
-        paperLevel: "CCF-A/SCI 一区",
-        paperStatus: "已发表/录用/在投",
+        paperName: "还真有不少公司会问这个",
+        paperChannel: "这个可能是下拉菜单不好填",
+        authorOrder: "但是你也可以在这里记录",
+        paperLevel: "有需要的时候可以点进来看",
+        paperStatus: "一般就是已发表/录用/在投",
         paperLink: "https://doi.org/xxxx",
-        content: "简要描述论文的核心创新点、解决的问题以及你在其中的具体贡献。"
+        content: "如果你真有拿得出手的论文的话，就狠狠秀给公司看"
       }
     }
   },
@@ -110,12 +114,12 @@ const resumeData = {
     default_game: {
       name: "示例",
       payload: {
-        gameList: "英雄联盟、原神、艾尔登法环",
-        gameFrequency: "日活玩家，每天 2 小时以上",
-        gameBest: "英雄联盟 (LOL)",
-        gameAchievement: "最强王者 / 全成就达成",
-        gameInsight: "从数值平衡、关卡设计或心流体验等方面描述你对该游戏的深度见解。",
-        content: "概述你的游戏历程，展示你作为核心玩家的热爱与审美。"
+        gameList: "游戏公司经典问题",
+        gameFrequency: "这个可能是下拉菜单不好填",
+        gameBest: "但是你也可以在这里记录",
+        gameAchievement: "有需要的时候可以点进来看",
+        gameInsight: "从数值平衡、关卡设计或心流体验等方面描述你对该游戏的深度见解",
+        content: "概述你的游戏历程，展示你作为核心玩家的热爱与审美"
       }
     }
   },
@@ -129,7 +133,9 @@ const resumeData = {
         projectName: "如题，填项目名称",
         projectResponsibility: "比如国聘和猎聘，点名批评",
         projectRoleTitle: "如题，填项目角色",
-        techStack: "如果你那个是编程项目的话，就有这个可以写了"
+        techStack: "如果你那个是编程项目的话，就有这个可以写了",
+        start: "2024-06-01",
+        end: "2024-08-31"
       }
     }
   },

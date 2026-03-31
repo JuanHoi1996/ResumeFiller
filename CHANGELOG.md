@@ -1,16 +1,17 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
-## [2.2.0] - 2026-03-30
+## [2.2.0] - 2026-03-31
 
 ### Added
-- **Papers Section**: Support for paper name, publication channel, author order, links, and abstracts.
-- **Game Experience Section**: Targeted at the gaming industry; supports game lists, favorite games, achievements/ranks, and insights.
-- **Extended Personal Info**: Added Birthplace (nativePlace) and Political Status (politicalStatus).
+- **New Modules**: Added "Papers" and "Game Experience" sections for tracking academic publications and gaming industry specific applications.
+- **Extended Date Fields**: Added start/end dates for Education and Projects; added "Date Earned" for Languages and Computer Skills (e.g. CET-4/6, IELTS, TOEFL certifications).
+- **Personal Info**: Added Height, Weight, Birthplace, and Political Status fields.
 
 ### Improved
 - **"Manage-it-all" Philosophy**: Added support for fields that might be hard to autofill (e.g. native place dropdowns) to the editor, ensuring the extension acts as a single source of truth for the user.
 - **Enhanced Scoped Logic**: Applied the "Payload-first" scoping strategy to Papers and Games to handle split-card layouts.
+- **Open Questions Refactor**: Re-implemented the module as a pure "fallback filler". It no longer relies on keywords and instead fills the first visible long-text area (Textarea/ContentEditable) within the scoped root.
 
 ## [2.1.6] - 2026-03-30
 

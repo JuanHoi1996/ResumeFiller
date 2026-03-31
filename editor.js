@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     languages: document.getElementById("tabLanguages"),
     computerSkills: document.getElementById("tabComputerSkills"),
     familyMembers: document.getElementById("tabFamilyMembers"),
+    papers: document.getElementById("tabPapers"),
+    gameExperience: document.getElementById("tabGameExperience"),
     openQuestions: document.getElementById("tabOpenQuestions")
   };
 
@@ -30,6 +32,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     languages: document.getElementById("languageForm"),
     computerSkills: document.getElementById("computerForm"),
     familyMembers: document.getElementById("familyMemberForm"),
+    papers: document.getElementById("paperForm"),
+    gameExperience: document.getElementById("gameExperienceForm"),
     openQuestions: document.getElementById("openQuestionForm")
   };
 
@@ -54,6 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     schoolName: document.getElementById("schoolName"),
     college: document.getElementById("college"),
     major: document.getElementById("major"),
+    start: document.getElementById("eduStart"),
+    end: document.getElementById("eduEnd"),
     educationExperience: document.getElementById("educationExperience"),
     coreCourses: document.getElementById("coreCourses"),
     educationSummary: document.getElementById("educationSummary")
@@ -84,6 +90,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     key: document.getElementById("projectKey"),
     projectName: document.getElementById("projectName"),
     projectRoleTitle: document.getElementById("projectRoleTitle"),
+    start: document.getElementById("projStart"),
+    end: document.getElementById("projEnd"),
     techStack: document.getElementById("techStack"),
     content: document.getElementById("projectContent"),
     projectDesc: document.getElementById("projectDesc"),
@@ -101,12 +109,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const languageFields = {
     name: document.getElementById("langShortName"),
     key: document.getElementById("langKey"),
+    dateEarned: document.getElementById("langDate"),
     content: document.getElementById("langContent")
   };
 
   const computerFields = {
     name: document.getElementById("compShortName"),
     key: document.getElementById("compKey"),
+    dateEarned: document.getElementById("compDate"),
     content: document.getElementById("compContent")
   };
 
@@ -162,6 +172,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       languages: "",
       computerSkills: "",
       familyMembers: "",
+      papers: "",
+      gameExperience: "",
       openQuestions: ""
     }
   };
@@ -393,6 +405,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     educationFields.schoolName.value = payload.schoolName || "";
     educationFields.college.value = payload.college || "";
     educationFields.major.value = payload.major || "";
+    educationFields.start.value = payload.start || "";
+    educationFields.end.value = payload.end || "";
     educationFields.educationExperience.value = payload.educationExperience || "";
     educationFields.coreCourses.value = payload.coreCourses || "";
     educationFields.educationSummary.value = payload.educationSummary || "";
@@ -425,6 +439,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     projectFields.key.value = key || "";
     projectFields.projectName.value = payload.projectName || "";
     projectFields.projectRoleTitle.value = payload.projectRoleTitle || "";
+    projectFields.start.value = payload.start || "";
+    projectFields.end.value = payload.end || "";
     projectFields.techStack.value = payload.techStack || "";
     projectFields.content.value = payload.content || "";
     projectFields.projectDesc.value = payload.projectDesc || "";
@@ -442,12 +458,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   function renderLanguageForm(item, key) {
     languageFields.name.value = item?.name || "";
     languageFields.key.value = key || "";
+    languageFields.dateEarned.value = item?.dateEarned || "";
     languageFields.content.value = item?.content || "";
   }
 
   function renderComputerForm(item, key) {
     computerFields.name.value = item?.name || "";
     computerFields.key.value = key || "";
+    computerFields.dateEarned.value = item?.dateEarned || "";
     computerFields.content.value = item?.content || "";
   }
 
@@ -461,6 +479,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     familyMemberFields.familyPosition.value = payload.familyPosition || "";
     familyMemberFields.familyPhone.value = payload.familyPhone || "";
     familyMemberFields.familyPoliticalStatus.value = payload.familyPoliticalStatus || "";
+  }
+
+  function renderPaperForm(item, key) {
+    const payload = item?.payload || {};
+    paperFields.name.value = item?.name || "";
+    paperFields.key.value = key || "";
+    paperFields.paperName.value = payload.paperName || "";
+    paperFields.paperChannel.value = payload.paperChannel || "";
+    paperFields.authorOrder.value = payload.authorOrder || "";
+    paperFields.paperLevel.value = payload.paperLevel || "";
+    paperFields.paperStatus.value = payload.paperStatus || "";
+    paperFields.paperLink.value = payload.paperLink || "";
+    paperFields.content.value = payload.content || "";
+  }
+
+  function renderGameExperienceForm(item, key) {
+    const payload = item?.payload || {};
+    gameExperienceFields.name.value = item?.name || "";
+    gameExperienceFields.key.value = key || "";
+    gameExperienceFields.gameList.value = payload.gameList || "";
+    gameExperienceFields.gameFrequency.value = payload.gameFrequency || "";
+    gameExperienceFields.gameBest.value = payload.gameBest || "";
+    gameExperienceFields.gameAchievement.value = payload.gameAchievement || "";
+    gameExperienceFields.gameInsight.value = payload.gameInsight || "";
+    gameExperienceFields.content.value = payload.content || "";
   }
 
   function renderOpenQuestionForm(item, key) {
@@ -482,6 +525,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (state.currentSection === "languages") return renderLanguageForm(item, key);
     if (state.currentSection === "computerSkills") return renderComputerForm(item, key);
     if (state.currentSection === "familyMembers") return renderFamilyMemberForm(item, key);
+    if (state.currentSection === "papers") return renderPaperForm(item, key);
+    if (state.currentSection === "gameExperience") return renderGameExperienceForm(item, key);
     return renderOpenQuestionForm(item, key);
   }
 
@@ -505,6 +550,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       schoolName: educationFields.schoolName.value.trim(),
       college: educationFields.college.value.trim(),
       major: educationFields.major.value.trim(),
+      start: educationFields.start.value.trim(),
+      end: educationFields.end.value.trim(),
       educationExperience: educationFields.educationExperience.value.trim(),
       coreCourses: educationFields.coreCourses.value.trim(),
       educationSummary: educationFields.educationSummary.value.trim()
@@ -539,6 +586,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       ...item.payload,
       projectName: projectFields.projectName.value.trim(),
       projectRoleTitle: projectFields.projectRoleTitle.value.trim(),
+      start: projectFields.start.value.trim(),
+      end: projectFields.end.value.trim(),
       techStack: projectFields.techStack.value.trim(),
       content: projectFields.content.value.trim(),
       projectDesc: projectFields.projectDesc.value.trim(),
@@ -555,11 +604,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function persistLanguageForm(item) {
     item.name = languageFields.name.value.trim() || "新外语技能";
+    item.dateEarned = languageFields.dateEarned.value.trim();
     item.content = languageFields.content.value.trim();
   }
 
   function persistComputerForm(item) {
     item.name = computerFields.name.value.trim() || "新计算机技能";
+    item.dateEarned = computerFields.dateEarned.value.trim();
     item.content = computerFields.content.value.trim();
   }
 
@@ -573,6 +624,33 @@ document.addEventListener("DOMContentLoaded", async () => {
       familyPosition: familyMemberFields.familyPosition.value.trim(),
       familyPhone: familyMemberFields.familyPhone.value.trim(),
       familyPoliticalStatus: familyMemberFields.familyPoliticalStatus.value.trim()
+    };
+  }
+
+  function persistPaperForm(item) {
+    item.name = paperFields.name.value.trim() || "新论文";
+    item.payload = {
+      ...item.payload,
+      paperName: paperFields.paperName.value.trim(),
+      paperChannel: paperFields.paperChannel.value.trim(),
+      authorOrder: paperFields.authorOrder.value.trim(),
+      paperLevel: paperFields.paperLevel.value.trim(),
+      paperStatus: paperFields.paperStatus.value.trim(),
+      paperLink: paperFields.paperLink.value.trim(),
+      content: paperFields.content.value.trim()
+    };
+  }
+
+  function persistGameExperienceForm(item) {
+    item.name = gameExperienceFields.name.value.trim() || "新游戏经历";
+    item.payload = {
+      ...item.payload,
+      gameList: gameExperienceFields.gameList.value.trim(),
+      gameFrequency: gameExperienceFields.gameFrequency.value.trim(),
+      gameBest: gameExperienceFields.gameBest.value.trim(),
+      gameAchievement: gameExperienceFields.gameAchievement.value.trim(),
+      gameInsight: gameExperienceFields.gameInsight.value.trim(),
+      content: gameExperienceFields.content.value.trim()
     };
   }
 
@@ -598,6 +676,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (state.currentSection === "languages") return persistLanguageForm(item);
     if (state.currentSection === "computerSkills") return persistComputerForm(item);
     if (state.currentSection === "familyMembers") return persistFamilyMemberForm(item);
+    if (state.currentSection === "papers") return persistPaperForm(item);
+    if (state.currentSection === "gameExperience") return persistGameExperienceForm(item);
     return persistOpenQuestionForm(item);
   }
 
@@ -611,6 +691,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       languages: "language",
       computerSkills: "computer",
       familyMembers: "family",
+      papers: "paper",
+      gameExperience: "game",
       openQuestions: "open_ques"
     };
     return `${prefixMap[section]}_${Date.now()}`;
@@ -633,6 +715,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       languages: "default_en",
       computerSkills: "default_skills",
       familyMembers: "default_family",
+      papers: "default_paper",
+      gameExperience: "default_game",
       openQuestions: "career_quant"
     };
     const nameMap = {
@@ -644,6 +728,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       languages: "外语技能",
       computerSkills: "计算机技能",
       familyMembers: "家庭成员",
+      papers: "论文发表",
+      gameExperience: "游戏经历",
       openQuestions: "开放性问答"
     };
     const key = keyMap[section];
@@ -689,6 +775,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     data.languages = data.languages || {};
     data.computerSkills = data.computerSkills || {};
     data.familyMembers = data.familyMembers || {};
+    data.papers = data.papers || {};
+    data.gameExperience = data.gameExperience || {};
     data.openQuestions = data.openQuestions || {};
 
     if (Object.keys(data.personalInfos).length === 0) {
@@ -714,6 +802,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     if (Object.keys(data.familyMembers).length === 0) {
       data.familyMembers.default_family = createDefaultFamilyMember("家庭成员");
+    }
+    if (Object.keys(data.papers).length === 0) {
+      data.papers.default_paper = createDefaultPaper("默认论文发表");
+    }
+    if (Object.keys(data.gameExperience).length === 0) {
+      data.gameExperience.default_game = createDefaultGame("默认游戏经历");
     }
     if (Object.keys(data.openQuestions).length === 0) {
       data.openQuestions.career_quant = createDefaultOpenQuestion("开放性问答");
@@ -765,6 +859,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       languages: "新外语技能",
       computerSkills: "新计算机技能",
       familyMembers: "新家庭成员",
+      papers: "新论文",
+      gameExperience: "新游戏经历",
       openQuestions: "新开放性问答"
     };
     state.data[state.currentSection][key] = createDefaultItem(state.currentSection, defaultNameMap[state.currentSection]);

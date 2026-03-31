@@ -358,6 +358,12 @@ function containerHasPayloadField(node, payload, section) {
   ).filter(isElementVisible);
   if (controls.length < 2) return false;
 
+  // Open questions / fallback: do not depend on label/placeholder keywords.
+  // We only need a visible large text control inside this container.
+  if (section === 'openQuestions' && Object.prototype.hasOwnProperty.call(payload, 'content')) {
+    return controls.some(el => el.tagName === 'TEXTAREA' || el.isContentEditable || el.getAttribute('role') === 'textbox');
+  }
+
   const matchedFields = new Set();
   for (const element of controls) {
     const field = detectField(
@@ -766,15 +772,7 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   }
 
   // Open Questions Logic
-  if (
-    normalizedSection === 'openQuestions' &&
-    (text.includes('规划') || text.includes('理由') || text.includes('说明') || text.includes('陈述') ||
-      text.includes('看法') || text.includes('背景') || text.includes('性格') || text.includes('其他'))
-  ) {
-    if (element.tagName === 'TEXTAREA' || element.isContentEditable || primaryText.length > 5) {
-      return 'content';
-    }
-  }
+  // (intentionally removed) openQuestions no longer relies on label/placeholder keywords.
 
   // Referee Logic
   if (
@@ -930,9 +928,11 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     }
   }
   if (normalizedSection === 'languages') {
+    if (text.includes('获得时间') || text.includes('证书时间') || text.includes('日期') || text.includes('时间')) return 'dateEarned';
     if (text.includes('外语') || text.includes('英语')) return 'languageSkills';
   }
   if (normalizedSection === 'computerSkills') {
+    if (text.includes('获得时间') || text.includes('证书时间') || text.includes('日期') || text.includes('时间')) return 'dateEarned';
     if (text.includes('计算机') || text.includes('IT技能')) return 'computerSkills';
   }
 
@@ -1064,6 +1064,37 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
   const results = [];
   let contentFilled = false;
   let projectDescFilled = false;
+
+  // Open questions fallback: fill the current scope's first visible text control,
+  // regardless of its label/placeholder.
+  if (section === 'openQuestions' && data && typeof data.content === 'string') {
+    const contentValue = data.content.trim();
+    if (contentValue) {
+      const candidates = Array.from(
+        scopeRoot.querySelectorAll('textarea, [contenteditable="true"], [role="textbox"], input')
+      ).filter(isElementVisible);
+      const candidate = candidates.find(
+        el => el.tagName === 'TEXTAREA' || el.isContentEditable || el.getAttribute('role') === 'textbox'
+      );
+      if (candidate) {
+        if (candidate.isContentEditable) {
+          setContentEditableValue(candidate, contentValue);
+        } else {
+          setNativeValue(candidate, contentValue);
+        }
+        candidate.style.backgroundColor = '#d9fdd3';
+        candidate.style.border = '2px solid #2e7d32';
+        results.push({
+          index: 1,
+          field: 'content',
+          label: 'openQuestions(兜底)',
+          value: contentValue.slice(0, 80),
+          success: true
+        });
+        return { success: true, total: candidates.length, filled: 1, results };
+      }
+    }
+  }
 
   const elements = Array.from(
     scopeRoot.querySelectorAll('input, textarea, select, [role="combobox"], [contenteditable="true"]')
