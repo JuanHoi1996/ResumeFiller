@@ -1111,28 +1111,32 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
   if (section === 'openQuestions' && data && typeof data.content === 'string') {
     const contentValue = data.content.trim();
     if (contentValue) {
-      const candidates = Array.from(
+      // Priority: If the anchor (where user clicked) is already a valid long-text input, use it directly.
+      const anchor = (lastInteractedField && document.contains(lastInteractedField)) ? lastInteractedField : document.activeElement;
+      const isAnchorValid = anchor && isElementVisible(anchor) && (anchor.tagName === 'TEXTAREA' || anchor.isContentEditable || anchor.getAttribute('role') === 'textbox');
+      
+      const targetCandidate = isAnchorValid ? anchor : Array.from(
         scopeRoot.querySelectorAll('textarea, [contenteditable="true"], [role="textbox"], input')
-      ).filter(isElementVisible);
-      const candidate = candidates.find(
+      ).filter(isElementVisible).find(
         el => el.tagName === 'TEXTAREA' || el.isContentEditable || el.getAttribute('role') === 'textbox'
       );
-      if (candidate) {
-        if (candidate.isContentEditable) {
-          setContentEditableValue(candidate, contentValue);
+
+      if (targetCandidate) {
+        if (targetCandidate.isContentEditable) {
+          setContentEditableValue(targetCandidate, contentValue);
         } else {
-          setNativeValue(candidate, contentValue);
+          setNativeValue(targetCandidate, contentValue);
         }
-        candidate.style.backgroundColor = '#d9fdd3';
-        candidate.style.border = '2px solid #2e7d32';
+        targetCandidate.style.backgroundColor = '#d9fdd3';
+        targetCandidate.style.border = '2px solid #2e7d32';
         results.push({
           index: 1,
           field: 'content',
-          label: 'openQuestions(兜底)',
+          label: 'openQuestions(指向填充)',
           value: contentValue.slice(0, 80),
           success: true
         });
-        return { success: true, total: candidates.length, filled: 1, results };
+        return { success: true, total: 1, filled: 1, results };
       }
     }
   }

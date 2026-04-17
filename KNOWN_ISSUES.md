@@ -43,3 +43,4 @@ This file lists known limitations and temporary workarounds.
 - **Reason**: 51job sites use legacy DOM structures and heavy custom scripts for dropdowns; a conservative strategy is currently used to avoid interfering with their internal logic.
 - **Workaround**: Manually select the correct item from the dropdown and clear the mis-filled content in the "Other" text fields.
 
+
