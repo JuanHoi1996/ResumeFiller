@@ -201,6 +201,13 @@ function getContextHintText(element) {
 }
 
 function getLabelText(element) {
+  if (!element) return '';
+  // High-Priority: 51job/xyz style explicit attributes
+  const cname = element.getAttribute?.('cname');
+  if (cname?.trim()) return cname.trim();
+  const ename = element.getAttribute?.('ename');
+  if (ename?.trim()) return ename.trim();
+
   // Phoenix / Beisen-like label (e.g. div.form-item--phoenix > div.form-item__title > label.form-item__text)
   const phoenixItem = element.closest?.('.form-item--phoenix, [class*="form-item--phoenix"]');
   if (phoenixItem) {
@@ -302,7 +309,7 @@ function isElementVisible(element) {
 
 function getScopeHintKeywords(section) {
   const bySection = {
-    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式'],
+    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式', '身高', '体重', '籍贯', '政治面貌'],
     internships: [
       '公司',
       '企业名称',
@@ -378,6 +385,14 @@ function containerHasPayloadField(node, payload, section) {
     }
   }
 
+  if (section === 'personalInfos') {
+    const infoAnchors = ['fullName', 'phone', 'email', 'idNumber', 'height', 'weight', 'nativePlace', 'politicalStatus'];
+    // For personal info, require at least 2 anchors to consider it a "full section" container,
+    // otherwise it might stop at a single-field card (e.g. just Name card).
+    const matchedCount = infoAnchors.filter(f => matchedFields.has(f)).length;
+    return matchedCount >= 1; // We keep it at 1 for basic detection, but see resolveScopedRoot for the real fix
+  }
+
   if (section === 'internships') {
     // For internships, avoid selecting "family/person cards" as entry containers.
     // Require at least one strong internship anchor field inside the container.
@@ -440,8 +455,27 @@ function resolveScopedRoot(section, payload) {
     const payloadOk = containerHasPayloadField(node, payload, section);
     // Projects / educations / papers / games (e.g. BOSS Zhipin): keyword-only likely-container can stop too early
     // when fields are split across sibling cards — prefer payload-matching subtrees first.
-    if (section === 'projects' || section === 'educations' || section === 'papers' || section === 'gameExperience') {
+    if (['projects', 'educations', 'papers', 'gameExperience'].includes(section)) {
       if (payloadOk) return node;
+    } else if (section === 'personalInfos') {
+      // For personal info, if we only found 1-2 fields, keep going up to find a larger section container
+      // (e.g. common ancestor of Name card and Height card).
+      const infoAnchors = ['fullName', 'phone', 'email', 'idNumber', 'height', 'weight', 'nativePlace', 'politicalStatus'];
+      const matchedCount = infoAnchors.filter(f => {
+        const matched = detectField(anchor, getLabelText(anchor), getElementPlaceholder(anchor), getContextHintText(anchor), section);
+        return matched === f;
+      }).length; // This is a simplified check, containerHasPayloadField is better
+
+      // Re-run container check to get the actual count in this node
+      const matchedFields = new Set();
+      const controls = Array.from(node.querySelectorAll('input, textarea, select')).filter(isElementVisible);
+      controls.forEach(el => {
+        const f = detectField(el, getLabelText(el), getElementPlaceholder(el), getContextHintText(el), section);
+        if (f && infoAnchors.includes(f)) matchedFields.add(f);
+      });
+
+      // If this container has most of our payload, or at least 3 fields, it's a good root.
+      if (matchedFields.size >= 3 || matchedFields.size === Object.keys(payload).length) return node;
     } else {
       if (likely) return node;
       if (payloadOk) return node;
@@ -661,8 +695,12 @@ function getDefaultPayload() {
 
 function detectField(element, labelText, placeholder, contextText, section = null) {
   const type = (element.type || '').toLowerCase();
-  const primaryText = toCompactText(labelText, placeholder);
-  const extendedText = toCompactText(labelText, placeholder, contextText);
+  const cname = (element.getAttribute?.('cname') || '').trim();
+  const ename = (element.getAttribute?.('ename') || '').trim();
+
+  // Combine label, placeholder, and 51job specific attributes for primary matching
+  const primaryText = toCompactText(labelText, placeholder, cname, ename);
+  const extendedText = toCompactText(labelText, placeholder, contextText, cname, ename);
   const normalizedSection = section ? String(section).trim() : null;
 
   // 1. Context Bleed Protection: Clear context for generic fields that often trigger false positives
@@ -687,6 +725,10 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     primaryText.includes('住址') ||
     primaryText.includes('公司') ||
     primaryText.includes('单位') ||
+    primaryText.includes('职业') ||
+    primaryText.includes('职务') ||
+    primaryText.includes('身高') ||
+    primaryText.includes('体重') ||
     primaryText.includes('离职原因')
   ) {
     effectiveContext = '';
@@ -708,16 +750,12 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     return 'fullName';
   }
   if (isPersonalInfoSection && (primaryText.includes('邮箱') || primaryText.includes('邮件'))) return 'email';
-  if (
-    isPersonalInfoSection &&
-    normalizedSection !== 'familyMembers' &&
-    (primaryText.includes('手机号') || primaryText.includes('手机号码'))
-  ) {
+  if (isPersonalInfoSection && (primaryText.includes('手机号') || primaryText.includes('手机号码'))) {
     return 'phone';
   }
-  if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号'))) return 'idNumber';
-  if (isPersonalInfoSection && primaryText.includes('身高')) return 'height';
-  if (isPersonalInfoSection && primaryText.includes('体重')) return 'weight';
+  if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号') || primaryText.includes('身份证'))) return 'idNumber';
+  if (isPersonalInfoSection && (primaryText.includes('身高') || primaryText.includes('Height'))) return 'height';
+  if (isPersonalInfoSection && (primaryText.includes('体重') || primaryText.includes('Weight'))) return 'weight';
   if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
   if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
 
@@ -765,8 +803,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   if (normalizedSection === 'familyMembers') {
     if (text.includes('关系') || text.includes('称谓')) return 'familyRelation';
     if (text.includes('姓名')) return 'familyName';
+    // Prioritize specific position/job labels to avoid context bleed from "Company"
+    if (text.includes('职务') || text.includes('职称') || text.includes('职位') || text.includes('职业')) return 'familyPosition';
     if (text.includes('工作单位') || text.includes('单位') || text.includes('单位及职务')) return 'familyCompany';
-    if (text.includes('职务') || text.includes('职称') || text.includes('职位')) return 'familyPosition';
     if (text.includes('电话') || text.includes('手机') || text.includes('联系方式')) return 'familyPhone';
     if (text.includes('政治面貌') || text.includes('面貌')) return 'familyPoliticalStatus';
   }
@@ -808,9 +847,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     }
     if (text.includes('在校经历/核心课程')) return 'educationSummary';
     if (text.includes('在校经历') || text.includes('校园经历')) return 'educationExperience';
-    if (text.includes('核心课程') || text.includes('主修课程')) return 'coreCourses';
+    if (text.includes('核心课程') || text.includes('主修课程') || text.includes('专业课程')) return 'coreCourses';
     if (text.includes('学院') || text.includes('院系') || text.includes('学部')) return 'college';
-    if (text.includes('专业')) return 'major';
+    if (text.includes('专业') && !text.includes('课程')) return 'major';
     if (text.includes('学校名称') || text.includes('毕业院校') || text.includes('学校')) return 'schoolName';
   }
 

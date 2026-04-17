@@ -35,3 +35,17 @@ This file lists known limitations and temporary workarounds.
   - Projects: long-text distribution between "project description" (long) and "project intro" (short) may be incorrect; one of the targets can remain empty.
   - Self-evaluation & Education: those sections may not be filled (or only partially filled) on some pages/components.
 - **Workaround**: Use manual input (or the plugin's scoped filling after clicking the exact target input first). If it still fails, capture the label text + screenshot and add it to the report.
+
+## 8) 51job (xyz.51job.com) Custom Dropdowns and "Other" Field Mis-detection
+- **Symptom**:
+  - **Dropdown Compatibility**: Fields like School and Major often use custom dropdown components in 51job-based sites, which the extension cannot currently simulate for selection.
+  - **"Other" Field Mis-detection**: When primary dropdown fields cannot be filled, the extension may identify the "Other School" or "Other Major" text inputs below and fill them, leading to data misplacement.
+- **Reason**: 51job sites use legacy DOM structures and heavy custom scripts for dropdowns; a conservative strategy is currently used to avoid interfering with their internal logic.
+- **Workaround**: Manually select the correct item from the dropdown and clear the mis-filled content in the "Other" text fields.
+
+## 9) Beisen (zhiye.com / Phoenix) Personal Info Multi-Card Layout
+- **Symptom**: Beisen-based sites often split personal information into multiple physical cards (e.g., Name/Phone in one card, Height/Weight/Birthplace in another).
+- **Impact**: Due to scoped filling limitations, the extension may fail to populate fields in a card that is different from where the cursor is currently focused.
+- **Reason**: Fields are isolated in deeply nested containers; while common-ancestor logic is applied, dynamic rendering or extreme isolation can still block cross-card filling.
+- **Workaround**: Click into an input box within the missing card (e.g., "Height"), then trigger the "Personal Info" template again to fill that specific scope.
+

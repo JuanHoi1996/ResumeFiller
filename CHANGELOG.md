@@ -1,6 +1,24 @@
 # Changelog
 
 All notable changes to ResumeFiller will be documented in this file.
+
+## [2.2.2] - 2026-04-17
+
+### Improved
+- **Beisen (zhiye.com / Phoenix) Deep Compatibility (e.g. Shekou)**:
+  - **Cross-Card Height/Weight Filling**: Significantly improved Scoped Filling for Personal Info. For sites that split info into multiple cards (e.g., Name card vs. Height card), the extension now finds the common ancestor to ensure all fields are filled at once.
+  - **Keyword Enhancement**: Added "Height", "Weight", "Birthplace", and "Political Status" to the core detection library.
+  - **Context Bleed Protection**: Improved context clearing for Height, Weight, and Position to prevent interference from surrounding text.
+- **Family Member Logic**: Supported the "职业" (Profession) label, mapping it to `familyPosition`, and refined rule priority to prevent misidentification as "Company".
+
+## [2.2.1] - 2026-04-07
+
+### Improved
+- **51job (xyz.51job.com) Deep Compatibility**: Optimized field detection for legacy recruitment platforms (e.g. COFCO) using the 51job system.
+  - **Enhanced Tag Detection**: Added support for `cname` and `ename` custom attributes to identify fields, bypassing the lack of standard `<label>` tags.
+  - **Full-Module Support**: Extended `cname/ename` detection to all core modules including Internships, Projects, and Education.
+  - **Keyword Completion**: Added "身份证" (ID Card) to the high-priority detection list for personal info.
+
 ## [2.2.0] - 2026-03-31
 
 ### Added
