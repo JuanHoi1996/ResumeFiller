@@ -4,12 +4,15 @@ All notable changes to ResumeFiller will be documented in this file.
 
 ## [2.2.2] - 2026-04-17
 
+### Added
+- **Emergency Contact Support**: Added fields for "Emergency Contact" and "Emergency Phone", specifically tailored for SOE/Enterprise recruitment forms like China Merchants Shekou.
+
 ### Improved
 - **Beisen (zhiye.com / Phoenix) Deep Compatibility (e.g. Shekou)**:
-  - **Cross-Card Height/Weight Filling**: Significantly improved Scoped Filling for Personal Info. For sites that split info into multiple cards (e.g., Name card vs. Height card), the extension now finds the common ancestor to ensure all fields are filled at once.
-  - **Keyword Enhancement**: Added "Height", "Weight", "Birthplace", and "Political Status" to the core detection library.
-  - **Context Bleed Protection**: Improved context clearing for Height, Weight, and Position to prevent interference from surrounding text.
-- **Family Member Logic**: Supported the "职业" (Profession) label, mapping it to `familyPosition`, and refined rule priority to prevent misidentification as "Company".
+  - **Cross-Card Filling**: Improved Scoped Filling for Personal Info to handle multi-card layouts, ensuring fields like Height/Weight are filled regardless of cursor focus.
+  - **Keyword Enhancement**: Added "Height", "Weight", "Birthplace", and "Emergency Contact" to the core detection library.
+  - **Context Bleed Protection**: Refined context clearing for identity and contact fields to prevent interference.
+- **Family Member Logic**: Supported the "职业" (Profession) label, mapping it to `familyPosition`, and refined rule priority.
 
 ## [2.2.1] - 2026-04-07
 

@@ -92,7 +92,9 @@ const resumeData = {
         height: "175",
         weight: "70",
         nativePlace: "在这里填籍贯",
-        politicalStatus: "中共党员/共青团员/群众"
+        politicalStatus: "中共党员/共青团员/群众",
+        emergencyContact: "那个能随时接你电话的人",
+        emergencyPhone: "他的电话"
       }
     }
   },

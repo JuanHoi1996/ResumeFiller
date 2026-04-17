@@ -48,6 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     weight: document.getElementById("weight"),
     nativePlace: document.getElementById("nativePlace"),
     politicalStatus: document.getElementById("politicalStatus"),
+    emergencyContact: document.getElementById("emergencyContact"),
+    emergencyPhone: document.getElementById("emergencyPhone"),
     homeAddress: document.getElementById("homeAddress"),
     hukouLocation: document.getElementById("hukouLocation")
   };
@@ -394,6 +396,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     personalInfoFields.phone.value = payload.phone || "";
     personalInfoFields.email.value = payload.email || "";
     personalInfoFields.idNumber.value = payload.idNumber || "";
+    personalInfoFields.height.value = payload.height || "";
+    personalInfoFields.weight.value = payload.weight || "";
+    personalInfoFields.nativePlace.value = payload.nativePlace || "";
+    personalInfoFields.politicalStatus.value = payload.politicalStatus || "";
+    personalInfoFields.emergencyContact.value = payload.emergencyContact || "";
+    personalInfoFields.emergencyPhone.value = payload.emergencyPhone || "";
     personalInfoFields.homeAddress.value = payload.homeAddress || "";
     personalInfoFields.hukouLocation.value = payload.hukouLocation || "";
   }
@@ -538,6 +546,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       phone: personalInfoFields.phone.value.trim(),
       email: personalInfoFields.email.value.trim(),
       idNumber: personalInfoFields.idNumber.value.trim(),
+      height: personalInfoFields.height.value.trim(),
+      weight: personalInfoFields.weight.value.trim(),
+      nativePlace: personalInfoFields.nativePlace.value.trim(),
+      politicalStatus: personalInfoFields.politicalStatus.value.trim(),
+      emergencyContact: personalInfoFields.emergencyContact.value.trim(),
+      emergencyPhone: personalInfoFields.emergencyPhone.value.trim(),
       homeAddress: personalInfoFields.homeAddress.value.trim(),
       hukouLocation: personalInfoFields.hukouLocation.value.trim()
     };

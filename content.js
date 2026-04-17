@@ -758,6 +758,8 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   if (isPersonalInfoSection && (primaryText.includes('体重') || primaryText.includes('Weight'))) return 'weight';
   if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
   if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
+  if (isPersonalInfoSection && (primaryText.includes('紧急联系人') || primaryText.includes('联系人姓名'))) return 'emergencyContact';
+  if (isPersonalInfoSection && (primaryText.includes('紧急联系电话') || primaryText.includes('紧急联系人电话') || primaryText.includes('联系人电话'))) return 'emergencyPhone';
 
   // Paper Logic
   if (normalizedSection === 'papers') {

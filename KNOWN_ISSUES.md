@@ -43,9 +43,3 @@ This file lists known limitations and temporary workarounds.
 - **Reason**: 51job sites use legacy DOM structures and heavy custom scripts for dropdowns; a conservative strategy is currently used to avoid interfering with their internal logic.
 - **Workaround**: Manually select the correct item from the dropdown and clear the mis-filled content in the "Other" text fields.
 
-## 9) Beisen (zhiye.com / Phoenix) Personal Info Multi-Card Layout
-- **Symptom**: Beisen-based sites often split personal information into multiple physical cards (e.g., Name/Phone in one card, Height/Weight/Birthplace in another).
-- **Impact**: Due to scoped filling limitations, the extension may fail to populate fields in a card that is different from where the cursor is currently focused.
-- **Reason**: Fields are isolated in deeply nested containers; while common-ancestor logic is applied, dynamic rendering or extreme isolation can still block cross-card filling.
-- **Workaround**: Click into an input box within the missing card (e.g., "Height"), then trigger the "Personal Info" template again to fill that specific scope.
-
