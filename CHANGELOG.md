@@ -7,10 +7,15 @@ All notable changes to ResumeFiller will be documented in this file.
 ### Improved
 - **Personal Info Module Enhancement**:
   - **New Fields**: Added support for "Emergency Contact" and "Emergency Phone".
-  - **Beisen (zhiye.com / Phoenix) Deep Compatibility**: Improved Scoped Filling to support cross-card autofill for Height, Weight, etc.
+  - **Beisen (zhiye.com) Deep Compatibility**: Improved Scoped Filling to support cross-card autofill for Height, Weight, etc.
 - **Open Questions (openQuestions) UX**:
   - **Directional Filling**: Rewrote fallback logic to prioritize the currently focused input box, fixing the "first-box hijacking" issue on multi-textarea pages.
 - **Family Member Logic**: Supported "职业" (Profession) label, mapping it to `familyPosition`, and refined rule priority.
+
+### Docs
+- **README**: Cross-links between English and Chinese; clarified Guopin vs Hotjob (Dayee) vs Beisen naming.
+- **KNOWN_ISSUES**: Removed Bank of China "Yingcai" deep-table limitation (to be re-tested on newer builds).
+- **LICENSE**: Added MIT license.
 
 ## [2.2.1] - 2026-04-07
 

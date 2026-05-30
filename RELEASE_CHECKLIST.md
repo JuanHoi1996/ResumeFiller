@@ -7,6 +7,7 @@ Use this checklist before each gray release or public release.
 - [ ] Add release notes to `CHANGELOG.md`.
 - [ ] Append latest test round to `TEST_LOG.md`.
 - [ ] Update `KNOWN_ISSUES.md` if behavior changed.
+- [ ] Confirm `LICENSE` (MIT) is present and linked from README.
 
 ## B. Package hygiene
 - [ ] Ensure extension folder includes only runtime files:
@@ -37,7 +38,8 @@ Use this checklist before each gray release or public release.
 ## D. Site regression checks
 - [ ] BOSS: internship + project + self evaluation autofill.
 - [ ] 猎聘: internship + project + self evaluation autofill.
-- [ ] 国聘: internship + project + self evaluation autofill.
+- [ ] Guopin: internship + project + self evaluation autofill.
+- [ ] Hotjob (e.g. `wecruit.hotjob.cn`): internship + project + self evaluation autofill.
 - [ ] Verify work content does not write into work achievement fields.
 
 ## E. Gray rollout

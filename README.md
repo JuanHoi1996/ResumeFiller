@@ -2,6 +2,10 @@
 
 Open-source resume autofill assistant for job applications.
 
+**Languages:** English (this file) · [中文说明](README.zh-CN.md)
+
+**License:** [MIT](LICENSE)
+
 ## What it does
 - Lets you maintain resume templates (in the built-in editor).
 - One-click autofill into common online application forms.
@@ -13,13 +17,13 @@ The extension combines **generic** heuristics (common UI libraries, labels, plac
 | Area | Examples |
 |------|----------|
 | **BOSS Zhipin** | `zhipin.com` resume editor & application forms (dedicated handling) |
-| **Guopin / WeRecruit** | Government-style recruitment portals |
-| **Beisen / Phoenix (北森)** | Enterprise ATS using Phoenix-style items (e.g. `form-item--phoenix`) |
+| **Guopin (国聘)** | Government-style recruitment portal (`iguopin.com` and similar); not the same product as Hotjob |
+| **Beisen (北森)** | Enterprise ATS (e.g. `zhiye.com` career sites); DOM often uses `form-item--phoenix` class names |
+| **Hotjob (大易)** | Shanghai Dayee Cloud (`wecruit.hotjob.cn` and related Hotjob-hosted career sites) |
 | **Feishu / Lark** | Recruitment pages on Feishu/Lark forms |
 | **Moka** | Marketing career sites built on Moka |
-| **Bank of China “Yingcai” (英才)** | Very deep table layouts; use scoped fill; not 100% automatic |
 
-**Often usable** on other major boards via generic controls: **Liepin**, **Zhaopin (智联)**, **Shixiseng**, **51job**, etc. Other vendor families (**Hotjob**, **ChinaHR-style** portals, etc.) may work depending on DOM. If a field misses, use **scoped fill** and report the label + screenshot.
+**Often usable** on other major boards via generic controls: **Liepin**, **Zhaopin (智联)**, **Shixiseng**, **51job**, etc. Other vendor families (**ChinaHR-style** portals, etc.) may work depending on DOM. If a field misses, use **scoped fill** and report the label + screenshot.
 
 ## Supported browsers
 This extension is packaged for **Chrome (Manifest V3)**. In practice it should work on most **Chromium-based** browsers via “Load unpacked”:
@@ -41,11 +45,13 @@ If a browser-specific component differs, please report the label text + a screen
 3. On the panel, click a template button under the module you want:
    - Personal Info, Education, Internships, Projects
    - Self Evaluations, Language Skills, Computer Skills
-   - Family Members, Open Questions
+   - Family Members, Papers, Game Experience, Open Questions
 4. If a field doesn’t match on the first attempt:
    - Click into the exact input box first, then click the same template button again (**Scoped Fill**).
 
 ## Known issues
-- See `KNOWN_ISSUES.md` / `KNOWN_ISSUES.zh-CN.md`.
-- Some sites (e.g. Bank of China “Yingcai” deep table layouts) may require manual help even with scoped fill.
+- See `KNOWN_ISSUES.md` / [`KNOWN_ISSUES.zh-CN.md`](KNOWN_ISSUES.zh-CN.md).
 
+## Contributing & docs
+- Changelog: `CHANGELOG.md` / [`CHANGELOG.zh-CN.md`](CHANGELOG.zh-CN.md)
+- Handover notes (for maintainers): see repo root `HANDOVER.md` if present
