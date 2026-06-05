@@ -2,6 +2,11 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.2.3] - 2026-05-30
+
+### Improved
+- **Extension icon finalized**: full-bleed blue tile with center-pivot oblique white **R**; removed alternate icon drafts and preview tooling.
+
 ## [2.2.2] - 2026-04-17
 
 ### Improved

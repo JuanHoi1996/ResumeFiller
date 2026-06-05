@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ResumeFiller",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Open-source resume autofill assistant for job applications",
   "permissions": [
     "activeTab",
@@ -11,8 +11,20 @@
     "contextMenus",
     "clipboardWrite"
   ],
+  "icons": {
+    "16": "icons/active/icon16.png",
+    "32": "icons/active/icon32.png",
+    "48": "icons/active/icon48.png",
+    "128": "icons/active/icon128.png"
+  },
   "action": {
-    "default_title": "ResumeFiller"
+    "default_title": "ResumeFiller",
+    "default_icon": {
+      "16": "icons/active/icon16.png",
+      "32": "icons/active/icon32.png",
+      "48": "icons/active/icon48.png",
+      "128": "icons/active/icon128.png"
+    }
   },
   "background": {
     "service_worker": "background.js"
