@@ -331,7 +331,7 @@ function getScopeHintKeywords(section) {
       '实习经历',
       '工作经历'
     ],
-    projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '起止时间', '项目内容', '主要业绩'],
+    projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '项目链接', '起止时间', '项目内容', '主要业绩'],
     educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历', '学历', '专业', '课程', '荣誉'],
     selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点', '评价内容'],
     languages: ['外语', '英语', '等级', '熟练程度', '语言能力'],
@@ -904,6 +904,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
 
   // Project Logic
   if (normalizedSection === 'projects') {
+    const dataCy = (element.getAttribute?.('data-cy') || '').toLowerCase();
+    const elId = (element.id || '').toLowerCase();
+    const elName = (element.name || '').toLowerCase();
+    const attrHint = `${dataCy} ${elId} ${elName}`;
+    if (
+      /project[^a-z]*link|projectlink|linkinput/.test(attrHint) ||
+      attrHint.includes('.link')
+    ) {
+      return 'projectLink';
+    }
     if (
       isBossSite() &&
       element.tagName === 'INPUT' &&
@@ -917,6 +927,19 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('项目名称')) return 'projectName';
     if (text.includes('项目角色')) return 'projectRoleTitle';
     if (text.includes('技术栈')) return 'techStack';
+    if (
+      text.includes('项目链接') ||
+      text.includes('项目网址') ||
+      text.includes('项目URL') ||
+      text.includes('项目地址') ||
+      text.includes('仓库链接') ||
+      text.includes('源码链接') ||
+      text.includes('GitHub') ||
+      text.includes('github') ||
+      (primaryText === '链接' && !text.includes('论文'))
+    ) {
+      return 'projectLink';
+    }
     if (text.includes('项目职责') || (text.includes('职责') && normalizedSection === 'projects')) return 'projectResponsibility';
     if (text.includes('项目成果') || text.includes('项目业绩')) return 'projectAchievement';
     if (text.includes('项目内容') || text.includes('项目描述')) return 'content';

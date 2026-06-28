@@ -19,6 +19,21 @@
 
 ---
 
+## 2026-06-28 | 2.2.4
+
+### 测试环境
+- 浏览器/系统：Windows Chrome
+- 数据模式：storage 优先
+
+### 站点结果
+- 飞书招聘（`dedao.jobs.feishu.cn`）
+  - 项目经历 · **项目链接**（`project[0].link` / `data-cy="project[0].linkInput"`）：通过
+
+### Editor 页面
+- 项目经历 · 项目链接字段 CRUD / 持久化：通过
+
+---
+
 ## 2026-02-25 | 1.1.0-beta.1
 
 ### 测试环境

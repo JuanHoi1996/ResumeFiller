@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     start: document.getElementById("projStart"),
     end: document.getElementById("projEnd"),
     techStack: document.getElementById("techStack"),
+    projectLink: document.getElementById("projectLink"),
     content: document.getElementById("projectContent"),
     projectDesc: document.getElementById("projectDesc"),
     projectResponsibility: document.getElementById("projectResponsibility"),
@@ -259,6 +260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         projectName: "",
         projectRoleTitle: "",
         techStack: "",
+        projectLink: "",
         content: "",
         projectDesc: "",
         projectResponsibility: "",
@@ -450,6 +452,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     projectFields.start.value = payload.start || "";
     projectFields.end.value = payload.end || "";
     projectFields.techStack.value = payload.techStack || "";
+    projectFields.projectLink.value = payload.projectLink || "";
     projectFields.content.value = payload.content || "";
     projectFields.projectDesc.value = payload.projectDesc || "";
     projectFields.projectResponsibility.value = payload.projectResponsibility || "";
@@ -603,6 +606,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       start: projectFields.start.value.trim(),
       end: projectFields.end.value.trim(),
       techStack: projectFields.techStack.value.trim(),
+      projectLink: projectFields.projectLink.value.trim(),
       content: projectFields.content.value.trim(),
       projectDesc: projectFields.projectDesc.value.trim(),
       projectResponsibility: projectFields.projectResponsibility.value.trim(),

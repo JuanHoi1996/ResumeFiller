@@ -2,6 +2,11 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.2.4] - 2026-06-28
+
+### Added
+- **Projects · project link**: New `projectLink` field in the editor; recognizes labels like「项目链接」and Feishu/Lark ATS hints (`data-cy`, `id` e.g. `project[0].link`).
+
 ## [2.2.3] - 2026-05-30
 
 ### Improved

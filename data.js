@@ -135,6 +135,7 @@ const resumeData = {
         projectName: "如题，填项目名称",
         projectResponsibility: "比如国聘和猎聘，点名批评",
         projectRoleTitle: "如题，填项目角色",
+        projectLink: "有 GitHub 或线上 Demo 就填这里，飞书招聘等项目经历里常有「项目链接」",
         techStack: "如果你那个是编程项目的话，就有这个可以写了",
         start: "2024-06-01",
         end: "2024-08-31"

@@ -19,6 +19,21 @@ Issue link/screenshot:
 
 ---
 
+## 2026-06-28 | 2.2.4
+
+### Environment
+- Browser/OS: Chrome on Windows
+- Data source: storage-first
+
+### Site results
+- Feishu Recruiting (`dedao.jobs.feishu.cn`)
+  - Projects · **project link** (`project[0].link` / `data-cy="project[0].linkInput"`): Pass
+
+### Editor page
+- Projects · project link field CRUD / persist: Pass
+
+---
+
 ## 2026-02-25 | 1.1.0-beta.1
 
 ### Environment
