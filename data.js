@@ -87,6 +87,8 @@ const resumeData = {
         fullName: "你的名字",
         homeAddress: "也不会知道你的家庭住址",
         hukouLocation: "不会泄露的，放心",
+        githubUrl: "https://github.com/yourname",
+        scholarUrl: "有 Google Scholar 就填，没有就空着",
         idNumber: "开发者不可能知道你的身份证号",
         phone: "请放心填写",
         height: "175",

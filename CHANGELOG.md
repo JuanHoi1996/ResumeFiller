@@ -2,6 +2,15 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.2.5] - 2026-07-13
+
+### Improved
+- **Hotjob (e.g. Caitong Securities)**: Map internship/work long-text labels like「工作职责」/「岗位职责」to `content` (previously only「工作内容」matched).
+- **Address mis-fill guard**: GitHub / Scholar / homepage labels containing「地址」no longer map to home address; editor Personal Info adds optional `githubUrl` / `scholarUrl` fields for recording.
+
+### Docs
+- **KNOWN_ISSUES**: Document unreliable autofill for Tonghuashun campus GitHub / Scholar homepage fields.
+
 ## [2.2.4] - 2026-06-28
 
 ### Added

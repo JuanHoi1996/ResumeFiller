@@ -19,6 +19,21 @@
 
 ---
 
+## 2026-07-13 | 2.2.5
+
+### 测试环境
+- 浏览器/系统：Windows Chrome
+- 数据模式：storage 优先
+
+### 站点结果
+- Hotjob（`wecruit.hotjob.cn` / 财通证券）
+  - 实习/工作经历 · **工作职责** → `content`：通过
+- 同花顺校招（`campus.10jqka.com.cn`）
+  - 「Github主页」不再误填家庭住址：通过
+  - GitHub / Scholar URL 稳定自动写入：未通过（已记 KNOWN_ISSUES）
+
+---
+
 ## 2026-06-28 | 2.2.4
 
 ### 测试环境

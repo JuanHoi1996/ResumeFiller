@@ -220,6 +220,15 @@ function getLabelText(element) {
     if (anyLabel?.textContent?.trim()) return anyLabel.textContent.trim();
   }
 
+  // Element UI / Ant Design form item label (Tonghuashun etc.)
+  const uiFormItem = element.closest?.('.el-form-item, .ant-form-item, .ivu-form-item');
+  if (uiFormItem) {
+    const uiLabel = uiFormItem.querySelector?.(
+      '.el-form-item__label, .ant-form-item-label label, .ant-form-item-label, .ivu-form-item-label, label'
+    );
+    if (uiLabel?.textContent?.trim()) return uiLabel.textContent.trim();
+  }
+
   const ariaLabelledBy = element.getAttribute?.('aria-labelledby');
   if (ariaLabelledBy) {
     const labelNode = document.getElementById(ariaLabelledBy);
@@ -309,7 +318,7 @@ function isElementVisible(element) {
 
 function getScopeHintKeywords(section) {
   const bySection = {
-    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式', '身高', '体重', '籍贯', '政治面貌'],
+    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式', '身高', '体重', '籍贯', '政治面貌', 'Github', 'GitHub', 'Scholar', '主页'],
     internships: [
       '公司',
       '企业名称',
@@ -321,6 +330,8 @@ function getScopeHintKeywords(section) {
       '职位',
       '岗位',
       '工作内容',
+      '工作职责',
+      '岗位职责',
       '在职时间',
       '任职时间',
       '描述',
@@ -386,7 +397,22 @@ function containerHasPayloadField(node, payload, section) {
   }
 
   if (section === 'personalInfos') {
-    const infoAnchors = ['fullName', 'phone', 'email', 'idNumber', 'height', 'weight', 'nativePlace', 'politicalStatus'];
+    const infoAnchors = [
+      'fullName',
+      'phone',
+      'email',
+      'idNumber',
+      'height',
+      'weight',
+      'nativePlace',
+      'politicalStatus',
+      'homeAddress',
+      'hukouLocation',
+      'githubUrl',
+      'scholarUrl',
+      'emergencyContact',
+      'emergencyPhone'
+    ];
     // For personal info, require at least 2 anchors to consider it a "full section" container,
     // otherwise it might stop at a single-field card (e.g. just Name card).
     const matchedCount = infoAnchors.filter(f => matchedFields.has(f)).length;
@@ -460,7 +486,22 @@ function resolveScopedRoot(section, payload) {
     } else if (section === 'personalInfos') {
       // For personal info, if we only found 1-2 fields, keep going up to find a larger section container
       // (e.g. common ancestor of Name card and Height card).
-      const infoAnchors = ['fullName', 'phone', 'email', 'idNumber', 'height', 'weight', 'nativePlace', 'politicalStatus'];
+      const infoAnchors = [
+        'fullName',
+        'phone',
+        'email',
+        'idNumber',
+        'height',
+        'weight',
+        'nativePlace',
+        'politicalStatus',
+        'homeAddress',
+        'hukouLocation',
+        'githubUrl',
+        'scholarUrl',
+        'emergencyContact',
+        'emergencyPhone'
+      ];
       const matchedCount = infoAnchors.filter(f => {
         const matched = detectField(anchor, getLabelText(anchor), getElementPlaceholder(anchor), getContextHintText(anchor), section);
         return matched === f;
@@ -703,6 +744,21 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   const extendedText = toCompactText(labelText, placeholder, contextText, cname, ename);
   const normalizedSection = section ? String(section).trim() : null;
 
+  // Profile / academic URLs — detect on full hint (incl. context) BEFORE「地址」bleed-clear
+  // e.g. 同花顺「Github主页」/ placeholder「请填写Github主页地址」
+  const isPersonalInfoSection = !normalizedSection || normalizedSection === 'personalInfos';
+  if (isPersonalInfoSection) {
+    const urlHint = extendedText.toLowerCase();
+    if (urlHint.includes('github') || urlHint.includes('git hub')) return 'githubUrl';
+    if (
+      urlHint.includes('scholar') ||
+      extendedText.includes('谷歌学术') ||
+      extendedText.includes('学术主页')
+    ) {
+      return 'scholarUrl';
+    }
+  }
+
   // 1. Context Bleed Protection: Clear context for generic fields that often trigger false positives
   let effectiveContext = contextText;
   if (
@@ -737,7 +793,6 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   const text = effectiveContext ? extendedText : primaryText;
 
   // 2. High-Priority Direct Mappings (Check Primary Labels first)
-  const isPersonalInfoSection = !normalizedSection || normalizedSection === 'personalInfos';
   if (isPersonalInfoSection && (primaryText.includes('家庭住址') || primaryText.includes('家庭地址') || primaryText.includes('现居地址'))) return 'homeAddress';
   if (isPersonalInfoSection && (primaryText.includes('户籍所在地') || primaryText.includes('户籍地址') || primaryText.includes('户籍'))) return 'hukouLocation';
   if (
@@ -795,8 +850,24 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     primaryText.includes('离职时间')
   ) return 'end';
 
-  // Internship content label is commonly "实习内容"
-  if (primaryText.includes('实习内容') || primaryText.includes('实习描述')) return 'content';
+  // Internship content label is commonly "实习内容" / Hotjob "工作职责"
+  if (
+    primaryText.includes('实习内容') ||
+    primaryText.includes('实习描述') ||
+    primaryText.includes('工作内容') ||
+    primaryText.includes('工作职责') ||
+    primaryText.includes('岗位职责') ||
+    primaryText.includes('职责描述') ||
+    primaryText.includes('工作描述') ||
+    primaryText.includes('任职描述')
+  ) {
+    // Keep project-specific「项目职责」out of internship content mapping
+    if (normalizedSection === 'projects') {
+      // fall through to project logic
+    } else if (!normalizedSection || normalizedSection === 'internships') {
+      return 'content';
+    }
+  }
 
   if (primaryText.includes('部门') && !primaryText.includes('学院')) return 'department';
   
@@ -900,6 +971,19 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       if (isMeasurePlaceholder && !labelHasCompanyUnit) return '';
       return 'company';
     }
+    if (
+      text.includes('工作内容') ||
+      text.includes('工作职责') ||
+      text.includes('岗位职责') ||
+      text.includes('职责描述') ||
+      text.includes('工作描述') ||
+      text.includes('任职描述') ||
+      text.includes('实习内容') ||
+      text.includes('实习描述') ||
+      text.includes('职责业绩')
+    ) {
+      return 'content';
+    }
   }
 
   // Project Logic
@@ -1000,8 +1084,23 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('计算机') || text.includes('IT技能')) return 'computerSkills';
   }
 
-  // Generic Fallbacks
-  if (text.includes('住址') || text.includes('地址') || text.includes('地点') || text.includes('城市')) return 'homeAddress';
+  // Generic Fallbacks — residential address only; skip URL/homepage labels that contain「地址」
+  const looksLikeUrlOrHomepage =
+    /github|scholar|linkedin|个人主页|主页地址|网址|链接|url|http|仓库|源码/i.test(text) ||
+    (text.includes('主页') && (text.includes('地址') || text.includes('链接') || text.includes('网址')));
+  if (!looksLikeUrlOrHomepage) {
+    if (
+      text.includes('家庭住址') ||
+      text.includes('家庭地址') ||
+      text.includes('现居地址') ||
+      text.includes('详细地址') ||
+      text.includes('住址') ||
+      // Bare「地址」only when not clearly a city picker / homepage
+      (text.includes('地址') && !text.includes('城市') && !text.includes('地区'))
+    ) {
+      return 'homeAddress';
+    }
+  }
   if (text.includes('户籍所在地') || text.includes('户籍地址') || text.includes('户籍')) return 'hukouLocation';
   if (
     (normalizedSection === 'internships' ||
@@ -1010,7 +1109,13 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       normalizedSection === 'openQuestions' ||
       normalizedSection === 'languages' ||
       normalizedSection === 'computerSkills') &&
-    (text.includes('描述') || text.includes('主要工作') || text.includes('职责业绩') || text.includes('主要业绩'))
+    (text.includes('描述') ||
+      text.includes('主要工作') ||
+      text.includes('职责业绩') ||
+      text.includes('工作职责') ||
+      text.includes('工作内容') ||
+      text.includes('岗位职责') ||
+      text.includes('主要业绩'))
   ) {
     // Prevent internship/project "content" from being mis-mapped into education "specialty description" fields
     // where the label/placeholder is like "专业描述".
@@ -1086,17 +1191,20 @@ function fillGeneralWorkContentFallback(contentValue, scopeRoot = document) {
       hint.includes('工作描述') ||
       hint.includes('任职描述') ||
       hint.includes('内容描述') ||
-      hint.includes('描述') ||
+      hint.includes('实习内容') ||
+      hint.includes('实习描述') ||
       hint.includes('主要业绩');
+    // Avoid bare「描述」stealing the first empty textarea before「工作职责」
     const looksLikeAchievementField = hint.includes('工作业绩') || hint.includes('业绩成果');
     const looksLikeProjectField = hint.includes('项目');
-    return looksLikeWorkField && !looksLikeProjectField && !looksLikeAchievementField;
+    if (!looksLikeWorkField || looksLikeProjectField || looksLikeAchievementField) return false;
+    const currentText = element.isContentEditable
+      ? String(element.textContent || '')
+      : String(element.value || '');
+    return currentText.trim().length <= 2;
   });
 
   if (!candidate) return false;
-
-  const currentText = candidate.isContentEditable ? String(candidate.textContent || '') : String(candidate.value || '');
-  if (currentText.trim().length > 2) return false; // Avoid overriding user/already-filled value
 
   if (candidate.isContentEditable) {
     setContentEditableValue(candidate, contentValue);
@@ -1176,7 +1284,14 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
     const contextText = getContextHintText(element);
     const field = detectField(element, labelText, placeholder, contextText, section);
     if (!field) return;
-    if (!allowedFields.has(field)) return;
+    if (!allowedFields.has(field)) {
+      if (field === 'githubUrl' || field === 'scholarUrl') {
+        console.log(
+          `[ResumeFiller] 已识别 ${field}，但当前基础信息模板没有该字段。请打开编辑器填写「GitHub/Scholar 主页」后保存。`
+        );
+      }
+      return;
+    }
 
     // Relationship Guard: If filling a family member, ensure the label matches the specific relation if it exists
     if (data.familyRelation && field.startsWith('family')) {
@@ -1193,7 +1308,14 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
     }
 
     const value = data[field];
-    if (value === undefined || value === null || value === '') return;
+    if (value === undefined || value === null || value === '') {
+      if (field === 'githubUrl' || field === 'scholarUrl') {
+        console.log(
+          `[ResumeFiller] 已识别「${labelText || placeholder || field}」→ ${field}，但简历数据为空。请在编辑器填写并保存后再试。`
+        );
+      }
+      return;
+    }
 
     try {
       const type = (element.type || '').toLowerCase();

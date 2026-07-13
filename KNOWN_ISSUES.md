@@ -38,3 +38,11 @@ This file lists known limitations and temporary workarounds.
   - **"Other" Field Mis-detection**: When primary dropdown fields cannot be filled, the extension may identify the "Other School" or "Other Major" text inputs below and fill them, leading to data misplacement.
 - **Reason**: 51job sites use legacy DOM structures and heavy custom scripts for dropdowns; a conservative strategy is currently used to avoid interfering with their internal logic.
 - **Workaround**: Manually select the correct item from the dropdown and clear the mis-filled content in the "Other" text fields.
+
+## 8) Tonghuashun campus (`campus.10jqka.com.cn`) GitHub / Scholar homepage
+- **Symptom**:
+  - Labels like「Github主页地址」/「Scholar主页」were previously mis-mapped to home address because of the generic「地址」fallback (exclusion added; address mis-fill should stop).
+  - Correctly writing GitHub / Scholar URLs is still unreliable on some pages (field recognized but not written, or depends on whether editor fields `githubUrl` / `scholarUrl` are saved).
+- **Impact**: Homepage URL fields need manual paste; other personal-info fields can still autofill.
+- **Workaround**: Paste the GitHub / Scholar URL manually. You can still store both values under Personal Info in the editor for reference.
+- **Sample**: `campus.10jqka.com.cn` resume page, labels「Github主页」「Scholar主页」(Element UI `el-input`).

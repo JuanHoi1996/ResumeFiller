@@ -19,6 +19,21 @@ Issue link/screenshot:
 
 ---
 
+## 2026-07-13 | 2.2.5
+
+### Environment
+- Browser/OS: Chrome on Windows
+- Data source: storage-first
+
+### Site results
+- Hotjob (`wecruit.hotjob.cn` / Caitong Securities)
+  - Internship/work · **工作职责** → `content`: Pass
+- Tonghuashun campus (`campus.10jqka.com.cn`)
+  -「Github主页」no longer mis-filled with home address: Pass
+  - Stable GitHub / Scholar URL autofill: Fail (documented in KNOWN_ISSUES)
+
+---
+
 ## 2026-06-28 | 2.2.4
 
 ### Environment

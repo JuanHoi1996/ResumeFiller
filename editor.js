@@ -51,7 +51,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     emergencyContact: document.getElementById("emergencyContact"),
     emergencyPhone: document.getElementById("emergencyPhone"),
     homeAddress: document.getElementById("homeAddress"),
-    hukouLocation: document.getElementById("hukouLocation")
+    hukouLocation: document.getElementById("hukouLocation"),
+    githubUrl: document.getElementById("githubUrl"),
+    scholarUrl: document.getElementById("scholarUrl")
   };
 
   const educationFields = {
@@ -211,7 +213,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         email: "",
         idNumber: "",
         homeAddress: "",
-        hukouLocation: ""
+        hukouLocation: "",
+        githubUrl: "",
+        scholarUrl: ""
       }
     };
   }
@@ -406,6 +410,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     personalInfoFields.emergencyPhone.value = payload.emergencyPhone || "";
     personalInfoFields.homeAddress.value = payload.homeAddress || "";
     personalInfoFields.hukouLocation.value = payload.hukouLocation || "";
+    personalInfoFields.githubUrl.value = payload.githubUrl || "";
+    personalInfoFields.scholarUrl.value = payload.scholarUrl || "";
   }
 
   function renderEducationForm(item, key) {
@@ -556,7 +562,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       emergencyContact: personalInfoFields.emergencyContact.value.trim(),
       emergencyPhone: personalInfoFields.emergencyPhone.value.trim(),
       homeAddress: personalInfoFields.homeAddress.value.trim(),
-      hukouLocation: personalInfoFields.hukouLocation.value.trim()
+      hukouLocation: personalInfoFields.hukouLocation.value.trim(),
+      githubUrl: personalInfoFields.githubUrl.value.trim(),
+      scholarUrl: personalInfoFields.scholarUrl.value.trim()
     };
   }
 
