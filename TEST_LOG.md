@@ -19,6 +19,19 @@ Issue link/screenshot:
 
 ---
 
+## 2026-07-28 | 2.2.6
+
+### Environment
+- Browser/OS: Chrome on Windows
+- Data source: storage-first
+
+### Site / feature results
+- Editor Ctrl+S save: Pass
+- GF Securities (Hotjob): education GPA / referees, project「活动」labels, emergency-phone priority: Pass (local)
+- Guojin Scoped row fill: known limitation (KNOWN_ISSUES #9)
+
+---
+
 ## 2026-07-13 | 2.2.5
 
 ### Environment

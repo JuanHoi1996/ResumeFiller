@@ -24,6 +24,10 @@ const resumeData = {
         educationSummary: "如你所见，这个就是用来兜底的",
         major: "在这里填专业",
         schoolName: "在这里填学校",
+        gpa: 'GPA--"3.50/4.00"；平均分--"80.4/100"（按网站格式改）',
+        refereeName: "证明人姓名；有的网站要「证明人信息」一整段",
+        refereeRelation: "导师/辅导员/班主任之类",
+        refereePhone: "证明人电话",
         start: "2021-09-01",
         end: "2025-06-30"
       }

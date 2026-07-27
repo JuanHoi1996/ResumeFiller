@@ -49,7 +49,7 @@
       <button id="setDefaultBtn">设为默认模板</button>
       <button id="exportBtn">导出 JSON</button>
       <button id="importBtn">导入 JSON</button>
-      <button id="saveBtn" class="primary">保存到本地</button>
+      <button id="saveBtn" class="primary" title="Ctrl+S / ⌘S">保存到本地</button>
     </div>
     <div class="layout">
       <div class="panel"><div id="itemList"></div></div>
@@ -84,8 +84,12 @@
             <div class="field"><label for="major">专业</label><input id="major" /></div>
             <div class="field"><label for="eduStart">开始日期</label><input id="eduStart" placeholder="YYYY-MM-DD" /></div>
             <div class="field"><label for="eduEnd">结束日期</label><input id="eduEnd" placeholder="YYYY-MM-DD" /></div>
+            <div class="field full"><label for="gpa">GPA / 平均分 / 学习成绩</label><input id="gpa" placeholder='如 GPA--"3.50/4.00"；平均分--"80.4/100"' /></div>
+            <div class="field"><label for="eduRefereeName">证明人 / 证明人信息</label><input id="eduRefereeName" placeholder="姓名，或姓名+职务等综合信息" /></div>
+            <div class="field"><label for="eduRefereeRelation">与证明人关系</label><input id="eduRefereeRelation" placeholder="如导师、辅导员、班主任" /></div>
+            <div class="field"><label for="eduRefereePhone">证明人电话</label><input id="eduRefereePhone" /></div>
             <div class="field full"><label for="educationExperience">在校经历</label><textarea id="educationExperience"></textarea></div>
-            <div class="field full"><label for="coreCourses">核心课程</label><textarea id="coreCourses"></textarea></div>
+            <div class="field full"><label for="coreCourses">核心课程 / 所学课程及成绩</label><textarea id="coreCourses"></textarea></div>
             <div class="field full"><label for="educationSummary">在校经历/核心课程（组合兜底）</label><textarea id="educationSummary"></textarea></div>
           </div>
         </div>
@@ -105,7 +109,7 @@
             <div class="field"><label for="companyType">单位性质</label><input id="companyType" /></div>
             <div class="field"><label for="workType">工作性质</label><input id="workType" /></div>
             <div class="field"><label for="refereeName">证明人</label><input id="refereeName" /></div>
-            <div class="field"><label for="leaveReason">离职原因</label><input id="leaveReason" /></div>
+            <div class="field"><label for="leaveReason">离职/结束实习原因</label><input id="leaveReason" /></div>
             <div class="field"><label for="refereeCompanyTitle">证明人单位/职务</label><input id="refereeCompanyTitle" /></div>
             <div class="field"><label for="refereePhone">联系方式</label><input id="refereePhone" /></div>
             <div class="field full"><label for="internshipContent">工作内容</label><textarea id="internshipContent"></textarea></div>

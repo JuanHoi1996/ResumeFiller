@@ -338,12 +338,14 @@ function getScopeHintKeywords(section) {
       '主要业绩',
       '职务',
       '离职原因',
+      '结束实习',
+      '结束兼职',
       '实习',
       '实习经历',
       '工作经历'
     ],
-    projects: ['项目', '项目名称', '项目描述', '项目经验', '项目职责', '项目成果', '项目链接', '起止时间', '项目内容', '主要业绩'],
-    educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '教育经历', '学历', '专业', '课程', '荣誉'],
+    projects: ['项目', '项目名称', '活动名称', '担任角色', '项目描述', '项目简述', '活动简述', '项目经验', '项目职责', '项目成果', '项目链接', '起止时间', '项目内容', '主要业绩'],
+    educations: ['学校', '院校', '学院', '在校经历', '核心课程', '主修课程', '所学课程', '教育经历', '学历', '专业', '课程', '成绩', 'GPA', '绩点', '平均分', '学习成绩', '证明人', '荣誉'],
     selfEvaluations: ['自我评价', '个人评价', '自我介绍', '个人优势', '优势亮点', '评价内容'],
     languages: ['外语', '英语', '等级', '熟练程度', '语言能力'],
     computerSkills: ['计算机', '技能', '熟练程度', '软件', '编程', 'IT技能'],
@@ -445,7 +447,11 @@ function containerHasPayloadField(node, payload, section) {
       'college',
       'educationSummary',
       'educationExperience',
-      'coreCourses'
+      'coreCourses',
+      'gpa',
+      'refereeName',
+      'refereeRelation',
+      'refereePhone'
     ];
     return educationAnchors.some(f => matchedFields.has(f));
   }
@@ -813,8 +819,24 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   if (isPersonalInfoSection && (primaryText.includes('体重') || primaryText.includes('Weight'))) return 'weight';
   if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
   if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
-  if (isPersonalInfoSection && (primaryText.includes('紧急联系人') || primaryText.includes('联系人姓名'))) return 'emergencyContact';
-  if (isPersonalInfoSection && (primaryText.includes('紧急联系电话') || primaryText.includes('紧急联系人电话') || primaryText.includes('联系人电话'))) return 'emergencyPhone';
+  // Phone before contact name:「紧急联系人电话」contains「紧急联系人」and must not map to name
+  if (
+    isPersonalInfoSection &&
+    (primaryText.includes('紧急联系电话') ||
+      primaryText.includes('紧急联系人电话') ||
+      primaryText.includes('联系人电话') ||
+      (primaryText.includes('紧急联系人') && (primaryText.includes('电话') || primaryText.includes('手机'))))
+  ) {
+    return 'emergencyPhone';
+  }
+  if (
+    isPersonalInfoSection &&
+    (primaryText.includes('紧急联系人') || primaryText.includes('联系人姓名')) &&
+    !primaryText.includes('电话') &&
+    !primaryText.includes('手机')
+  ) {
+    return 'emergencyContact';
+  }
 
   // Paper Logic
   if (normalizedSection === 'papers') {
@@ -886,16 +908,33 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   // Open Questions Logic
   // (intentionally removed) openQuestions no longer relies on label/placeholder keywords.
 
-  // Referee Logic
+  // Referee Logic (internships + educations — e.g. 广发 Hotjob asks referees under education)
   if (
-    normalizedSection === 'internships' &&
+    (normalizedSection === 'internships' || normalizedSection === 'educations') &&
     (text.includes('证明人') || text.includes('联系人') || text.includes('汇报对象') || text.includes('汇报人'))
   ) {
-    if (primaryText.includes('电话') || primaryText.includes('手机') || primaryText.includes('联系方式')) return 'refereePhone';
+    if (primaryText.includes('电话') || primaryText.includes('手机') || primaryText.includes('联系方式')) {
+      return 'refereePhone';
+    }
+    if (
+      primaryText.includes('关系') ||
+      text.includes('与证明人关系') ||
+      text.includes('证明人关系')
+    ) {
+      return 'refereeRelation';
+    }
     // Strict Title detection for referees to avoid hijacking the Name field
-    if (primaryText.includes('单位') || primaryText.includes('职务') || primaryText.includes('单位及职务')) return 'refereeCompanyTitle';
-    // If the label is JUST "Referee" or similar, it's most likely the name
-    if (primaryText.includes('证明人') || primaryText.includes('联系人') || primaryText.includes('汇报对象') || primaryText.includes('汇报人') || primaryText === '') {
+    if (primaryText.includes('单位') || primaryText.includes('职务') || primaryText.includes('单位及职务')) {
+      return 'refereeCompanyTitle';
+    }
+    // 「证明人信息」or bare「证明人」→ name / combined info blob
+    if (
+      primaryText.includes('证明人') ||
+      primaryText.includes('联系人') ||
+      primaryText.includes('汇报对象') ||
+      primaryText.includes('汇报人') ||
+      primaryText === ''
+    ) {
       return 'refereeName';
     }
   }
@@ -920,7 +959,29 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     }
     if (text.includes('在校经历/核心课程')) return 'educationSummary';
     if (text.includes('在校经历') || text.includes('校园经历')) return 'educationExperience';
-    if (text.includes('核心课程') || text.includes('主修课程') || text.includes('专业课程')) return 'coreCourses';
+    if (
+      text.includes('核心课程') ||
+      text.includes('主修课程') ||
+      text.includes('专业课程') ||
+      text.includes('所学课程') ||
+      text.includes('课程及成绩') ||
+      (text.includes('课程') && text.includes('成绩'))
+    ) {
+      return 'coreCourses';
+    }
+    // GPA / average score — after course lists so「所学课程及成绩」stays coreCourses
+    if (
+      /gpa/i.test(text) ||
+      text.includes('绩点') ||
+      text.includes('平均分') ||
+      text.includes('加权平均') ||
+      text.includes('学习成绩') ||
+      text.includes('学业成绩') ||
+      text.includes('在校成绩') ||
+      (text.includes('成绩') && !text.includes('课程') && !text.includes('考试'))
+    ) {
+      return 'gpa';
+    }
     if (text.includes('学院') || text.includes('院系') || text.includes('学部')) return 'college';
     if (text.includes('专业') && !text.includes('课程')) return 'major';
     if (text.includes('学校名称') || text.includes('毕业院校') || text.includes('学校')) return 'schoolName';
@@ -947,7 +1008,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
         return bossExampleLooksLikeJobTitle(egSample) ? 'position' : 'company';
       }
     }
-    if (text.includes('离职原因')) return 'leaveReason';
+    if (
+      text.includes('离职原因') ||
+      text.includes('结束实习') ||
+      text.includes('结束兼职') ||
+      text.includes('结束原因') ||
+      text.includes('实习/兼职原因') ||
+      (text.includes('兼职') && text.includes('原因') && !text.includes('证明'))
+    ) {
+      return 'leaveReason';
+    }
     if (text.includes('单位性质')) return 'companyType';
     if (text.includes('工作性质')) return 'workType';
     if (text.includes('部门') || text.includes('团队') || text.includes('产品部')) return 'department';
@@ -1008,8 +1078,22 @@ function detectField(element, labelText, placeholder, contextText, section = nul
         return bossExampleLooksLikeJobTitle(egSample) ? 'projectRoleTitle' : 'projectName';
       }
     }
-    if (text.includes('项目名称')) return 'projectName';
-    if (text.includes('项目角色')) return 'projectRoleTitle';
+    if (
+      text.includes('项目名称') ||
+      text.includes('项目/活动名称') ||
+      text.includes('活动名称') ||
+      (text.includes('项目') && text.includes('活动') && text.includes('名称'))
+    ) {
+      return 'projectName';
+    }
+    if (
+      text.includes('项目角色') ||
+      text.includes('担任角色') ||
+      primaryText === '角色' ||
+      primaryText.replace(/[?*？]/g, '') === '担任角色'
+    ) {
+      return 'projectRoleTitle';
+    }
     if (text.includes('技术栈')) return 'techStack';
     if (
       text.includes('项目链接') ||
@@ -1043,7 +1127,19 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     ) {
       return 'content';
     }
-    if (text.includes('项目介绍') || text.includes('项目背景') || text.includes('项目概述') || text.includes('项目概况') || text.includes('项目经验')) return 'projectDesc';
+    if (
+      text.includes('项目介绍') ||
+      text.includes('项目背景') ||
+      text.includes('项目概述') ||
+      text.includes('项目概况') ||
+      text.includes('项目经验') ||
+      text.includes('项目/活动简述') ||
+      text.includes('活动简述') ||
+      (text.includes('项目') && text.includes('简述')) ||
+      (text.includes('活动') && text.includes('简述'))
+    ) {
+      return 'projectDesc';
+    }
   }
 
   if (

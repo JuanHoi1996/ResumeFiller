@@ -2,6 +2,20 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.2.6] - 2026-07-28
+
+### Added
+- **Editor Ctrl+S / ⌘S**: Quick save to local storage (blocks the browser “Save page as” dialog).
+- **Education · GPA / average score** (`gpa`): Recognizes「学习成绩」, GPA, 绩点, 平均分, etc. (kept distinct from course-list fields).
+- **Education · referees**: `refereeName` / `refereeRelation` / `refereePhone` (e.g. GF Securities Hotjob asks under education).
+
+### Improved
+- **GF Securities (Hotjob) labels**: Emergency-contact phone before name; leave reason for「结束实习/兼职原因」; project labels like「项目/活动名称」「担任角色」「项目/活动简述».
+- **Emergency contact phone**:「紧急联系人电话」no longer hijacked by「紧急联系人」→ name.
+
+### Docs
+- **KNOWN_ISSUES**: Guojin Securities (Beisen) internship Scoped Fill often stops at one row (~3 clicks).
+
 ## [2.2.5] - 2026-07-13
 
 ### Improved

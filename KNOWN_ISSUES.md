@@ -46,3 +46,10 @@ This file lists known limitations and temporary workarounds.
 - **Impact**: Homepage URL fields need manual paste; other personal-info fields can still autofill.
 - **Workaround**: Paste the GitHub / Scholar URL manually. You can still store both values under Personal Info in the editor for reference.
 - **Sample**: `campus.10jqka.com.cn` resume page, labels「Github主页」「Scholar主页」(Element UI `el-input`).
+
+## 9) Guojin Securities / Beisen (`gjzq.zhiye.com`) internship Scoped Fill stops at one row
+- **Symptom**: Internship blocks are often laid out as **~3 rows × 2 fields** (e.g. company/title, internship content/referee, referee title/phone). After focusing one input and clicking the internship template, Scoped Fill usually fills **only that row**; you may need ~3 clicks (one per row) to complete one internship entry.
+- **Likely cause**: Beisen Phoenix often wraps each visual row in its own container. Scoped Fill walks up from the focused field and can stop at the **row** container instead of the common ancestor of the full internship entry. Fields are still recognizable (company, position, content, referee, etc.) — filling works, just not in one shot.
+- **Impact**: Extra clicks; does not block manual entry or per-row Scoped Fill.
+- **Workaround**: Focus any field in the next row and click the same internship template again; or blur and retry whole-page fill depending on site behavior.
+- **Sample**: `gjzq.zhiye.com` application form (Beisen / `phoenix-input`), internship labels as above.

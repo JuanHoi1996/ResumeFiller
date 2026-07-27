@@ -64,6 +64,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     major: document.getElementById("major"),
     start: document.getElementById("eduStart"),
     end: document.getElementById("eduEnd"),
+    gpa: document.getElementById("gpa"),
+    refereeName: document.getElementById("eduRefereeName"),
+    refereeRelation: document.getElementById("eduRefereeRelation"),
+    refereePhone: document.getElementById("eduRefereePhone"),
     educationExperience: document.getElementById("educationExperience"),
     coreCourses: document.getElementById("coreCourses"),
     educationSummary: document.getElementById("educationSummary")
@@ -229,6 +233,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         major: "",
         educationExperience: "",
         coreCourses: "",
+        gpa: "",
+        refereeName: "",
+        refereeRelation: "",
+        refereePhone: "",
         educationSummary: ""
       }
     };
@@ -423,6 +431,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     educationFields.major.value = payload.major || "";
     educationFields.start.value = payload.start || "";
     educationFields.end.value = payload.end || "";
+    educationFields.gpa.value = payload.gpa || "";
+    educationFields.refereeName.value = payload.refereeName || "";
+    educationFields.refereeRelation.value = payload.refereeRelation || "";
+    educationFields.refereePhone.value = payload.refereePhone || "";
     educationFields.educationExperience.value = payload.educationExperience || "";
     educationFields.coreCourses.value = payload.coreCourses || "";
     educationFields.educationSummary.value = payload.educationSummary || "";
@@ -577,6 +589,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       major: educationFields.major.value.trim(),
       start: educationFields.start.value.trim(),
       end: educationFields.end.value.trim(),
+      gpa: educationFields.gpa.value.trim(),
+      refereeName: educationFields.refereeName.value.trim(),
+      refereeRelation: educationFields.refereeRelation.value.trim(),
+      refereePhone: educationFields.refereePhone.value.trim(),
       educationExperience: educationFields.educationExperience.value.trim(),
       coreCourses: educationFields.coreCourses.value.trim(),
       educationSummary: educationFields.educationSummary.value.trim()
@@ -945,7 +961,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  saveBtn.addEventListener("click", async () => {
+  async function saveToLocal() {
     try {
       persistCurrentFormToState();
       await window.resumeStorage.saveResumeData(state.data);
@@ -954,6 +970,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       showStatus(`保存失败: ${error.message}`, true);
     }
+  }
+
+  saveBtn.addEventListener("click", () => {
+    saveToLocal();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "s") return;
+    event.preventDefault();
+    saveToLocal();
   });
 
   try {
