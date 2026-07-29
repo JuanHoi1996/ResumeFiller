@@ -135,6 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.tabs.create({ url: chrome.runtime.getURL('editor.html') });
   });
 
+  const privacyLink = document.getElementById('privacyLink');
+  if (privacyLink) {
+    privacyLink.addEventListener('click', event => {
+      event.preventDefault();
+      chrome.tabs.create({ url: chrome.runtime.getURL('privacy.html') });
+    });
+  }
+
   reloadBtn.addEventListener('click', async () => {
     try {
       const tab = await getActiveTab();

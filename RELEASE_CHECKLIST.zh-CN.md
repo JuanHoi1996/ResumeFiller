@@ -18,22 +18,27 @@
   - `popup.js`
   - `editor.html`
   - `editor.js`
+  - `privacy.html`
   - `storage.js`
   - `data.js`
 - [ ] 打包前删除临时文件：
   - `resumefiller-data-*.json`
   - 各类备份/临时文件
-  - 与插件无关的文档或脚本
+  - 与插件无关的文档或脚本（Markdown 文档可排除出商店 ZIP；`privacy.html` 必须保留）
 - [ ] 检查 zip 结构：压缩包根目录应直接包含 `manifest.json`。
 
 ## C. 功能冒烟测试
 - [ ] Popup 模板列表正常渲染。
+- [ ] 侧栏顶部 sticky「编辑 / 刷新」在滚动时仍可见。
 - [ ] Editor 可新增/编辑/删除实习经历。
 - [ ] Editor 可新增/编辑/删除项目经历。
 - [ ] Editor 可新增/编辑/删除自我评价。
 - [ ] JSON 导出可用。
 - [ ] JSON 导入可用。
 - [ ] 保存后刷新，数据持久化正常。
+- [ ] 首次打开编辑器出现隐私知情横幅；确认后不再出现。
+- [ ] 「清除本地数据」二次确认后恢复为中性示例。
+- [ ] 侧栏 / 编辑器可打开 `privacy.html`。
 
 ## D. 站点回归
 - [ ] BOSS：实习 + 项目 + 自我评价自动填充。
@@ -42,7 +47,12 @@
 - [ ] Hotjob 系（如 `wecruit.hotjob.cn`）：实习 + 项目 + 自我评价自动填充。
 - [ ] 验证 `工作内容` 不会误写入 `工作业绩`。
 
-## E. 灰度发布
+## E. 商店 / 隐私（Edge 等）
+- [ ] 已启用 GitHub Pages，商店隐私政策 URL 可访问（如 `https://juanhoi1996.github.io/ResumeFiller/privacy.html`）。
+- [ ] 隐私问卷披露与政策一致：本地存储、填充写入目标页、无远程遥测。
+- [ ] 权限说明与 `manifest.json` 一致（已无 `scripting` / `activeTab`）。
+
+## F. 灰度发布
 - [ ] 选择测试人群（5-20 人）。
 - [ ] 下发安装与反馈说明。
 - [ ] 收集浏览器/系统/站点/字段级错误信息。

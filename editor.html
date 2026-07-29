@@ -25,11 +25,45 @@
     input, textarea { border: 1px solid #ccd7e5; border-radius: 8px; padding: 8px 10px; font-size: 13px; font-family: inherit; background: #fff; }
     textarea { min-height: 110px; resize: vertical; }
     #status { margin-top: 10px; font-size: 13px; color: #166534; min-height: 18px; }
+    .privacy-hint {
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d6e2ee;
+      background: #f1f7ff;
+      font-size: 13px;
+      color: #334155;
+    }
+    .privacy-hint a { color: #1d6ef2; }
+    .privacy-banner {
+      display: none;
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #f0d78c;
+      background: #fff8e6;
+      font-size: 13px;
+      color: #5c4a12;
+    }
+    .privacy-banner.visible { display: block; }
+    .privacy-banner .actions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    button.danger { border-color: #e2a5a5; color: #9b1c1c; background: #fff5f5; }
+    button.danger:hover { background: #ffe8e8; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>ResumeFiller 数据编辑器</h1>
+    <div id="privacyBanner" class="privacy-banner" role="status">
+      <div>简历仅保存在本机浏览器；点击填充时会写入您当前打开的招聘网页。本扩展不上传数据。详情见<a id="privacyBannerLink" href="#">隐私政策</a>。</div>
+      <div class="actions">
+        <button id="privacyAcceptBtn" class="primary" type="button">我已了解</button>
+      </div>
+    </div>
+    <p class="privacy-hint">
+      简历仅存本机；填充会写入当前网页。
+      <a id="privacyPageLink" href="#">隐私政策</a>
+    </p>
     <div class="section-tabs">
       <button id="tabPersonalInfos" class="active">个人信息</button>
       <button id="tabEducations">教育经历</button>
@@ -49,6 +83,7 @@
       <button id="setDefaultBtn">设为默认模板</button>
       <button id="exportBtn">导出 JSON</button>
       <button id="importBtn">导入 JSON</button>
+      <button id="clearLocalBtn" class="danger" type="button">清除本地数据</button>
       <button id="saveBtn" class="primary" title="Ctrl+S / ⌘S">保存到本地</button>
     </div>
     <div class="layout">

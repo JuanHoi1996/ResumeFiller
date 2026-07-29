@@ -287,6 +287,12 @@ function toCompactText(...parts) {
   return parts.join(' ').replace(/\s+/g, '');
 }
 
+/** True when hint is only the token「内容」(label+placeholder may duplicate →「内容内容»). */
+function isBareContentHint(text) {
+  const t = normalizeText(text);
+  return t.length > 0 && /^(内容)+$/.test(t);
+}
+
 function normalizeToYYYYMM(dateLike) {
   if (!dateLike) return '';
   const raw = String(dateLike).trim();
@@ -820,12 +826,16 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
   if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
   // Phone before contact name:「紧急联系人电话」contains「紧急联系人」and must not map to name
+  // CATL etc. may use typo/variant「紧急人联系电话」
   if (
     isPersonalInfoSection &&
     (primaryText.includes('紧急联系电话') ||
       primaryText.includes('紧急联系人电话') ||
+      primaryText.includes('紧急人联系电话') ||
       primaryText.includes('联系人电话') ||
-      (primaryText.includes('紧急联系人') && (primaryText.includes('电话') || primaryText.includes('手机'))))
+      (primaryText.includes('紧急') &&
+        (primaryText.includes('电话') || primaryText.includes('手机')) &&
+        (primaryText.includes('联系') || primaryText.includes('联系人'))))
   ) {
     return 'emergencyPhone';
   }
@@ -1018,6 +1028,24 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     ) {
       return 'leaveReason';
     }
+    // Work location (e.g. CATL); editor already has internship `location`
+    if (
+      primaryText.includes('工作地点') ||
+      primaryText.includes('工作城市') ||
+      primaryText.includes('实习地点') ||
+      primaryText === '地点'
+    ) {
+      return 'location';
+    }
+    // CATL etc.: control label/placeholder is bare「内容」(not「工作职责」).
+    // Only map on long-text controls to avoid stealing short「内容」inputs.
+    const isLongText =
+      element.tagName === 'TEXTAREA' ||
+      element.isContentEditable ||
+      element.getAttribute?.('role') === 'textbox';
+    if (isLongText && isBareContentHint(primaryText)) {
+      return 'content';
+    }
     if (text.includes('单位性质')) return 'companyType';
     if (text.includes('工作性质')) return 'workType';
     if (text.includes('部门') || text.includes('团队') || text.includes('产品部')) return 'department';
@@ -1113,7 +1141,7 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('项目内容') || text.includes('项目描述')) return 'content';
     // Moka / Generic: if we are in projects section and label is just "内容" or "职责"
     if (normalizedSection === 'projects') {
-      if (primaryText === '内容' || primaryText === '项目内容') return 'content';
+      if (isBareContentHint(primaryText) || primaryText === '项目内容') return 'content';
       if (primaryText === '职责' || primaryText === '项目职责') return 'projectResponsibility';
     }
     // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),
@@ -1289,7 +1317,9 @@ function fillGeneralWorkContentFallback(contentValue, scopeRoot = document) {
       hint.includes('内容描述') ||
       hint.includes('实习内容') ||
       hint.includes('实习描述') ||
-      hint.includes('主要业绩');
+      hint.includes('主要业绩') ||
+      // CATL: label+placeholder both「内容」→ compact「内容内容」
+      isBareContentHint(hint);
     // Avoid bare「描述」stealing the first empty textarea before「工作职责」
     const looksLikeAchievementField = hint.includes('工作业绩') || hint.includes('业绩成果');
     const looksLikeProjectField = hint.includes('项目');
@@ -1605,27 +1635,65 @@ function resolveReportTargetElement() {
   return null;
 }
 
+function sanitizeReportUrl(href) {
+  try {
+    const url = new URL(href || location.href);
+    // Keep origin + pathname only; drop query/hash (may contain resumeId/token).
+    return `${url.origin}${url.pathname}`;
+  } catch {
+    return String(href || '').split(/[?#]/)[0] || '';
+  }
+}
+
+function sanitizeReportOuterHtml(element) {
+  if (!element) return '';
+  const clone = element.cloneNode(true);
+  const scrub = node => {
+    if (!node || node.nodeType !== 1) return;
+    [
+      'value',
+      'src',
+      'href',
+      'data-value',
+      'data-token',
+      'data-userid',
+      'data-user-id',
+      'autocomplete'
+    ].forEach(attr => node.removeAttribute?.(attr));
+    // Prefer structure over entered content for text controls.
+    if (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA') {
+      node.removeAttribute('value');
+      if ('value' in node) node.value = '';
+      if (node.tagName === 'TEXTAREA') node.textContent = '';
+    }
+    Array.from(node.children || []).forEach(scrub);
+  };
+  scrub(clone);
+  let html = clone.outerHTML || '';
+  const max = 10000;
+  if (html.length > max) {
+    html = `${html.slice(0, max)}\n... [truncated ${html.length - max} chars]`;
+  }
+  return html;
+}
+
 function buildFieldReportText(element) {
   const manifest = chrome.runtime.getManifest();
   const version = manifest?.version || '';
   const labelText = getLabelText(element);
   const placeholder = getElementPlaceholder(element);
   const contextHint = getContextHintText(element);
-  let html = element?.outerHTML || '';
-  const max = 80000;
-  if (html.length > max) {
-    html = `${html.slice(0, max)}\n... [truncated ${html.length - max} chars]`;
-  }
+  const html = sanitizeReportOuterHtml(element);
   return [
-    'ResumeFiller field report (beta)',
+    'ResumeFiller field report',
     `Version: ${version}`,
-    `URL: ${location.href}`,
+    `URL: ${sanitizeReportUrl(location.href)}`,
     `Time: ${new Date().toISOString()}`,
     '---',
     `Label: ${labelText}`,
     `Placeholder: ${placeholder}`,
     `Context hint: ${contextHint}`,
-    '--- outerHTML ---',
+    '--- outerHTML (sanitized; values removed) ---',
     html,
     '--- end ---'
   ].join('\n');
@@ -1670,7 +1738,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         const text = buildFieldReportText(element);
         await copyReportToClipboard(text);
-        showReportToast('ResumeFiller：已复制到剪贴板，可粘贴到反馈/工单');
+        showReportToast('ResumeFiller：已复制脱敏报告（不含输入值与 URL 参数）');
         sendResponse({ success: true });
       } catch (error) {
         sendResponse({ success: false, error: error.message });

@@ -6,6 +6,8 @@ Open-source resume autofill assistant for job applications.
 
 **License:** [MIT](LICENSE)
 
+**Privacy:** [English](PRIVACY.md) · [中文](PRIVACY.zh-CN.md) · in-extension [`privacy.html`](privacy.html) (GitHub Pages: `https://juanhoi1996.github.io/ResumeFiller/privacy.html`)
+
 ## What it does
 - Lets you maintain resume templates (in the built-in editor).
 - One-click autofill into common online application forms.

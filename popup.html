@@ -12,8 +12,47 @@
     }
     h1 {
       font-size: 16px;
-      margin: 0 0 10px;
+      margin: 0;
       color: #1f2d3d;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+    .header-tip {
+      margin: 4px 0 10px;
+      font-size: 12px;
+      color: #5a6b7d;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .tool-bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      margin: 0 -14px 10px;
+      padding: 8px 14px;
+      background: #f6f8fb;
+      border-bottom: 1px solid #e7edf3;
+    }
+    .tool-bar button {
+      flex: 1;
+      border: 1px solid #d6e2ee;
+      background: #fff;
+      color: #243447;
+      border-radius: 8px;
+      padding: 8px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.1s;
+    }
+    .tool-bar button:hover {
+      background: #f1f7ff;
+    }
+    .tool-bar button:active {
+      background: #e1effe;
+      transform: translateY(1px);
     }
     .panel {
       background: #fff;
@@ -59,29 +98,18 @@
       background: #e1effe;
       transform: translateY(1px);
     }
-    .tool-bar {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .tool-bar button {
-      flex: 1;
-      border: 1px solid #d6e2ee;
-      background: #fff;
-      color: #243447;
-      border-radius: 8px;
-      padding: 8px 10px;
-      cursor: pointer;
+    .footer-links {
+      margin-top: 4px;
       font-size: 12px;
-      font-weight: 600;
-      transition: all 0.1s;
+      color: #5a6b7d;
+      text-align: center;
     }
-    .tool-bar button:hover {
-      background: #f1f7ff;
+    .footer-links a {
+      color: #1d6ef2;
+      text-decoration: none;
     }
-    .tool-bar button:active {
-      background: #e1effe;
-      transform: translateY(1px);
+    .footer-links a:hover {
+      text-decoration: underline;
     }
     .status {
       margin-top: 8px;
@@ -103,7 +131,12 @@
   </style>
 </head>
 <body>
-  <h1>ResumeFiller 模板填充</h1>
+  <h1>ResumeFiller</h1>
+  <p class="header-tip">先点目标输入框，再点下方模板</p>
+  <div class="tool-bar">
+    <button id="openDataBtn" type="button">编辑简历数据</button>
+    <button id="reloadBtn" type="button">刷新页面</button>
+  </div>
   <div class="panel">
     <div class="section-title">个人信息</div>
     <div id="personalInfoMenu" class="template-grid"></div>
@@ -128,10 +161,9 @@
     <div id="gameExperienceMenu" class="template-grid"></div>
     <div class="section-title">开放性问答 (小作文)</div>
     <div id="openQuestionMenu" class="template-grid"></div>
-    <div class="tool-bar">
-      <button id="openDataBtn">编辑简历数据</button>
-      <button id="reloadBtn">刷新页面</button>
-    </div>
+  </div>
+  <div class="footer-links">
+    <a id="privacyLink" href="#">隐私政策</a>
   </div>
   <div id="status" class="status"></div>
 
@@ -140,4 +172,3 @@
   <script src="popup.js"></script>
 </body>
 </html>
-

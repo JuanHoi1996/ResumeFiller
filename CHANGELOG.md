@@ -2,6 +2,21 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.3.0] - 2026-07-29
+
+### Added
+- **Privacy policy & notice**: `privacy.html` / `PRIVACY.md` / `PRIVACY.zh-CN.md` (incl. third-party data responsibility); links from side panel and editor; first-open acknowledge banner; **Clear local data** in the editor.
+
+### Improved
+- **Leaner permissions**: Removed unused `scripting` and `activeTab` (static content scripts + `<all_urls>` already cover fill).
+- **Neutral default sample data**: `data.js` uses formal placeholders so accidental form fills never inject joke copy.
+- **Sanitized field report**: Dropped `(beta)`; URL keeps origin + pathname only; strip sensitive attrs (e.g. `value`) from `outerHTML` and truncate; toast notes redaction.
+- **CATL / similar form labels**:
+  - Variants like「紧急人联系电话」→ `emergencyPhone`
+  - Bare internship「内容」(incl. duplicated label+placeholder) → `content` (long-text only, internships section only)
+  - 「工作地点」→ existing internship `location` (no new editor field)
+- **Side panel**: Brand title + short usage tip; sticky top Edit / Reload bar.
+
 ## [2.2.6] - 2026-07-28
 
 ### Added

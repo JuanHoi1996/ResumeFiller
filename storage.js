@@ -60,10 +60,52 @@
     return data;
   }
 
+  function clearResumeData() {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.remove([STORAGE_KEY], () => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+
+  const PRIVACY_NOTICE_KEY = "privacyNoticeAccepted";
+
+  function getPrivacyNoticeAccepted() {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.get([PRIVACY_NOTICE_KEY], result => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        resolve(Boolean(result?.[PRIVACY_NOTICE_KEY]));
+      });
+    });
+  }
+
+  function setPrivacyNoticeAccepted(accepted = true) {
+    return new Promise((resolve, reject) => {
+      chrome.storage.local.set({ [PRIVACY_NOTICE_KEY]: Boolean(accepted) }, () => {
+        if (chrome.runtime.lastError) {
+          reject(new Error(chrome.runtime.lastError.message));
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+
   window.resumeStorage = {
     STORAGE_KEY,
+    PRIVACY_NOTICE_KEY,
     getResumeData,
     ensureResumeData,
-    saveResumeData
+    saveResumeData,
+    clearResumeData,
+    getPrivacyNoticeAccepted,
+    setPrivacyNoticeAccepted
   };
 })();

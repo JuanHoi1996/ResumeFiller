@@ -6,6 +6,8 @@
 
 **许可证：** [MIT](LICENSE)
 
+**隐私政策：** [中文](PRIVACY.zh-CN.md) · [English](PRIVACY.md) · 应用内 [`privacy.html`](privacy.html)（GitHub Pages：`https://juanhoi1996.github.io/ResumeFiller/privacy.html`）
+
 ## 它能做什么
 - 维护简历模板（在插件自带编辑器里）。
 - 一键填充到常见网申表单。

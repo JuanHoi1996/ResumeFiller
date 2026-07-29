@@ -6,9 +6,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const setDefaultBtn = document.getElementById("setDefaultBtn");
   const exportBtn = document.getElementById("exportBtn");
   const importBtn = document.getElementById("importBtn");
+  const clearLocalBtn = document.getElementById("clearLocalBtn");
   const saveBtn = document.getElementById("saveBtn");
   const importFileInput = document.getElementById("importFileInput");
+  const privacyBanner = document.getElementById("privacyBanner");
+  const privacyAcceptBtn = document.getElementById("privacyAcceptBtn");
+  const privacyPageLink = document.getElementById("privacyPageLink");
+  const privacyBannerLink = document.getElementById("privacyBannerLink");
 
+  function openPrivacyPage(event) {
+    if (event) event.preventDefault();
+    chrome.tabs.create({ url: chrome.runtime.getURL("privacy.html") });
+  }
   const sectionTabs = {
     personalInfos: document.getElementById("tabPersonalInfos"),
     educations: document.getElementById("tabEducations"),
@@ -976,6 +985,53 @@ document.addEventListener("DOMContentLoaded", async () => {
     saveToLocal();
   });
 
+  if (privacyPageLink) privacyPageLink.addEventListener("click", openPrivacyPage);
+  if (privacyBannerLink) privacyBannerLink.addEventListener("click", openPrivacyPage);
+
+  if (privacyAcceptBtn) {
+    privacyAcceptBtn.addEventListener("click", async () => {
+      try {
+        await window.resumeStorage.setPrivacyNoticeAccepted(true);
+        privacyBanner?.classList.remove("visible");
+        showStatus("已记录隐私说明确认。");
+      } catch (error) {
+        showStatus(`确认失败: ${error.message}`, true);
+      }
+    });
+  }
+
+  if (clearLocalBtn) {
+    clearLocalBtn.addEventListener("click", async () => {
+      const ok = window.confirm(
+        "确定清除本机已保存的简历数据？\n清除后将恢复为中性示例占位内容，此操作不可撤销。"
+      );
+      if (!ok) return;
+      try {
+        await window.resumeStorage.clearResumeData();
+        const data = await window.resumeStorage.ensureResumeData();
+        if (!data) throw new Error("无法恢复示例数据");
+        state.data = normalizeImportedData(data);
+        [
+          "personalInfos",
+          "educations",
+          "internships",
+          "projects",
+          "selfEvaluations",
+          "languages",
+          "computerSkills",
+          "familyMembers",
+          "papers",
+          "gameExperience",
+          "openQuestions"
+        ].forEach(ensureSectionHasItem);
+        refreshUI();
+        showStatus("已清除本地简历数据，并恢复为示例占位内容。");
+      } catch (error) {
+        showStatus(`清除失败: ${error.message}`, true);
+      }
+    });
+  }
+
   document.addEventListener("keydown", event => {
     if (!(event.ctrlKey || event.metaKey) || event.key.toLowerCase() !== "s") return;
     event.preventDefault();
@@ -984,6 +1040,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     await loadInitialData();
+    const accepted = await window.resumeStorage.getPrivacyNoticeAccepted();
+    if (!accepted) privacyBanner?.classList.add("visible");
     showStatus("数据已加载。");
   } catch (error) {
     showStatus(`初始化失败: ${error.message}`, true);

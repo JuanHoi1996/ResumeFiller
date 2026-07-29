@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ResumeFiller 隐私政策</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f7f9fc;
+      color: #1f2d3d;
+      line-height: 1.6;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+    h1 { font-size: 22px; margin: 0 0 8px; }
+    h2 { font-size: 16px; margin: 24px 0 8px; }
+    .meta { color: #5a6b7d; font-size: 13px; margin-bottom: 20px; }
+    p, li { font-size: 14px; }
+    ul { padding-left: 1.25em; }
+    .card {
+      background: #fff;
+      border: 1px solid #e4ebf3;
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    .en { border-top: 1px dashed #d6e2ee; margin-top: 28px; padding-top: 20px; }
+    .en h1 { font-size: 18px; }
+    a { color: #1d6ef2; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      background: #eef3f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>ResumeFiller 隐私政策</h1>
+    <p class="meta">最后更新：2026-07-29 · 适用于 ResumeFiller 浏览器扩展</p>
+
+    <div class="card">
+      <p><strong>摘要：</strong>简历数据由您自行录入，仅保存在本机浏览器本地存储中。本扩展<strong>不联网上传</strong>、不采集遥测、不出售数据。当您点击填充时，所选字段会写入您当前打开的招聘网页（由该网站按其自身政策处理）。</p>
+    </div>
+
+    <h2>1. 我们处理哪些信息</h2>
+    <p>仅处理您在编辑器中主动填写或导入的简历模板数据，例如：</p>
+    <ul>
+      <li>姓名、手机号、邮箱、证件号码、住址、户籍、籍贯、政治面貌</li>
+      <li>紧急联系人、家庭成员、证明人联系方式</li>
+      <li>教育 / 实习 / 项目经历、自我评价、论文、开放性问答等</li>
+    </ul>
+    <p>其中可能包含敏感个人信息。请勿在公共设备上保存真实简历，或使用后及时清除。</p>
+    <p>您应确保有权录入、保存并提交家庭成员、紧急联系人、证明人等<strong>第三方</strong>信息；相关信息的合法性与合规性由您自行负责。本扩展仅按您的操作在本机存储并（在您点击填充时）写入目标网页。</p>
+
+    <h2>2. 信息存储在哪里</h2>
+    <p>数据保存在浏览器扩展的 <code>chrome.storage.local</code>（本机）。卸载扩展或使用「清除本地数据」后，本地简历数据会被移除或重置为示例占位内容。</p>
+
+    <h2>3. 我们不会做什么</h2>
+    <ul>
+      <li>不向开发者服务器或其他远程服务上传简历内容</li>
+      <li>不做使用分析、广告追踪或远程代码加载</li>
+      <li>不要求账号登录</li>
+    </ul>
+
+    <h2>4. 填充与字段报告</h2>
+    <ul>
+      <li><strong>自动填充：</strong>您选择的模板字段会写入当前标签页中的表单控件。目标招聘站点可能进一步收集、存储或传输这些信息，适用其隐私政策。</li>
+      <li><strong>右键字段报告：</strong>可复制脱敏后的字段结构（不含输入值；URL 去除查询参数与 hash）到剪贴板，便于您自行粘贴到反馈渠道。剪贴板内容仅在您本机，本扩展不会代为发送。</li>
+    </ul>
+
+    <h2>5. 权限说明</h2>
+    <ul>
+      <li><code>storage</code>：本地保存简历模板</li>
+      <li><code>sidePanel</code>：侧边栏操作界面</li>
+      <li><code>contextMenus</code>：右键「报告此字段」</li>
+      <li><code>clipboardWrite</code>：将字段报告写入剪贴板</li>
+      <li>主机权限 <code>&lt;all_urls&gt;</code>：在网页注入内容脚本以便识别并填充表单（核心功能）</li>
+    </ul>
+
+    <h2>6. 如何清除数据</h2>
+    <p>打开「编辑简历数据」编辑器，点击工具栏中的<strong>清除本地数据</strong>，确认后将删除已保存的简历并恢复为中性示例。您也可通过浏览器扩展管理页移除本扩展以清除其本地存储。</p>
+    <p>本页仅供阅读；清除操作请在编辑器中完成。</p>
+
+    <h2>7. 联系方式</h2>
+    <p>问题与隐私相关反馈请通过 GitHub Issues：<a href="https://github.com/JuanHoi1996/ResumeFiller/issues" target="_blank" rel="noopener noreferrer">JuanHoi1996/ResumeFiller</a>。</p>
+
+    <div class="en">
+      <h1>Privacy Policy (English summary)</h1>
+      <p class="meta">Last updated: 2026-07-29</p>
+      <p>ResumeFiller stores resume templates you enter in <code>chrome.storage.local</code> on your device only. It does <strong>not</strong> upload data to our servers, run telemetry, or load remote code. When you autofill, values are written into the job-application page you have open (subject to that site’s policy). You must have the right to enter and submit third-party information (family members, emergency contacts, referees, etc.). The optional field report copies a sanitized DOM snapshot to your clipboard for you to paste elsewhere; we do not transmit it. Clear local data from the editor, or uninstall the extension. Contact: <a href="https://github.com/JuanHoi1996/ResumeFiller/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.</p>
+      <p>Full Chinese text above is the authoritative version for Chinese store listings.</p>
+    </div>
+  </div>
+</body>
+</html>
