@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-edu-referee-phone",
+  "origin": "raw_feedback.txt ~L422",
+  "vendor": "hotjob",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "证明人电话*",
+  "placeholder": "请填写证明人电话",
+  "context": "",
+  "expect": "refereePhone"
+}

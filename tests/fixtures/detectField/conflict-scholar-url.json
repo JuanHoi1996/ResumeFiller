@@ -1,0 +1,11 @@
+{
+  "id": "conflict-scholar-url",
+  "origin": "raw_feedback.txt ~L218",
+  "section": "personalInfos",
+  "hostname": "campus.10jqka.com.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "Scholar主页",
+  "placeholder": "请填写Scholar地址",
+  "context": "Scholar主页",
+  "expect": "scholarUrl"
+}

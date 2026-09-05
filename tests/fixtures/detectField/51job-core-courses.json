@@ -1,0 +1,16 @@
+{
+  "id": "51job-core-courses-undergrad",
+  "origin": "raw_feedback.txt ~L75",
+  "vendor": "51job",
+  "section": "educations",
+  "hostname": "xyz.51job.com",
+  "element": {
+    "tagName": "TEXTAREA",
+    "type": "textarea",
+    "attrs": { "cname": "本科专业课程", "ename": "Main Courses" }
+  },
+  "label": "本科专业课程",
+  "placeholder": "",
+  "context": "本科专业课程",
+  "expect": "coreCourses"
+}

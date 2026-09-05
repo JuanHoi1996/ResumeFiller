@@ -1,0 +1,11 @@
+{
+  "id": "guard-work-achievement-not-content",
+  "origin": "RELEASE_CHECKLIST 工作业绩",
+  "section": "internships",
+  "hostname": "example.com",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "工作业绩",
+  "placeholder": "请填写工作业绩",
+  "context": "",
+  "expect": ""
+}

@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-edu-referee-name",
+  "origin": "raw_feedback.txt ~L398",
+  "vendor": "hotjob",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "证明人信息*",
+  "placeholder": "请填写证明人信息",
+  "context": "",
+  "expect": "refereeName"
+}

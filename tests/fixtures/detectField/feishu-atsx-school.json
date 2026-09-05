@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-school",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "educations",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "education[0].schoolInput", "id": "education[0].school" } },
+  "label": "学校名称",
+  "placeholder": "",
+  "context": "",
+  "expect": "schoolName"
+}

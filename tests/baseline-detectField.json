@@ -1,0 +1,472 @@
+{
+  "generatedAt": "2026-09-05T07:50:47.620Z",
+  "contentSource": "content.js",
+  "totals": {
+    "all": 46,
+    "pass": 46,
+    "softFail": 0,
+    "hardFail": 0
+  },
+  "results": [
+    {
+      "id": "51job-core-courses-undergrad",
+      "file": "51job-core-courses.json",
+      "soft": false,
+      "expect": "coreCourses",
+      "got": "coreCourses",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L75"
+    },
+    {
+      "id": "51job-height-cname",
+      "file": "51job-height.json",
+      "soft": false,
+      "expect": "height",
+      "got": "height",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt ~L39"
+    },
+    {
+      "id": "51job-id-number-cname",
+      "file": "51job-id-number.json",
+      "soft": false,
+      "expect": "idNumber",
+      "got": "idNumber",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt ~L27"
+    },
+    {
+      "id": "beisen-family-position-occupation",
+      "file": "beisen-family-position.json",
+      "soft": false,
+      "expect": "familyPosition",
+      "got": "familyPosition",
+      "ok": true,
+      "section": "familyMembers",
+      "origin": "raw_feedback.txt ~L123"
+    },
+    {
+      "id": "beisen-height",
+      "file": "beisen-height.json",
+      "soft": false,
+      "expect": "height",
+      "got": "height",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt ~L15"
+    },
+    {
+      "id": "beisen-internship-company",
+      "file": "beisen-internship-company.json",
+      "soft": false,
+      "expect": "company",
+      "got": "company",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L242"
+    },
+    {
+      "id": "beisen-internship-content",
+      "file": "beisen-internship-content.json",
+      "soft": false,
+      "expect": "content",
+      "got": "content",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L266"
+    },
+    {
+      "id": "beisen-internship-position",
+      "file": "beisen-internship-position.json",
+      "soft": false,
+      "expect": "position",
+      "got": "position",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L254"
+    },
+    {
+      "id": "catl-emergency-phone-typo",
+      "file": "catl-emergency-phone-typo.json",
+      "soft": false,
+      "expect": "emergencyPhone",
+      "got": "emergencyPhone",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt ~L434"
+    },
+    {
+      "id": "catl-internship-bare-content",
+      "file": "catl-internship-bare-content.json",
+      "soft": false,
+      "expect": "content",
+      "got": "content",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L446"
+    },
+    {
+      "id": "catl-work-location",
+      "file": "catl-work-location.json",
+      "soft": false,
+      "expect": "location",
+      "got": "location",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L458"
+    },
+    {
+      "id": "conflict-emergency-contact-name",
+      "file": "conflict-emergency-contact.json",
+      "soft": false,
+      "expect": "emergencyContact",
+      "got": "emergencyContact",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "HEURISTICS §7 companion"
+    },
+    {
+      "id": "conflict-emergency-phone-before-name",
+      "file": "conflict-emergency-phone.json",
+      "soft": false,
+      "expect": "emergencyPhone",
+      "got": "emergencyPhone",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "CHANGELOG 2.2.6 / HEURISTICS §7"
+    },
+    {
+      "id": "conflict-github-not-home-address",
+      "file": "conflict-github-url.json",
+      "soft": false,
+      "expect": "githubUrl",
+      "got": "githubUrl",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "CHANGELOG 2.2.5 / HEURISTICS §7"
+    },
+    {
+      "id": "conflict-guopin-selfeval-phone-in-placeholder",
+      "file": "conflict-guopin-selfeval.json",
+      "soft": false,
+      "expect": "selfEvaluation",
+      "got": "selfEvaluation",
+      "ok": true,
+      "section": "selfEvaluations",
+      "origin": "CHANGELOG 2.0.2 / HEURISTICS §7"
+    },
+    {
+      "id": "conflict-scholar-url",
+      "file": "conflict-scholar-url.json",
+      "soft": false,
+      "expect": "scholarUrl",
+      "got": "scholarUrl",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt ~L218"
+    },
+    {
+      "id": "conflict-unit-cm-not-company",
+      "file": "conflict-unit-cm-height.json",
+      "soft": false,
+      "expect": "height",
+      "got": "height",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "HEURISTICS §7 单位：cm"
+    },
+    {
+      "id": "feishu-atsx-career-company",
+      "file": "feishu-atsx-career-company.json",
+      "soft": false,
+      "expect": "company",
+      "got": "company",
+      "ok": true,
+      "section": "internships",
+      "origin": "htmls/零一万物-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-career-desc",
+      "file": "feishu-atsx-career-desc.json",
+      "soft": false,
+      "expect": "content",
+      "got": "content",
+      "ok": true,
+      "section": "internships",
+      "origin": "htmls/零一万物-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-career-title",
+      "file": "feishu-atsx-career-title.json",
+      "soft": false,
+      "expect": "position",
+      "got": "position",
+      "ok": true,
+      "section": "internships",
+      "origin": "htmls/零一万物-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-email",
+      "file": "feishu-atsx-email.json",
+      "soft": false,
+      "expect": "email",
+      "got": "email",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-hometown",
+      "file": "feishu-atsx-hometown.json",
+      "soft": false,
+      "expect": "nativePlace",
+      "got": "nativePlace",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-identification",
+      "file": "feishu-atsx-identification.json",
+      "soft": false,
+      "expect": "idNumber",
+      "got": "idNumber",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-major",
+      "file": "feishu-atsx-major.json",
+      "soft": false,
+      "expect": "major",
+      "got": "major",
+      "ok": true,
+      "section": "educations",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-name",
+      "file": "feishu-atsx-name.json",
+      "soft": false,
+      "expect": "fullName",
+      "got": "fullName",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-period-begin",
+      "file": "feishu-atsx-period-begin.json",
+      "soft": false,
+      "expect": "start",
+      "got": "start",
+      "ok": true,
+      "section": "educations",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-school",
+      "file": "feishu-atsx-school.json",
+      "soft": false,
+      "expect": "schoolName",
+      "got": "schoolName",
+      "ok": true,
+      "section": "educations",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-atsx-self-eval",
+      "file": "feishu-atsx-self-eval.json",
+      "soft": false,
+      "expect": "selfEvaluation",
+      "got": "selfEvaluation",
+      "ok": true,
+      "section": "selfEvaluations",
+      "origin": "htmls/小米-飞书系.html"
+    },
+    {
+      "id": "feishu-project-desc-bare",
+      "file": "feishu-project-desc-bare.json",
+      "soft": false,
+      "expect": "content",
+      "got": "content",
+      "ok": true,
+      "section": "projects",
+      "origin": "Feishu ATSX schema / 零一 career desc pattern"
+    },
+    {
+      "id": "feishu-project-link",
+      "file": "feishu-project-link.json",
+      "soft": false,
+      "expect": "projectLink",
+      "got": "projectLink",
+      "ok": true,
+      "section": "projects",
+      "origin": "raw_feedback.txt ~L194"
+    },
+    {
+      "id": "feishu-project-name-schema",
+      "file": "feishu-project-name-schema.json",
+      "soft": false,
+      "expect": "projectName",
+      "got": "projectName",
+      "ok": true,
+      "section": "projects",
+      "origin": "Feishu ATSX schema (expand project section live to confirm)"
+    },
+    {
+      "id": "feishu-project-role-schema",
+      "file": "feishu-project-role-schema.json",
+      "soft": false,
+      "expect": "projectRoleTitle",
+      "got": "projectRoleTitle",
+      "ok": true,
+      "section": "projects",
+      "origin": "Feishu ATSX schema"
+    },
+    {
+      "id": "guard-major-desc-maps-to-major-not-content",
+      "file": "guard-major-desc.json",
+      "soft": false,
+      "expect": "major",
+      "got": "major",
+      "ok": true,
+      "section": "educations",
+      "origin": "HEURISTICS §7 专业描述（防实习 content）"
+    },
+    {
+      "id": "guard-work-achievement-not-content",
+      "file": "guard-work-achievement.json",
+      "soft": false,
+      "expect": "",
+      "got": "",
+      "ok": true,
+      "section": "internships",
+      "origin": "RELEASE_CHECKLIST 工作业绩"
+    },
+    {
+      "id": "hotjob-core-courses-not-gpa",
+      "file": "hotjob-core-courses.json",
+      "soft": false,
+      "expect": "coreCourses",
+      "got": "coreCourses",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L326 / HEURISTICS §7"
+    },
+    {
+      "id": "hotjob-gpa-learning-score",
+      "file": "hotjob-gpa.json",
+      "soft": false,
+      "expect": "gpa",
+      "got": "gpa",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L386"
+    },
+    {
+      "id": "hotjob-leave-reason",
+      "file": "hotjob-leave-reason.json",
+      "soft": false,
+      "expect": "leaveReason",
+      "got": "leaveReason",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L338"
+    },
+    {
+      "id": "hotjob-cms-mobile-phone",
+      "file": "hotjob-mobile-phone.json",
+      "soft": false,
+      "expect": "phone",
+      "got": "phone",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt L470 招商证券 Hotjob 移动电话"
+    },
+    {
+      "id": "hotjob-project-desc-brief",
+      "file": "hotjob-project-desc.json",
+      "soft": false,
+      "expect": "projectDesc",
+      "got": "projectDesc",
+      "ok": true,
+      "section": "projects",
+      "origin": "raw_feedback.txt ~L374"
+    },
+    {
+      "id": "hotjob-project-activity-name",
+      "file": "hotjob-project-name.json",
+      "soft": false,
+      "expect": "projectName",
+      "got": "projectName",
+      "ok": true,
+      "section": "projects",
+      "origin": "raw_feedback.txt ~L350"
+    },
+    {
+      "id": "hotjob-project-role",
+      "file": "hotjob-project-role.json",
+      "soft": false,
+      "expect": "projectRoleTitle",
+      "got": "projectRoleTitle",
+      "ok": true,
+      "section": "projects",
+      "origin": "raw_feedback.txt ~L362"
+    },
+    {
+      "id": "hotjob-edu-referee-name",
+      "file": "hotjob-referee-name.json",
+      "soft": false,
+      "expect": "refereeName",
+      "got": "refereeName",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L398"
+    },
+    {
+      "id": "hotjob-edu-referee-phone",
+      "file": "hotjob-referee-phone.json",
+      "soft": false,
+      "expect": "refereePhone",
+      "got": "refereePhone",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L422"
+    },
+    {
+      "id": "hotjob-edu-referee-relation",
+      "file": "hotjob-referee-relation.json",
+      "soft": false,
+      "expect": "refereeRelation",
+      "got": "refereeRelation",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt ~L410"
+    },
+    {
+      "id": "hotjob-score-rank-should-not-be-gpa",
+      "file": "hotjob-score-rank-soft.json",
+      "soft": false,
+      "expect": "",
+      "got": "",
+      "ok": true,
+      "section": "educations",
+      "origin": "HEURISTICS §11.3 学习成绩排名风险"
+    },
+    {
+      "id": "hotjob-work-duty-content",
+      "file": "hotjob-work-duty.json",
+      "soft": false,
+      "expect": "content",
+      "got": "content",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt ~L230 / CHANGELOG 2.2.5"
+    }
+  ]
+}

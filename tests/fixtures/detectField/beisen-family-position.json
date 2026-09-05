@@ -1,0 +1,12 @@
+{
+  "id": "beisen-family-position-occupation",
+  "origin": "raw_feedback.txt ~L123",
+  "vendor": "beisen",
+  "section": "familyMembers",
+  "hostname": "cmsk1979.zhiye.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "职业",
+  "placeholder": "请输入",
+  "context": "职业 工作单位",
+  "expect": "familyPosition"
+}

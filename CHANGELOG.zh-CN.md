@@ -2,6 +2,35 @@
 
 本文件用于记录 ResumeFiller 的所有重要变更。
 
+## [2.3.3] - 2026-09-05
+
+### 优化
+- **个人手机号识别**：Hotjob「移动电话」等标签不再因只认「手机号/手机号码」而漏填；紧急联系人电话仍优先。
+
+### 测试
+- 新增夹具 `hotjob-cms-mobile-phone`（招商证券字段报告）。
+
+## [2.3.2] - 2026-08-09
+
+### 优化
+- **飞书招聘（Midas/ATSX）**：识别 `.atsx-form-item` 标签；`data-cy`/`id` 结构化映射（education/career/project 等）；下拉补 `.atsx-select-dropdown-menu-item`；Scoped 优先 `resumeEditForm-item`，跳过单字段 `atsx-form-item`。
+- **飞书文案**：「个人证件」→ `idNumber`，「家乡」→ `nativePlace`；裸「描述」→ `content`（实习/项目）。
+
+### 测试
+- 新增 14 条飞书夹具（小米 / 元气森林 / 零一万物 HTML 衍生）；基线 `pass=45`。
+
+## [2.3.1] - 2026-08-06
+
+### 优化
+- **Hotjob 下拉**：`optionSelectors` 补 Ant Design v3 的 `.ant-select-dropdown-menu-item`（`wecruit.hotjob.cn` 等）。
+- **Moka 标签**：在 `apply-field-*`（非 `apply-fields-*`）内取 `title-*`；拒绝 `sd-Input-container` 等外壳 label 与 `+86` / 空文案。
+- **信号去重**：`toCompactText` 去掉连续相同的 label/placeholder。
+- **GPA**：排除含「排名」的文案，避免「学习成绩排名」误填。
+- **Scoped 锚点**：北森跳过 `fields-row` / `fields-col` / 单字段 `form-item--phoenix`；Hotjob 优先 `.form-cell-inner`；Moka 优先 `apply-block-*`。
+
+### 测试
+- `detectField` 夹具基线：`pass=31`，`softFail=0`，`hardFail=0`。
+
 ## [2.3.0] - 2026-07-29
 
 ### 新增

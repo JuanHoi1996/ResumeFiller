@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-core-courses-not-gpa",
+  "origin": "raw_feedback.txt ~L326 / HEURISTICS §7",
+  "vendor": "hotjob",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "所学课程及成绩描述*?",
+  "placeholder": "格式说明：课程名称和成绩用顿号隔开，例如：金融工程78、投资银行学80、西方经济学98",
+  "context": "",
+  "expect": "coreCourses"
+}

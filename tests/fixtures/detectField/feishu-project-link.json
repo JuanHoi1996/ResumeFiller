@@ -1,0 +1,16 @@
+{
+  "id": "feishu-project-link",
+  "origin": "raw_feedback.txt ~L194",
+  "vendor": "feishu",
+  "section": "projects",
+  "hostname": "dedao.jobs.feishu.cn",
+  "element": {
+    "tagName": "INPUT",
+    "type": "text",
+    "attrs": { "data-cy": "project[0].linkInput", "id": "project[0].link" }
+  },
+  "label": "项目链接",
+  "placeholder": "",
+  "context": "",
+  "expect": "projectLink"
+}

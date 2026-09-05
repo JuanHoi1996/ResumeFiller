@@ -127,15 +127,17 @@ function getContextHintText(element) {
   if (!element) return '';
   const parts = [];
 
-  const formItem = element.closest?.('.ant-form-item, .el-form-item, .ivu-form-item, .feishu-form-item, .lark-form-item');
+  const formItem = element.closest?.(
+    '.ant-form-item, .el-form-item, .ivu-form-item, .atsx-form-item, .feishu-form-item, .lark-form-item'
+  );
   if (formItem) {
     const formLabel = formItem.querySelector(
-      '.ant-form-item-label label, .el-form-item__label, .ivu-form-item-label, label'
+      '.ant-form-item-label label, .el-form-item__label, .ivu-form-item-label, .atsx-form-item-label label, .atsx-form-item-label, label'
     );
     if (formLabel) parts.push(formLabel.textContent || '');
   }
 
-  // Feishu (Lark) Recruitment specific label finding
+  // Legacy Feishu label path (older shells); current Midas/ATSX uses atsx-form-item above.
   const feishuLabel = element.closest?.('.field-container')?.querySelector('.field-label');
   if (feishuLabel) parts.push(feishuLabel.textContent || '');
 
@@ -200,6 +202,34 @@ function getContextHintText(element) {
   return parts.join(' ').trim();
 }
 
+function isSpuriousLabelText(text) {
+  const t = String(text || '').trim();
+  if (!t) return true;
+  // Moka / Semi Design chrome that is not a field title
+  if (t === '+86' || t === '至今' || t === '-' || t === '—') return true;
+  if (/^身份证$/.test(t)) return true;
+  return false;
+}
+
+function isComponentShellLabel(labelEl) {
+  if (!labelEl?.className) return false;
+  const cn = String(labelEl.className);
+  return /sd-Input-container|sd-Select-container|sd-Checkbox|phoenix-radio|ant-radio-wrapper|el-radio|el-checkbox/.test(
+    cn
+  );
+}
+
+/** Single Moka field card (`apply-field-*`), not the plural `apply-fields-*` wrapper. */
+function closestMokaApplyField(element) {
+  let node = element;
+  while (node && node !== document.body) {
+    const tokens = String(node.className || '').split(/\s+/).filter(Boolean);
+    if (tokens.some(t => /^apply-field(?!s)/.test(t))) return node;
+    node = node.parentElement;
+  }
+  return null;
+}
+
 function getLabelText(element) {
   if (!element) return '';
   // High-Priority: 51job/xyz style explicit attributes
@@ -207,6 +237,24 @@ function getLabelText(element) {
   if (cname?.trim()) return cname.trim();
   const ename = element.getAttribute?.('ename');
   if (ename?.trim()) return ename.trim();
+
+  // Moka apply-form micro-app: title sits beside ctrl under apply-field-*
+  // Do NOT use [class*="apply-field"] — that also matches plural apply-fields-* wrappers.
+  const mokaField = closestMokaApplyField(element);
+  if (mokaField) {
+    const titleCandidates = Array.from(mokaField.querySelectorAll?.('[class*="title"]') || []).filter(
+      n => (n.textContent || '').trim()
+    );
+    // Prefer hashed field title `title-xxxx`; skip block-title / filed-title / home-title.
+    const bestTitle =
+      titleCandidates.find(n =>
+        String(n.className || '')
+          .split(/\s+/)
+          .some(t => t.startsWith('title-'))
+      ) || null;
+    const titleText = bestTitle?.textContent?.trim();
+    if (titleText && !isSpuriousLabelText(titleText)) return titleText;
+  }
 
   // Phoenix / Beisen-like label (e.g. div.form-item--phoenix > div.form-item__title > label.form-item__text)
   const phoenixItem = element.closest?.('.form-item--phoenix, [class*="form-item--phoenix"]');
@@ -220,13 +268,15 @@ function getLabelText(element) {
     if (anyLabel?.textContent?.trim()) return anyLabel.textContent.trim();
   }
 
-  // Element UI / Ant Design form item label (Tonghuashun etc.)
-  const uiFormItem = element.closest?.('.el-form-item, .ant-form-item, .ivu-form-item');
+  // Element UI / Ant Design / Feishu ATSX form item label
+  const uiFormItem = element.closest?.('.el-form-item, .ant-form-item, .ivu-form-item, .atsx-form-item');
   if (uiFormItem) {
     const uiLabel = uiFormItem.querySelector?.(
-      '.el-form-item__label, .ant-form-item-label label, .ant-form-item-label, .ivu-form-item-label, label'
+      '.el-form-item__label, .ant-form-item-label label, .ant-form-item-label, .atsx-form-item-label label, .atsx-form-item-label, .ivu-form-item-label, label'
     );
-    if (uiLabel?.textContent?.trim()) return uiLabel.textContent.trim();
+    if (uiLabel?.textContent?.trim() && !isComponentShellLabel(uiLabel)) {
+      return uiLabel.textContent.trim();
+    }
   }
 
   const ariaLabelledBy = element.getAttribute?.('aria-labelledby');
@@ -237,37 +287,55 @@ function getLabelText(element) {
 
   if (element.id) {
     const byFor = document.querySelector(`label[for="${element.id}"]`);
-    if (byFor) return byFor.textContent.trim();
+    if (byFor?.textContent?.trim() && !isComponentShellLabel(byFor)) {
+      return byFor.textContent.trim();
+    }
   }
 
-  const byClosest = element.closest('label');
-  if (byClosest) return byClosest.textContent.trim();
+  const byClosest = element.closest?.('label');
+  if (byClosest) {
+    const t = (byClosest.textContent || '').trim();
+    // Moka wraps inputs in label.sd-Input-container-* (empty or chrome text) — do not stop here.
+    if (t && !isComponentShellLabel(byClosest) && !isSpuriousLabelText(t)) {
+      return t;
+    }
+  }
 
   let parent = element.parentElement;
   while (parent && parent !== document.body) {
     const directLabel = parent.querySelector(':scope > label');
-    if (directLabel) return directLabel.textContent.trim();
+    if (directLabel) {
+      const t = (directLabel.textContent || '').trim();
+      if (t && !isComponentShellLabel(directLabel) && !isSpuriousLabelText(t)) return t;
+    }
 
     const formLabel = parent.querySelector(
       ':scope > .ant-form-item-label label, :scope > .el-form-item__label, :scope > .ivu-form-item-label'
     );
-    if (formLabel) return formLabel.textContent.trim();
+    if (formLabel?.textContent?.trim()) return formLabel.textContent.trim();
 
     const phoenixLabel = parent.querySelector(
       ':scope > .phoenix-form-item__label, :scope > [class*="phoenix-form-item__label"], :scope > .beisen-form-item__label, :scope > [class*="beisen-form-item__label"], :scope > [class*="form-item__label"]'
     );
-    if (phoenixLabel) return phoenixLabel.textContent.trim();
+    if (phoenixLabel?.textContent?.trim()) return phoenixLabel.textContent.trim();
 
     parent = parent.parentElement;
   }
 
   let prev = element.previousElementSibling;
   while (prev) {
-    if (prev.tagName === 'LABEL') return prev.textContent.trim();
+    if (prev.tagName === 'LABEL') {
+      const t = (prev.textContent || '').trim();
+      if (t && !isComponentShellLabel(prev) && !isSpuriousLabelText(t)) return t;
+    }
     // Support non-label tag elements that look like a label (e.g., text with colon at the end)
     if (prev.tagName === 'SPAN' || prev.tagName === 'DIV' || prev.tagName === 'TD' || prev.tagName === 'TH') {
       const text = (prev.textContent || '').trim();
-      if (text && (text.endsWith(':') || text.endsWith('：') || text.length < 15)) {
+      if (
+        text &&
+        !isSpuriousLabelText(text) &&
+        (text.endsWith(':') || text.endsWith('：') || text.length < 15)
+      ) {
         return text;
       }
     }
@@ -284,7 +352,15 @@ function getLabelText(element) {
 }
 
 function toCompactText(...parts) {
-  return parts.join(' ').replace(/\s+/g, '');
+  // Drop empties; collapse label===placeholder duplicates (Moka often sets both to the same string).
+  const cleaned = [];
+  for (const part of parts) {
+    const t = String(part || '').trim();
+    if (!t) continue;
+    if (cleaned.length && cleaned[cleaned.length - 1] === t) continue;
+    cleaned.push(t);
+  }
+  return cleaned.join(' ').replace(/\s+/g, '');
 }
 
 /** True when hint is only the token「内容」(label+placeholder may duplicate →「内容内容»). */
@@ -481,6 +557,28 @@ function containerHasPayloadField(node, payload, section) {
   return false;
 }
 
+/** Beisen row/col or single phoenix/ATSX item — too narrow for a multi-field entry root. */
+function isTooNarrowScopeNode(node) {
+  if (!node?.classList) return false;
+  if (node.classList.contains('fields-row') || node.classList.contains('fields-col')) return true;
+  if (node.classList.contains('form-item--phoenix')) return true;
+  if (node.classList.contains('atsx-form-item')) return true;
+  return false;
+}
+
+/** Vendor entry cards that are reliable scoped roots once payload matches. */
+function isPreferredVendorEntryRoot(node) {
+  if (!node) return false;
+  // Hotjob: one resume entry lives inside form-cell-inner
+  if (node.classList?.contains('form-cell-inner')) return true;
+  // Feishu Midas: one education/career/project card
+  if (node.classList?.contains('resumeEditForm-item')) return true;
+  // Moka: apply-block-* wraps one entry (not plural apply-blocks-*)
+  const tokens = String(node.className || '').split(/\s+/).filter(Boolean);
+  if (tokens.some(t => /^apply-block(?!s)/.test(t))) return true;
+  return false;
+}
+
 function resolveScopedRoot(section, payload) {
   const anchor =
     (lastInteractedField && document.contains(lastInteractedField) ? lastInteractedField : null) ||
@@ -489,8 +587,18 @@ function resolveScopedRoot(section, payload) {
 
   let node = anchor;
   for (let i = 0; i < 12 && node && node !== document.body; i += 1) {
+    // Skip Beisen fields-row / single form-item so we climb to the real entry card.
+    if (isTooNarrowScopeNode(node)) {
+      node = node.parentElement;
+      continue;
+    }
+
     const likely = isLikelyEntryContainer(node, section);
     const payloadOk = containerHasPayloadField(node, payload, section);
+
+    // Hotjob form-cell-inner / Moka apply-block: take as soon as payload fits.
+    if (isPreferredVendorEntryRoot(node) && payloadOk) return node;
+
     // Projects / educations / papers / games (e.g. BOSS Zhipin): keyword-only likely-container can stop too early
     // when fields are split across sibling cards — prefer payload-matching subtrees first.
     if (['projects', 'educations', 'papers', 'gameExperience'].includes(section)) {
@@ -662,7 +770,9 @@ function tryFillSingleChoiceDropdown(element, targetValue) {
   }
 
   const root =
-    element.closest?.('[role="combobox"], .ant-select, .el-select, .ivu-select, .n-select, .arco-select, .semi-select') ||
+    element.closest?.(
+      '[role="combobox"], .ant-select, .el-select, .ivu-select, .n-select, .arco-select, .semi-select, .atsx-select'
+    ) ||
     element.parentElement ||
     element;
 
@@ -671,8 +781,14 @@ function tryFillSingleChoiceDropdown(element, targetValue) {
 
   const optionSelectors = [
     '[role="option"]',
+    // Ant Design v4+
     '.ant-select-item-option-content',
     '.ant-select-item-option',
+    // Ant Design v3 (Hotjob / wecruit.hotjob.cn)
+    '.ant-select-dropdown-menu-item',
+    // Feishu Midas / ATSX (jobs.feishu.cn)
+    '.atsx-select-dropdown-menu-item',
+    '.atsx-dropdown-menu-item',
     '.el-select-dropdown__item',
     '.ivu-select-item',
     '.n-base-select-option',
@@ -746,6 +862,61 @@ function getDefaultPayload() {
   return resolveTemplate(resumeData, section, key);
 }
 
+/**
+ * Feishu Midas/ATSX structured attrs (data-cy / id like education[0].schoolInput).
+ * Prefer over free-text when present — labels are still used as fallback.
+ */
+function detectFieldFromAtsxAttrs(element, normalizedSection) {
+  if (!element) return '';
+  const dataCy = (element.getAttribute?.('data-cy') || '').toLowerCase();
+  const elId = (element.id || '').toLowerCase();
+  const hint = `${dataCy} ${elId}`.trim();
+  if (!hint) return '';
+
+  const inProject = normalizedSection === 'projects' || /project\[\d+]/.test(hint);
+  const inEducation = normalizedSection === 'educations' || /education\[\d+]/.test(hint);
+  const inWork =
+    normalizedSection === 'internships' || /career\[\d+]/.test(hint) || /internship\[\d+]/.test(hint);
+
+  if (inProject) {
+    if (/\.link(input)?\b/.test(hint) || /project[^a-z0-9]*link/.test(hint)) return 'projectLink';
+    if (/project\[\d+]\.name(input)?\b/.test(hint)) return 'projectName';
+    if (/\.role(input)?\b/.test(hint)) return 'projectRoleTitle';
+    if (/project\[\d+]\.desc(input)?\b/.test(hint)) return 'content';
+  }
+
+  if (inEducation) {
+    if (/\.school(input)?\b/.test(hint)) return 'schoolName';
+    if (/fieldofstudy/.test(hint)) return 'major';
+    if (/periodinputbegin/.test(hint)) return 'start';
+    if (/periodinputend/.test(hint)) return 'end';
+  }
+
+  if (inWork) {
+    if (/\.company(input)?\b/.test(hint)) return 'company';
+    if (/\.title(input)?\b/.test(hint)) return 'position';
+    if (/\.desc(input)?\b/.test(hint)) return 'content';
+    if (/periodinputbegin/.test(hint)) return 'start';
+    if (/periodinputend/.test(hint)) return 'end';
+  }
+
+  if (!normalizedSection || normalizedSection === 'personalInfos') {
+    if (
+      (dataCy === 'nameinput' || dataCy === 'name' || elId === 'name') &&
+      !/(education|career|internship|project|family)\[/.test(hint)
+    ) {
+      return 'fullName';
+    }
+    if (/email(input)?\b/.test(hint) && !/(education|career|internship|project)\[/.test(hint)) {
+      return 'email';
+    }
+    if (/identification_number/.test(hint)) return 'idNumber';
+    if (/hometown/.test(hint)) return 'nativePlace';
+  }
+
+  return '';
+}
+
 function detectField(element, labelText, placeholder, contextText, section = null) {
   const type = (element.type || '').toLowerCase();
   const cname = (element.getAttribute?.('cname') || '').trim();
@@ -755,6 +926,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   const primaryText = toCompactText(labelText, placeholder, cname, ename);
   const extendedText = toCompactText(labelText, placeholder, contextText, cname, ename);
   const normalizedSection = section ? String(section).trim() : null;
+
+  const atsxHit = detectFieldFromAtsxAttrs(element, normalizedSection);
+  if (atsxHit) return atsxHit;
 
   // Profile / academic URLs — detect on full hint (incl. context) BEFORE「地址」bleed-clear
   // e.g. 同花顺「Github主页」/ placeholder「请填写Github主页地址」
@@ -817,13 +991,10 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     return 'fullName';
   }
   if (isPersonalInfoSection && (primaryText.includes('邮箱') || primaryText.includes('邮件'))) return 'email';
-  if (isPersonalInfoSection && (primaryText.includes('手机号') || primaryText.includes('手机号码'))) {
-    return 'phone';
-  }
-  if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号') || primaryText.includes('身份证'))) return 'idNumber';
+  if (isPersonalInfoSection && (primaryText.includes('证件号码') || primaryText.includes('证件号') || primaryText.includes('身份证') || primaryText.includes('个人证件'))) return 'idNumber';
   if (isPersonalInfoSection && (primaryText.includes('身高') || primaryText.includes('Height'))) return 'height';
   if (isPersonalInfoSection && (primaryText.includes('体重') || primaryText.includes('Weight'))) return 'weight';
-  if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地'))) return 'nativePlace';
+  if (isPersonalInfoSection && (primaryText.includes('籍贯') || primaryText.includes('出生地') || primaryText.includes('家乡'))) return 'nativePlace';
   if (isPersonalInfoSection && (primaryText.includes('政治面貌') || primaryText.includes('面貌'))) return 'politicalStatus';
   // Phone before contact name:「紧急联系人电话」contains「紧急联系人」and must not map to name
   // CATL etc. may use typo/variant「紧急人联系电话」
@@ -846,6 +1017,23 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     !primaryText.includes('手机')
   ) {
     return 'emergencyContact';
+  }
+  // Personal mobile — Hotjob often uses「移动电话」not「手机号」. After emergency* so
+  // 「紧急联系人电话」is not stolen. Exclude referee/family/email hints.
+  if (
+    isPersonalInfoSection &&
+    !primaryText.includes('紧急') &&
+    !primaryText.includes('证明人') &&
+    !primaryText.includes('家庭') &&
+    !primaryText.includes('邮箱') &&
+    (primaryText.includes('移动电话') ||
+      primaryText.includes('联系电话') ||
+      primaryText.includes('电话号码') ||
+      primaryText.includes('手机号') ||
+      primaryText.includes('手机号码') ||
+      primaryText.includes('手机'))
+  ) {
+    return 'phone';
   }
 
   // Paper Logic
@@ -882,7 +1070,7 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     primaryText.includes('离职时间')
   ) return 'end';
 
-  // Internship content label is commonly "实习内容" / Hotjob "工作职责"
+  // Internship content label is commonly "实习内容" / Hotjob "工作职责" / Feishu bare「描述」
   if (
     primaryText.includes('实习内容') ||
     primaryText.includes('实习描述') ||
@@ -891,7 +1079,8 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     primaryText.includes('岗位职责') ||
     primaryText.includes('职责描述') ||
     primaryText.includes('工作描述') ||
-    primaryText.includes('任职描述')
+    primaryText.includes('任职描述') ||
+    primaryText === '描述'
   ) {
     // Keep project-specific「项目职责」out of internship content mapping
     if (normalizedSection === 'projects') {
@@ -979,16 +1168,18 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     ) {
       return 'coreCourses';
     }
-    // GPA / average score — after course lists so「所学课程及成绩」stays coreCourses
+    // GPA / average score — after course lists so「所学课程及成绩」stays coreCourses.
+    // Exclude「学习成绩排名」etc. (Hotjob rank dropdown is not a GPA value).
     if (
-      /gpa/i.test(text) ||
-      text.includes('绩点') ||
-      text.includes('平均分') ||
-      text.includes('加权平均') ||
-      text.includes('学习成绩') ||
-      text.includes('学业成绩') ||
-      text.includes('在校成绩') ||
-      (text.includes('成绩') && !text.includes('课程') && !text.includes('考试'))
+      !text.includes('排名') &&
+      (/gpa/i.test(text) ||
+        text.includes('绩点') ||
+        text.includes('平均分') ||
+        text.includes('加权平均') ||
+        text.includes('学习成绩') ||
+        text.includes('学业成绩') ||
+        text.includes('在校成绩') ||
+        (text.includes('成绩') && !text.includes('课程') && !text.includes('考试')))
     ) {
       return 'gpa';
     }
@@ -1141,7 +1332,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     if (text.includes('项目内容') || text.includes('项目描述')) return 'content';
     // Moka / Generic: if we are in projects section and label is just "内容" or "职责"
     if (normalizedSection === 'projects') {
-      if (isBareContentHint(primaryText) || primaryText === '项目内容') return 'content';
+      if (isBareContentHint(primaryText) || primaryText === '项目内容' || primaryText === '描述') {
+        return 'content';
+      }
       if (primaryText === '职责' || primaryText === '项目职责') return 'projectResponsibility';
     }
     // StarCharge / Phoenix: "项目描述" is closer to the general "项目描述（通用）" field (content),

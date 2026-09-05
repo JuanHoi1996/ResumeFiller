@@ -1,0 +1,11 @@
+{
+  "id": "conflict-github-not-home-address",
+  "origin": "CHANGELOG 2.2.5 / HEURISTICS §7",
+  "section": "personalInfos",
+  "hostname": "campus.10jqka.com.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "Github主页",
+  "placeholder": "请填写Github主页地址",
+  "context": "Github主页",
+  "expect": "githubUrl"
+}

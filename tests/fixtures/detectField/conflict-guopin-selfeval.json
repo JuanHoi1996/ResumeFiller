@@ -1,0 +1,12 @@
+{
+  "id": "conflict-guopin-selfeval-phone-in-placeholder",
+  "origin": "CHANGELOG 2.0.2 / HEURISTICS §7",
+  "note": "隐私提示 placeholder 含手机号，不得抢成 phone",
+  "section": "selfEvaluations",
+  "hostname": "iguopin.com",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "自我评价",
+  "placeholder": "为保护个人隐私，请不要填写手机号、微信、邮箱等联系方式",
+  "context": "",
+  "expect": "selfEvaluation"
+}

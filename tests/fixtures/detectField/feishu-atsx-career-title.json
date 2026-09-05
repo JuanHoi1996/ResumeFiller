@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-career-title",
+  "origin": "htmls/零一万物-飞书系.html",
+  "vendor": "feishu",
+  "section": "internships",
+  "hostname": "01ai.jobs.feishu.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "career[0].titleInput", "id": "career[0].title" } },
+  "label": "职位名称",
+  "placeholder": "",
+  "context": "",
+  "expect": "position"
+}

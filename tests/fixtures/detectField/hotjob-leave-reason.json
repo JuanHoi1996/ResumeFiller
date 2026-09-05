@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-leave-reason",
+  "origin": "raw_feedback.txt ~L338",
+  "vendor": "hotjob",
+  "section": "internships",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "结束实习/兼职原因",
+  "placeholder": "请填写结束实习/兼职原因",
+  "context": "",
+  "expect": "leaveReason"
+}

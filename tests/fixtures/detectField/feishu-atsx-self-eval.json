@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-self-eval",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "selfEvaluations",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "TEXTAREA", "attrs": { "data-cy": "7178743785101230189[0].7178743785101541485Input" } },
+  "label": "自我评价",
+  "placeholder": "",
+  "context": "",
+  "expect": "selfEvaluation"
+}

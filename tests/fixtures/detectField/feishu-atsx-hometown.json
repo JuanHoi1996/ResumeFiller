@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-hometown",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "personalInfos",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "hometown_cityInput", "id": "hometownCityCode" } },
+  "label": "家乡",
+  "placeholder": "",
+  "context": "",
+  "expect": "nativePlace"
+}

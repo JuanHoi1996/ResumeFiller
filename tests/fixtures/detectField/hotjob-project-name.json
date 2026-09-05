@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-project-activity-name",
+  "origin": "raw_feedback.txt ~L350",
+  "vendor": "hotjob",
+  "section": "projects",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "项目/活动名称?",
+  "placeholder": "中文/英文正规全称",
+  "context": "",
+  "expect": "projectName"
+}

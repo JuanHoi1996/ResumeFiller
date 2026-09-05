@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-edu-referee-relation",
+  "origin": "raw_feedback.txt ~L410",
+  "vendor": "hotjob",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "与证明人关系*",
+  "placeholder": "请填写与证明人关系",
+  "context": "",
+  "expect": "refereeRelation"
+}

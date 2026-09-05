@@ -1,0 +1,12 @@
+{
+  "id": "feishu-project-role-schema",
+  "origin": "Feishu ATSX schema",
+  "vendor": "feishu",
+  "section": "projects",
+  "hostname": "01ai.jobs.feishu.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "project[0].roleInput" } },
+  "label": "项目角色",
+  "placeholder": "",
+  "context": "",
+  "expect": "projectRoleTitle"
+}

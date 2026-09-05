@@ -1,0 +1,11 @@
+{
+  "id": "conflict-emergency-phone-before-name",
+  "origin": "CHANGELOG 2.2.6 / HEURISTICS §7",
+  "section": "personalInfos",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "紧急联系人电话*",
+  "placeholder": "请填写紧急联系人电话",
+  "context": "",
+  "expect": "emergencyPhone"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "feishu-project-name-schema",
+  "origin": "Feishu ATSX schema (expand project section live to confirm)",
+  "vendor": "feishu",
+  "section": "projects",
+  "hostname": "01ai.jobs.feishu.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "project[0].nameInput", "id": "project[0].name" } },
+  "label": "项目名称",
+  "placeholder": "",
+  "context": "",
+  "expect": "projectName"
+}

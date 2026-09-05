@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-project-role",
+  "origin": "raw_feedback.txt ~L362",
+  "vendor": "hotjob",
+  "section": "projects",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "担任角色?",
+  "placeholder": "项目负责人、主要参与者、一般参与者等",
+  "context": "",
+  "expect": "projectRoleTitle"
+}

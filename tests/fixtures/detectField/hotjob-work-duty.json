@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-work-duty-content",
+  "origin": "raw_feedback.txt ~L230 / CHANGELOG 2.2.5",
+  "vendor": "hotjob",
+  "section": "internships",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "工作职责*",
+  "placeholder": "请填写工作职责",
+  "context": "",
+  "expect": "content"
+}

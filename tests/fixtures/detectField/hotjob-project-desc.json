@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-project-desc-brief",
+  "origin": "raw_feedback.txt ~L374",
+  "vendor": "hotjob",
+  "section": "projects",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "项目/活动简述?",
+  "placeholder": "200字以内，请简单介绍项目/活动情况",
+  "context": "",
+  "expect": "projectDesc"
+}

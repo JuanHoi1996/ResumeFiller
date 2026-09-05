@@ -1,0 +1,13 @@
+{
+  "id": "feishu-atsx-period-begin",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "note": "Composite「起止时间」widget; map begin half via data-cy only",
+  "section": "educations",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "education[0].periodInputBegin" } },
+  "label": "起止时间",
+  "placeholder": "",
+  "context": "",
+  "expect": "start"
+}

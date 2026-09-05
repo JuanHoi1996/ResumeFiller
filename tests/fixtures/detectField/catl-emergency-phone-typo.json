@@ -1,0 +1,12 @@
+{
+  "id": "catl-emergency-phone-typo",
+  "origin": "raw_feedback.txt ~L434",
+  "vendor": "moka",
+  "section": "personalInfos",
+  "hostname": "talent.catl.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "",
+  "placeholder": "紧急人联系电话",
+  "context": "",
+  "expect": "emergencyPhone"
+}

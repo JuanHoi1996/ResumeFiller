@@ -1,0 +1,12 @@
+{
+  "id": "beisen-internship-content",
+  "origin": "raw_feedback.txt ~L266",
+  "vendor": "beisen",
+  "section": "internships",
+  "hostname": "gjzq.zhiye.com",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "实习内容",
+  "placeholder": "请输入",
+  "context": "实习内容 证明人",
+  "expect": "content"
+}

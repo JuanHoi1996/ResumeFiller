@@ -1,0 +1,16 @@
+{
+  "id": "51job-id-number-cname",
+  "origin": "raw_feedback.txt ~L27",
+  "vendor": "51job",
+  "section": "personalInfos",
+  "hostname": "xyz.51job.com",
+  "element": {
+    "tagName": "INPUT",
+    "type": "text",
+    "attrs": { "cname": "身份证号码", "ename": "ID Number" }
+  },
+  "label": "身份证号码不能为空!",
+  "placeholder": "",
+  "context": "国内身份证或护照（含港澳台）国外身份证 身份证号码 *",
+  "expect": "idNumber"
+}

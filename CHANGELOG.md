@@ -2,6 +2,35 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.3.3] - 2026-09-05
+
+### Improved
+- **Personal phone**: Recognize Hotjob「移动电话」(and similar) in addition to「手机号」; emergency-contact phone still wins first.
+
+### Tests
+- Fixture `hotjob-cms-mobile-phone` from CMS Securities field report.
+
+## [2.3.2] - 2026-08-09
+
+### Improved
+- **Feishu Recruit (Midas/ATSX)**: Recognize `.atsx-form-item` labels; structured `data-cy`/`id` mapping (education/career/project); dropdown options `.atsx-select-dropdown-menu-item`; scoped prefer `resumeEditForm-item`, skip single-field `atsx-form-item`.
+- **Feishu copy**:「个人证件」→ `idNumber`,「家乡」→ `nativePlace`; bare「描述」→ `content` (internship/project).
+
+### Tests
+- +14 Feishu fixtures (from Xiaomi / Genki Forest / 01.AI HTML); baseline `pass=45`.
+
+## [2.3.1] - 2026-08-06
+
+### Improved
+- **Hotjob dropdowns**: Add Ant Design v3 `.ant-select-dropdown-menu-item` to option selectors.
+- **Moka labels**: Read `title-*` inside `apply-field-*` (not plural `apply-fields-*`); ignore shell labels (`sd-Input-container`, `+86`, empty).
+- **Signal dedupe**: `toCompactText` drops consecutive identical label/placeholder parts.
+- **GPA**: Exclude hints containing「排名」so「学习成绩排名」does not map to `gpa`.
+- **Scoped roots**: Skip Beisen `fields-row` / `fields-col` / single `form-item--phoenix`; prefer Hotjob `.form-cell-inner` and Moka `apply-block-*`.
+
+### Tests
+- `detectField` fixtures: `pass=31`, `softFail=0`, `hardFail=0`.
+
 ## [2.3.0] - 2026-07-29
 
 ### Added

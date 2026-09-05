@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-identification",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "personalInfos",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "identification_numberInput" } },
+  "label": "个人证件",
+  "placeholder": "",
+  "context": "",
+  "expect": "idNumber"
+}

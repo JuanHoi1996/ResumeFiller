@@ -1,0 +1,16 @@
+{
+  "id": "51job-height-cname",
+  "origin": "raw_feedback.txt ~L39",
+  "vendor": "51job",
+  "section": "personalInfos",
+  "hostname": "xyz.51job.com",
+  "element": {
+    "tagName": "INPUT",
+    "type": "text",
+    "attrs": { "cname": "身高（cm）" }
+  },
+  "label": "",
+  "placeholder": "",
+  "context": "身高（cm）",
+  "expect": "height"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "beisen-internship-company",
+  "origin": "raw_feedback.txt ~L242",
+  "vendor": "beisen",
+  "section": "internships",
+  "hostname": "gjzq.zhiye.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "单位名称",
+  "placeholder": "请输入",
+  "context": "单位名称 职位名称",
+  "expect": "company"
+}

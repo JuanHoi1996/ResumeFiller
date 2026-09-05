@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-major",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "educations",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "education[0].fieldOfStudyInput", "id": "education[0].fieldOfStudy" } },
+  "label": "专业",
+  "placeholder": "",
+  "context": "",
+  "expect": "major"
+}

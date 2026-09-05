@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-gpa-learning-score",
+  "origin": "raw_feedback.txt ~L386",
+  "vendor": "hotjob",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "学习成绩*?",
+  "placeholder": "请填写GPA或平均分，遵循如下格式：GPA--\"3.50/4.00\"；平均分--\"80.4/100\"",
+  "context": "",
+  "expect": "gpa"
+}

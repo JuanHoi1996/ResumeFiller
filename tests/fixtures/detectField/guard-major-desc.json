@@ -1,0 +1,12 @@
+{
+  "id": "guard-major-desc-maps-to-major-not-content",
+  "origin": "HEURISTICS §7 专业描述（防实习 content）",
+  "note": "在 educations 分区会命中 major；关键是不得变成 internship content",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "专业描述",
+  "placeholder": "请填写专业描述",
+  "context": "",
+  "expect": "major"
+}

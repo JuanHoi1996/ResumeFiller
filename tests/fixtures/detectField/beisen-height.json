@@ -1,0 +1,12 @@
+{
+  "id": "beisen-height",
+  "origin": "raw_feedback.txt ~L15",
+  "vendor": "beisen",
+  "section": "personalInfos",
+  "hostname": "jingpai.zhiye.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "身高",
+  "placeholder": "请输入",
+  "context": "身高 姓名 性别 证件照 体重 籍贯 民族 政治面貌 证件号码 邮箱",
+  "expect": "height"
+}

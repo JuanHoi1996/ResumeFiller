@@ -1,0 +1,12 @@
+{
+  "id": "feishu-atsx-name",
+  "origin": "htmls/小米-飞书系.html",
+  "vendor": "feishu",
+  "section": "personalInfos",
+  "hostname": "xiaomi.jobs.f.mioffice.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "data-cy": "nameInput", "id": "name", "class": "atsx-input" } },
+  "label": "姓名",
+  "placeholder": "",
+  "context": "",
+  "expect": "fullName"
+}

@@ -1,0 +1,12 @@
+{
+  "id": "hotjob-score-rank-should-not-be-gpa",
+  "origin": "HEURISTICS §11.3 学习成绩排名风险",
+  "note": "gpa 规则排除「排名」后应返回空（不映射）",
+  "section": "educations",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "学习成绩排名",
+  "placeholder": "请选择学习成绩排名",
+  "context": "",
+  "expect": ""
+}

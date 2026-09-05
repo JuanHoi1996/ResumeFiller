@@ -1,0 +1,12 @@
+{
+  "id": "feishu-project-desc-bare",
+  "origin": "Feishu ATSX schema / 零一 career desc pattern",
+  "vendor": "feishu",
+  "section": "projects",
+  "hostname": "01ai.jobs.feishu.cn",
+  "element": { "tagName": "TEXTAREA", "attrs": { "data-cy": "project[0].descInput" } },
+  "label": "描述",
+  "placeholder": "",
+  "context": "",
+  "expect": "content"
+}

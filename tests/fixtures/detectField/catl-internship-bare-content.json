@@ -1,0 +1,12 @@
+{
+  "id": "catl-internship-bare-content",
+  "origin": "raw_feedback.txt ~L446",
+  "vendor": "moka",
+  "section": "internships",
+  "hostname": "talent.catl.com",
+  "element": { "tagName": "TEXTAREA", "type": "textarea", "attrs": {} },
+  "label": "内容",
+  "placeholder": "内容",
+  "context": "",
+  "expect": "content"
+}

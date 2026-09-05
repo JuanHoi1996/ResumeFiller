@@ -1,0 +1,11 @@
+{
+  "id": "hotjob-cms-mobile-phone",
+  "origin": "raw_feedback.txt L470 招商证券 Hotjob 移动电话",
+  "section": "personalInfos",
+  "hostname": "wecruit.hotjob.cn",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "class": "ant-input" } },
+  "label": "移动电话（请填写中国大陆移动电话，以便接收短信通知）*",
+  "placeholder": "请填写移动电话（请填写中国大陆移动电话，以便接收短信通知）",
+  "context": "移动电话（请填写中国大陆移动电话，以便接收短信通知）*",
+  "expect": "phone"
+}

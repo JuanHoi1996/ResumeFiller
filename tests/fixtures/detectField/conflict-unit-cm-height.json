@@ -1,0 +1,11 @@
+{
+  "id": "conflict-unit-cm-not-company",
+  "origin": "HEURISTICS §7 单位：cm",
+  "section": "personalInfos",
+  "hostname": "xyz.51job.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "cname": "身高（cm）" } },
+  "label": "",
+  "placeholder": "（单位：cm）",
+  "context": "身高（cm）",
+  "expect": "height"
+}

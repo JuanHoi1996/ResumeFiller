@@ -1,0 +1,12 @@
+{
+  "id": "catl-work-location",
+  "origin": "raw_feedback.txt ~L458",
+  "vendor": "moka",
+  "section": "internships",
+  "hostname": "talent.catl.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": {} },
+  "label": "",
+  "placeholder": "工作地点",
+  "context": "",
+  "expect": "location"
+}
