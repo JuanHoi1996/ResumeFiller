@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Packaged store zips (pack-edge-store writes these next to the repo by default)
+*.zip
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# Local resume dumps accidentally saved in the extension folder
+resumefiller-data-*.json

@@ -1,54 +1,52 @@
 # Known Issues
 
-This file lists known limitations and temporary workarounds.
+Current limitations and workarounds. Fixed behavior belongs in the changelog, not here.
 
 ## 1) Site-specific label drift
-- **Symptom**: Same semantic field has different labels on different platforms.
-- **Impact**: Some textareas/dropdowns may not match on first attempt.
-- **Workaround**: Use template button again after scrolling into the target block; if still failing, fill once manually and report field label + screenshot.
+- **Symptom**: The same field uses very different labels across sites.
+- **Impact**: Some inputs or dropdowns may miss on the first try.
+- **Workaround**: Scroll to the target block and fill again; or click into the input and reuse the same template (Scoped Fill). If it still fails, fill manually and report the label plus a screenshot.
 
-## 2) Complex dropdown components
-- **Symptom**: Industry/company type/work type may fail on custom dropdown widgets.
-- **Impact**: Field highlighted but not selected.
-- **Workaround**: Manual select for that field; keep other fields auto-filled.
+## 2) Complex custom dropdowns
+- **Symptom**: Industry, company type, work type, and similar fields may not select reliably in custom widgets.
+- **Impact**: The field may highlight without a real selection.
+- **Workaround**: Choose that field by hand; keep the rest of the autofill.
 
-## 3) Date autofill is currently muted
-- **Symptom**: Start/end date can remain blank.
-- **Reason**: Prevent destructive mismatch across incompatible date pickers.
-- **Workaround**: Fill date manually after autofill.
+## 3) Date autofill is muted
+- **Symptom**: Start/end dates may stay blank.
+- **Reason**: Date widgets differ by site; writing the wrong format is worse than skipping.
+- **Workaround**: Enter dates manually after autofill.
 
-## 4) Safari is not supported in current package
-- **Symptom**: Chrome extension package cannot be loaded directly in Safari.
-- **Workaround**: Use Chrome/Edge first. Safari adaptation should be a separate roadmap item.
+## 4) Safari cannot load this package
+- **Symptom**: The current build is a Chrome Manifest V3 extension and will not load in Safari.
+- **Workaround**: Use Chrome or Edge (or another Chromium browser that can load unpacked extensions).
 
-## 5) Work content vs work achievement
-- **Symptom**: Some sites have both `工作内容` and `工作业绩`.
-- **Current behavior**: ResumeFiller intentionally avoids auto-filling `工作业绩` to reduce wrong writes.
+## 5) Work-achievement fields are skipped on purpose
+- **Symptom**: Some sites have both work content and work achievement.
+- **Current behavior**: Achievement is not autofilled, so duty text is not written into the achievement box.
 
-## 6) BOSS (Zhipin) Content & Scoped Fill Limitations
+## 6) BOSS (zhipin.com) long text and Scoped Fill
 - **Symptom**:
-  - Internships: only basic fields (company/department/position) are filled reliably; other internship long-text fields may not be populated.
-  - Projects: long-text distribution between "project description" (long) and "project intro" (short) may be incorrect; one of the targets can remain empty.
-  - Self-evaluation & Education: those sections may not be filled (or only partially filled) on some pages/components.
-- **Workaround**: Use manual input (or the plugin's scoped filling after clicking the exact target input first). If it still fails, capture the label text + screenshot and add it to the report.
+  - Internships: company / department / title are relatively reliable; some long-text internship fields may not write.
+  - Projects: long text may land in the wrong of “description” vs “intro/background”, leaving one empty.
+  - Self-evaluation and education may fill only partially, or not at all, on some pages.
+- **Workaround**: Type by hand, or focus the target input and run Scoped Fill. If it still fails, report the label plus a screenshot.
 
-## 7) 51job (xyz.51job.com) Custom Dropdowns and "Other" Field Mis-detection
+## 7) 51job (xyz.51job.com) custom dropdowns and “Other” boxes
 - **Symptom**:
-  - **Dropdown Compatibility**: Fields like School and Major often use custom dropdown components in 51job-based sites, which the extension cannot currently simulate for selection.
-  - **"Other" Field Mis-detection**: When primary dropdown fields cannot be filled, the extension may identify the "Other School" or "Other Major" text inputs below and fill them, leading to data misplacement.
-- **Reason**: 51job sites use legacy DOM structures and heavy custom scripts for dropdowns; a conservative strategy is currently used to avoid interfering with their internal logic.
-- **Workaround**: Manually select the correct item from the dropdown and clear the mis-filled content in the "Other" text fields.
+  - School and major often use custom dropdowns the extension cannot click.
+  - When the dropdown cannot be filled, text may go into “other school” / “other major” inputs underneath.
+- **Reason**: Legacy DOM and custom dropdown scripts; the extension does not override that logic.
+- **Workaround**: Pick the correct dropdown value by hand and clear anything that landed in “Other”.
 
-## 8) Tonghuashun campus (`campus.10jqka.com.cn`) GitHub / Scholar homepage
-- **Symptom**:
-  - Labels like「Github主页地址」/「Scholar主页」were previously mis-mapped to home address because of the generic「地址」fallback (exclusion added; address mis-fill should stop).
-  - Correctly writing GitHub / Scholar URLs is still unreliable on some pages (field recognized but not written, or depends on whether editor fields `githubUrl` / `scholarUrl` are saved).
-- **Impact**: Homepage URL fields need manual paste; other personal-info fields can still autofill.
-- **Workaround**: Paste the GitHub / Scholar URL manually. You can still store both values under Personal Info in the editor for reference.
-- **Sample**: `campus.10jqka.com.cn` resume page, labels「Github主页」「Scholar主页」(Element UI `el-input`).
+## 8) Tonghuashun campus (`campus.10jqka.com.cn`) GitHub / Scholar URLs may not write
+- **Symptom**: Labels such as「Github主页」/「Scholar主页」are recognized, but the URL sometimes does not land in the input (the editor Personal Info fields `githubUrl` / `scholarUrl` must already be saved).
+- **Impact**: Those two homepage fields may still need a manual paste; other personal-info fields can still autofill.
+- **Workaround**: Paste the URL into the target box.
+- **Sample**: `campus.10jqka.com.cn` resume page, Element UI `el-input`.
 
-## 9) Guojin Securities / Beisen (`gjzq.zhiye.com`) internship Scoped Fill stops at one row
-- **Historical symptom**: Internship blocks often lay out as **~3 rows × 2 fields**; Scoped Fill could stop at the row.
-- **Status (2.3.1)**: Climb now skips `fields-row` / `fields-col` / single `form-item--phoenix`. **Needs live confirmation** on Guojin. If still truncated, report the real entry-ancestor class names.
-- **Workaround (if still repro)**: Focus each row and click the template again, or try full-page fill after blur.
-- **Sample**: `gjzq.zhiye.com` application form (Beisen / `phoenix-input`), internship labels as above.
+## 9) Agricultural Bank of China careers site: desktop page uses mobile-style input
+- **Symptom**: Wheel scrolling barely works (or not at all) and the context menu is blocked. Side-panel fill is hard to aim; right-click **Copy field report** never appears.
+- **Likely cause**: A full-page gesture layer, a custom scroller, and/or the page cancelling `contextmenu`.
+- **Impact**: Autofill is not reliable on this site, and field reports cannot be copied from the page.
+- **Workaround**: If Tab or click can still focus an input, try Scoped Fill; otherwise fill by hand. When reporting, include the careers-page URL. Saving the page as HTML usually does not reproduce the blocked wheel or context menu.

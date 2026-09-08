@@ -2,6 +2,16 @@
 
 本文件用于记录 ResumeFiller 的所有重要变更。
 
+## [2.3.4] - 2026-09-07
+
+### 优化
+- **教育「成绩」**：北森 Phoenix 旁路「成绩排名」不再误杀本框「成绩」→ GPA；「学习成绩排名」本身仍不映射。
+- **人事档案保管单位**（`archiveUnit`）：基础信息新增字段，覆盖 Moka 等校招表单。
+- **证明人及联系方式**：单格时拼接已有「证明人 + 电话」，不新增编辑器字段。
+
+### 测试
+- 新增夹具 `beisen-score-not-blocked-by-rank-sibling`、`moka-archive-keeping-unit`、`moka-referee-name-and-contact-combined`。
+
 ## [2.3.3] - 2026-09-05
 
 ### 优化

@@ -1,0 +1,11 @@
+{
+  "id": "beisen-score-not-blocked-by-rank-sibling",
+  "origin": "raw_feedback.txt L482 chinastock.zhiye.com 成绩 + context 成绩排名",
+  "section": "educations",
+  "hostname": "chinastock.zhiye.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "class": "phoenix-input__input" } },
+  "label": "成绩",
+  "placeholder": "请输入",
+  "context": "成绩 成绩排名",
+  "expect": "gpa"
+}

@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-09-05T07:50:47.620Z",
+  "generatedAt": "2026-09-07T10:03:30.853Z",
   "contentSource": "content.js",
   "totals": {
-    "all": 46,
-    "pass": 46,
+    "all": 49,
+    "pass": 49,
     "softFail": 0,
     "hardFail": 0
   },
@@ -87,6 +87,16 @@
       "ok": true,
       "section": "internships",
       "origin": "raw_feedback.txt ~L254"
+    },
+    {
+      "id": "beisen-score-not-blocked-by-rank-sibling",
+      "file": "beisen-score-sibling-rank.json",
+      "soft": false,
+      "expect": "gpa",
+      "got": "gpa",
+      "ok": true,
+      "section": "educations",
+      "origin": "raw_feedback.txt L482 chinastock.zhiye.com 成绩 + context 成绩排名"
     },
     {
       "id": "catl-emergency-phone-typo",
@@ -467,6 +477,26 @@
       "ok": true,
       "section": "internships",
       "origin": "raw_feedback.txt ~L230 / CHANGELOG 2.2.5"
+    },
+    {
+      "id": "moka-archive-keeping-unit",
+      "file": "moka-archive-unit.json",
+      "soft": false,
+      "expect": "archiveUnit",
+      "got": "archiveUnit",
+      "ok": true,
+      "section": "personalInfos",
+      "origin": "raw_feedback.txt L494 申万宏源 Moka 人事档案保管单位"
+    },
+    {
+      "id": "moka-referee-name-and-contact-combined",
+      "file": "moka-referee-combined.json",
+      "soft": false,
+      "expect": "refereeContact",
+      "got": "refereeContact",
+      "ok": true,
+      "section": "internships",
+      "origin": "raw_feedback.txt L506 申万宏源 Moka 证明人及联系方式单格"
     }
   ]
 }

@@ -91,6 +91,7 @@ const resumeData = {
         fullName: "示例用户",
         homeAddress: "请填写家庭住址",
         hukouLocation: "请填写户籍所在地",
+        archiveUnit: "请填写人事档案保管单位（如学校、人才中心）",
         githubUrl: "https://github.com/example",
         scholarUrl: "请填写 Google Scholar 或学术主页（如无可留空）",
         idNumber: "请填写证件号码",

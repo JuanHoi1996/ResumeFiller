@@ -1,0 +1,11 @@
+{
+  "id": "moka-archive-keeping-unit",
+  "origin": "raw_feedback.txt L494 申万宏源 Moka 人事档案保管单位",
+  "section": "personalInfos",
+  "hostname": "app.mokahr.com",
+  "element": { "tagName": "TEXTAREA", "attrs": { "class": "sd-Textarea-textarea-dyLbN" } },
+  "label": "人事档案保管单位",
+  "placeholder": "",
+  "context": "",
+  "expect": "archiveUnit"
+}

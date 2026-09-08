@@ -400,7 +400,7 @@ function isElementVisible(element) {
 
 function getScopeHintKeywords(section) {
   const bySection = {
-    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '联系方式', '身高', '体重', '籍贯', '政治面貌', 'Github', 'GitHub', 'Scholar', '主页'],
+    personalInfos: ['个人信息', '基本信息', '姓名', '邮箱', '邮件', '手机', '手机号', '证件', '证件号', '身份证', '地址', '住址', '家庭住址', '户籍所在地', '户籍地址', '人事档案', '档案保管', '联系方式', '身高', '体重', '籍贯', '政治面貌', 'Github', 'GitHub', 'Scholar', '主页'],
     internships: [
       '公司',
       '企业名称',
@@ -492,6 +492,7 @@ function containerHasPayloadField(node, payload, section) {
       'politicalStatus',
       'homeAddress',
       'hukouLocation',
+      'archiveUnit',
       'githubUrl',
       'scholarUrl',
       'emergencyContact',
@@ -533,7 +534,8 @@ function containerHasPayloadField(node, payload, section) {
       'gpa',
       'refereeName',
       'refereeRelation',
-      'refereePhone'
+      'refereePhone',
+      'refereeContact'
     ];
     return educationAnchors.some(f => matchedFields.has(f));
   }
@@ -617,6 +619,7 @@ function resolveScopedRoot(section, payload) {
         'politicalStatus',
         'homeAddress',
         'hukouLocation',
+        'archiveUnit',
         'githubUrl',
         'scholarUrl',
         'emergencyContact',
@@ -862,6 +865,23 @@ function getDefaultPayload() {
   return resolveTemplate(resumeData, section, key);
 }
 
+/** 「证明人及联系方式」— one box wants name + phone. */
+function isCombinedRefereeContactHint(text) {
+  const t = String(text || '');
+  if (!t.includes('证明人') && !t.includes('推荐人') && !t.includes('汇报人') && !t.includes('汇报对象')) {
+    return false;
+  }
+  if (!(t.includes('联系') || t.includes('电话') || t.includes('手机'))) return false;
+  return /[及和/、]/.test(t);
+}
+
+function composeRefereeContact(data) {
+  if (!data) return '';
+  const name = String(data.refereeName || '').trim();
+  const phone = String(data.refereePhone || '').trim();
+  return [name, phone].filter(Boolean).join(' ');
+}
+
 /**
  * Feishu Midas/ATSX structured attrs (data-cy / id like education[0].schoolInput).
  * Prefer over free-text when present — labels are still used as fallback.
@@ -981,6 +1001,14 @@ function detectField(element, labelText, placeholder, contextText, section = nul
   // 2. High-Priority Direct Mappings (Check Primary Labels first)
   if (isPersonalInfoSection && (primaryText.includes('家庭住址') || primaryText.includes('家庭地址') || primaryText.includes('现居地址'))) return 'homeAddress';
   if (isPersonalInfoSection && (primaryText.includes('户籍所在地') || primaryText.includes('户籍地址') || primaryText.includes('户籍'))) return 'hukouLocation';
+  if (
+    isPersonalInfoSection &&
+    (primaryText.includes('人事档案') ||
+      primaryText.includes('档案保管') ||
+      (primaryText.includes('档案') && primaryText.includes('单位')))
+  ) {
+    return 'archiveUnit';
+  }
   if (
     isPersonalInfoSection &&
     normalizedSection !== 'familyMembers' &&
@@ -1112,6 +1140,10 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     (normalizedSection === 'internships' || normalizedSection === 'educations') &&
     (text.includes('证明人') || text.includes('联系人') || text.includes('汇报对象') || text.includes('汇报人'))
   ) {
+    // Single box asking for name AND contact — compose at fill time, no extra editor field.
+    if (isCombinedRefereeContactHint(primaryText)) {
+      return 'refereeContact';
+    }
     if (primaryText.includes('电话') || primaryText.includes('手机') || primaryText.includes('联系方式')) {
       return 'refereePhone';
     }
@@ -1169,9 +1201,10 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       return 'coreCourses';
     }
     // GPA / average score — after course lists so「所学课程及成绩」stays coreCourses.
-    // Exclude「学习成绩排名」etc. (Hotjob rank dropdown is not a GPA value).
+    // Exclude「学习成绩排名」on the field's own label/placeholder only. Sibling
+    // context like Phoenix「成绩排名」must not block a neighboring「成绩」box.
     if (
-      !text.includes('排名') &&
+      !primaryText.includes('排名') &&
       (/gpa/i.test(text) ||
         text.includes('绩点') ||
         text.includes('平均分') ||
@@ -1250,7 +1283,8 @@ function detectField(element, labelText, placeholder, contextText, section = nul
       !text.includes('规模') &&
       !text.includes('性质') &&
       !text.includes('类型') &&
-      !text.includes('行业')
+      !text.includes('行业') &&
+      !text.includes('档案')
     ) {
       // Avoid misclassifying "measurement unit" placeholders, e.g. placeholder="（单位：cm）"
       const placeholderStr = String(placeholder || '');
@@ -1419,6 +1453,9 @@ function detectField(element, labelText, placeholder, contextText, section = nul
     }
   }
   if (text.includes('户籍所在地') || text.includes('户籍地址') || text.includes('户籍')) return 'hukouLocation';
+  if (primaryText.includes('人事档案') || primaryText.includes('档案保管') || (primaryText.includes('档案') && primaryText.includes('单位'))) {
+    return 'archiveUnit';
+  }
   if (
     (normalizedSection === 'internships' ||
       normalizedSection === 'projects' ||
@@ -1603,16 +1640,29 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
     const contextText = getContextHintText(element);
     const field = detectField(element, labelText, placeholder, contextText, section);
     if (!field) return;
-    if (!allowedFields.has(field)) {
-      if (field === 'githubUrl' || field === 'scholarUrl') {
+
+    let value;
+    if (field === 'refereeContact') {
+      value = composeRefereeContact(data);
+    } else if (!allowedFields.has(field)) {
+      if (field === 'githubUrl' || field === 'scholarUrl' || field === 'archiveUnit') {
         console.log(
-          `[ResumeFiller] 已识别 ${field}，但当前基础信息模板没有该字段。请打开编辑器填写「GitHub/Scholar 主页」后保存。`
+          `[ResumeFiller] 已识别 ${field}，但当前模板没有该字段。请打开编辑器填写后保存。`
+        );
+      }
+      return;
+    } else {
+      value = data[field];
+    }
+
+    if (value === undefined || value === null || value === '') {
+      if (field === 'githubUrl' || field === 'scholarUrl' || field === 'archiveUnit' || field === 'refereeContact') {
+        console.log(
+          `[ResumeFiller] 已识别「${labelText || placeholder || field}」→ ${field}，但简历数据为空。请在编辑器填写并保存后再试。`
         );
       }
       return;
     }
-
-    // Relationship Guard: If filling a family member, ensure the label matches the specific relation if it exists
     if (data.familyRelation && field.startsWith('family')) {
       const relation = toCompactText(data.familyRelation);
       const label = toCompactText(labelText, placeholder, contextText);
@@ -1624,16 +1674,6 @@ function autoFill(payload, dataSource, scopeRoot = document, section = null) {
         console.log(`[ResumeFiller] 关系不匹配跳过: ${label} != ${relation}`);
         return;
       }
-    }
-
-    const value = data[field];
-    if (value === undefined || value === null || value === '') {
-      if (field === 'githubUrl' || field === 'scholarUrl') {
-        console.log(
-          `[ResumeFiller] 已识别「${labelText || placeholder || field}」→ ${field}，但简历数据为空。请在编辑器填写并保存后再试。`
-        );
-      }
-      return;
     }
 
     try {

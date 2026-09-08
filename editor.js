@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     emergencyPhone: document.getElementById("emergencyPhone"),
     homeAddress: document.getElementById("homeAddress"),
     hukouLocation: document.getElementById("hukouLocation"),
+    archiveUnit: document.getElementById("archiveUnit"),
     githubUrl: document.getElementById("githubUrl"),
     scholarUrl: document.getElementById("scholarUrl")
   };
@@ -227,6 +228,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         idNumber: "",
         homeAddress: "",
         hukouLocation: "",
+        archiveUnit: "",
         githubUrl: "",
         scholarUrl: ""
       }
@@ -427,6 +429,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     personalInfoFields.emergencyPhone.value = payload.emergencyPhone || "";
     personalInfoFields.homeAddress.value = payload.homeAddress || "";
     personalInfoFields.hukouLocation.value = payload.hukouLocation || "";
+    personalInfoFields.archiveUnit.value = payload.archiveUnit || "";
     personalInfoFields.githubUrl.value = payload.githubUrl || "";
     personalInfoFields.scholarUrl.value = payload.scholarUrl || "";
   }
@@ -584,6 +587,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       emergencyPhone: personalInfoFields.emergencyPhone.value.trim(),
       homeAddress: personalInfoFields.homeAddress.value.trim(),
       hukouLocation: personalInfoFields.hukouLocation.value.trim(),
+      archiveUnit: personalInfoFields.archiveUnit.value.trim(),
       githubUrl: personalInfoFields.githubUrl.value.trim(),
       scholarUrl: personalInfoFields.scholarUrl.value.trim()
     };

@@ -1,0 +1,11 @@
+{
+  "id": "moka-referee-name-and-contact-combined",
+  "origin": "raw_feedback.txt L506 申万宏源 Moka 证明人及联系方式单格",
+  "section": "internships",
+  "hostname": "app.mokahr.com",
+  "element": { "tagName": "INPUT", "type": "text", "attrs": { "class": "sd-Input-input-10L0t" } },
+  "label": "证明人及联系方式",
+  "placeholder": "证明人及联系方式",
+  "context": "",
+  "expect": "refereeContact"
+}

@@ -2,6 +2,16 @@
 
 All notable changes to ResumeFiller will be documented in this file.
 
+## [2.3.4] - 2026-09-07
+
+### Improved
+- **Education score**: Beisen sibling label「成绩排名」no longer blocks the neighboring「成绩」box from mapping to GPA;「学习成绩排名」itself still does not map.
+- **Personnel archive unit** (`archiveUnit`): new personal-info field for Moka-style「人事档案保管单位」.
+- **Combined referee box**:「证明人及联系方式」fills `refereeName` + `refereePhone` (no extra editor field).
+
+### Tests
+- Fixtures `beisen-score-not-blocked-by-rank-sibling`, `moka-archive-keeping-unit`, `moka-referee-name-and-contact-combined`.
+
 ## [2.3.3] - 2026-09-05
 
 ### Improved
